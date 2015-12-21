@@ -11,20 +11,23 @@ import local.oop.presenter.Presenter;
 
 public class Game extends ApplicationAdapter {
     private Presenter presenter;
+    private InputProcessor playerInputProcessor;
+    private InputProcessor windowInputProcessor;
 
     @Inject
     public Game(Presenter presenter, @Named("PlayerInputProcessor") InputProcessor playerInputProcessor,
                 @Named("WindowInputProcessor") InputProcessor windowInputProcessor) {
         this.presenter = presenter;
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(windowInputProcessor);
-        inputMultiplexer.addProcessor(playerInputProcessor);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        this.playerInputProcessor = playerInputProcessor;
+        this.windowInputProcessor = windowInputProcessor;
     }
 
     @Override
     public void create() {
-
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(windowInputProcessor);
+        inputMultiplexer.addProcessor(playerInputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
