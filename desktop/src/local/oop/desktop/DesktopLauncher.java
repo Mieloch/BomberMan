@@ -1,12 +1,17 @@
 package local.oop.desktop;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import local.oop.Game;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import local.oop.ApplicationModule;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Game(), config);
-	}
+        Injector injector = Guice.createInjector(new ApplicationModule());
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        ApplicationListener application = injector.getInstance(ApplicationListener.class);
+        new LwjglApplication(application, config);
+    }
 }

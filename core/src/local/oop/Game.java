@@ -2,26 +2,33 @@ package local.oop;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import local.oop.model.ArenaState;
+import local.oop.presenter.Presenter;
 
 public class Game extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+    private Presenter presenter;
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
+    @Inject
+    public Game(Presenter presenter, @Named("PlayerInputProcessor") InputProcessor playerInputProcessor,
+                @Named("WindowInputProcessor") InputProcessor windowInputProcessor) {
+        this.presenter = presenter;
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(windowInputProcessor);
+        inputMultiplexer.addProcessor(playerInputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    @Override
+    public void create() {
+
+    }
+
+    @Override
+    public void render() {
+        ArenaState arenaState = presenter.getCurrentState();
+    }
 }
