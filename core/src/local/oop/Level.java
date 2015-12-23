@@ -2,13 +2,13 @@ package local.oop;
 
 import java.util.Random;
 
-public class LevelGenerator {
+public class Level {
 
     private int[][] level;
     private int width;
     private int height;
 
-    public LevelGenerator(int width, int height){
+    public Level(int width, int height){
         this.level = generate(width, height);
     }
 
