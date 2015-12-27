@@ -16,9 +16,9 @@ public class PlayerRenderer extends AbstractRenderer{
 
     private static final int FRAME_COLS = 4;
     private static final int FRAME_ROWS= 2;
-    private final String FRONT_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Bomberman 3\\all\\front3.png";
-    private final String BACK_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Bomberman 3\\all\\back3.png";
-    private final String SIDE_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Bomberman 3\\all\\side3.png";
+    private final String FRONT_SHEET_PATH = "core\\assets\\front3.png";
+    private final String BACK_SHEET_PATH = "core\\assets\\back3.png";
+    private final String SIDE_SHEET_PATH = "core\\assets\\side3.png";
 
     HashMap<Direction, Animation> animationMap;
 

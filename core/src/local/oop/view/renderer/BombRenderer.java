@@ -12,8 +12,8 @@ import java.util.HashMap;
  * Created by admin on 2015-12-26.
  */
 public class BombRenderer extends AbstractRenderer{
-    private static final String BOMB_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Bomb\\bomb.png";
-    private static final String FIRE_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Flame\\fire.png";
+    private static final String BOMB_SHEET_PATH = "core\\assets\\bomb.png";
+    private static final String FIRE_SHEET_PATH = "core\\assets\\fire.png";
 
     HashMap<Bomb,Animation> bombMap;
     public BombRenderer(){
