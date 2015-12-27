@@ -11,7 +11,10 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
         Injector injector = Guice.createInjector(new ApplicationModule());
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.height = 768;
+        config.width = 1366;
         ApplicationListener application = injector.getInstance(ApplicationListener.class);
         new LwjglApplication(application, config);
+
     }
 }
