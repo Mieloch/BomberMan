@@ -27,6 +27,11 @@ public class ViewImpl implements View {
     @Override
     public void renderArena(ArenaState arenaState) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        renderTest(); // tylko do zobaczenia jak renderuje
+
+    }
+
+    private void renderTest(){
         playerRenderer.render(50,50, Direction.LEFT);
         playerRenderer.render(100,50, Direction.RIGHT);
         playerRenderer.render(200,50, Direction.UP);

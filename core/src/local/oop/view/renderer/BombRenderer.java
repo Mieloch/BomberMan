@@ -8,6 +8,7 @@ import local.oop.model.Bomb;
 import java.util.HashMap;
 
 /**
+ * KLASA RENDERUJACA BOMBY ORAZ OGNIE
  * Created by admin on 2015-12-26.
  */
 public class BombRenderer extends AbstractRenderer{
@@ -19,6 +20,7 @@ public class BombRenderer extends AbstractRenderer{
        initBombMap();
     }
 
+    //renderuje obiekty
     public void render(float x, float y, Bomb type){
         Animation bomb = bombMap.get(type);
         stateTime += Gdx.graphics.getDeltaTime();
@@ -28,6 +30,7 @@ public class BombRenderer extends AbstractRenderer{
         sprite.end();
     }
 
+    // inicjalizuje mape z animacjami, klucze rodzaj animacji, wartosc animacja
     private void initBombMap(){
         bombMap = new HashMap<Bomb, Animation>();
         bombMap.put(Bomb.FIRE,createAnimation(FIRE_SHEET_PATH,1,5,0.15f));

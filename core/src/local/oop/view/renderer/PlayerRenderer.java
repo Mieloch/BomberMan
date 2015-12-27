@@ -24,9 +24,7 @@ public class PlayerRenderer extends AbstractRenderer{
 
 
     public PlayerRenderer(){
-
         initAnimationMap();
-
     }
 
     //renderuje animacje gracza zaleznie od jego kierunku

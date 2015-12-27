@@ -17,6 +17,7 @@ public abstract class AbstractRenderer {
         stateTime=0;
     }
 
+    //tworzy teksture w pamieci
     Texture createTexture(String texturePath){
         Texture texture = new Texture(texturePath);
 
