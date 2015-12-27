@@ -1,9 +1,7 @@
-package local.oop.view;
+package local.oop.view.renderer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import local.oop.model.Direction;
 
@@ -14,7 +12,7 @@ import java.util.HashMap;
  * KLASA RENDERUJACA ANIMACJE GRACZA
  * Created by echomil on 2015-12-26.
  */
-public class PlayerRenderer {
+public class PlayerRenderer extends AbstractRenderer{
 
     private static final int FRAME_COLS = 4;
     private static final int FRAME_ROWS= 2;
@@ -23,14 +21,12 @@ public class PlayerRenderer {
     private final String SIDE_SHEET_PATH = "C:\\Users\\admin\\Desktop\\Sprites\\Bomberman 3\\all\\side3.png";
 
     HashMap<Direction, Animation> animationMap;
-    SpriteBatch sprite;
-    float stateTime;
+
 
     public PlayerRenderer(){
 
-        createAnimationMap();
-        sprite = new SpriteBatch();
-        stateTime=0;
+        initAnimationMap();
+
     }
 
     //renderuje animacje gracza zaleznie od jego kierunku
@@ -49,29 +45,16 @@ public class PlayerRenderer {
         sprite.end();
     }
 
-    // tworzy animacje z pliku png
-    private Animation createAnimation(String sheetPath){
-        Animation animation;
-        Texture forwardSheet = new Texture(Gdx.files.internal(sheetPath));
-        TextureRegion[][] tmp = TextureRegion.split(forwardSheet,forwardSheet.getWidth()/FRAME_COLS, forwardSheet.getHeight()/FRAME_ROWS);
-        TextureRegion[] forwardFrames = new TextureRegion[FRAME_ROWS*FRAME_COLS];
-        int index=0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                forwardFrames[index++] = tmp[i][j];
-            }
-        }
-        animation = new Animation(0.125f, forwardFrames);
-        return animation;
-    }
+
+
 
 
     //tworzy mape gdzie kluczem jest kierunek a wartoscia animacja ruchu dla tego kierunku
-    private void createAnimationMap(){
+    private void initAnimationMap(){
         animationMap = new HashMap<Direction, Animation>();
-        animationMap.put(Direction.DOWN,createAnimation(FRONT_SHEET_PATH));
-        animationMap.put(Direction.UP,createAnimation(BACK_SHEET_PATH));
-        Animation sideAnimSheet = createAnimation(SIDE_SHEET_PATH);
+        animationMap.put(Direction.DOWN,createAnimation(FRONT_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
+        animationMap.put(Direction.UP,createAnimation(BACK_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
+        Animation sideAnimSheet = createAnimation(SIDE_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f);
         animationMap.put(Direction.LEFT,sideAnimSheet);
         animationMap.put(Direction.RIGHT,sideAnimSheet);
     }
