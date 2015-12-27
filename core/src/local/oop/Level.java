@@ -1,5 +1,8 @@
 package local.oop;
 
+import jdk.nashorn.internal.ir.Block;
+import local.oop.model.BlockType;
+
 import java.util.Random;
 
 public class Level {
@@ -8,7 +11,7 @@ public class Level {
     private int width;
     private int height;
 
-    public Level(int width, int height){
+    public Level(int width, int height) {
         this.level = generate(width, height);
     }
 
@@ -22,14 +25,44 @@ public class Level {
      * 4 - faster character
      * 5 - more bombs ( 3 instead of 1 )
      */
-    private int[][] generate(int width, int height){
+
+    public BlockType[][] getEnumLevel() {
+        BlockType[][] enumLevel = new BlockType[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (level[i][j]) {
+                    case 0:
+                        enumLevel[i][j] = BlockType.BACKGROUNG;
+                        break;
+                    case 1:
+                        enumLevel[i][j] = BlockType.EXPLODABLE;
+                        break;
+                    case 2:
+                        enumLevel[i][j] = BlockType.SOLID;
+                        break;
+                    case 3:
+                        enumLevel[i][j] = BlockType.POWER_UP;
+                        break;
+                    case 4:
+                        enumLevel[i][j] = BlockType.SPEED_UP;
+                        break;
+                    case 5:
+                        enumLevel[i][j] = BlockType.EXTRA_BOMB;
+                        break;
+                }
+            }
+        }
+        return enumLevel;
+    }
+
+    private int[][] generate(int width, int height) {
         this.width = width;
         this.height = height;
-        int [][] level = new int[width][height];
+        int[][] level = new int[width][height];
         int number;
-        for(int i = 0; i<width ; i++){
-            for(int j = 0; j<height; j++){
-                if((i==0 || i==1 || i==width-1 || i==width-2) && (j==0 || j==1 || j==height-1 || j==height-2) && !((i==1 || i==width-2) && (j == 1 || j==height-2))){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if ((i == 0 || i == 1 || i == width - 1 || i == width - 2) && (j == 0 || j == 1 || j == height - 1 || j == height - 2) && !((i == 1 || i == width - 2) && (j == 1 || j == height - 2))) {
                     number = 0;
                 } else if (i % 2 == 1 && j % 2 == 1) {
                     number = 2;
@@ -41,27 +74,28 @@ public class Level {
         }
         boolean generated = false;
         int i = 3;
-        while (!generated){
+        while (!generated) {
             Random r = new Random();
             int x = r.nextInt(width);
             int y = r.nextInt(height);
-            if(level[x][y]==1){
+            if (level[x][y] == 1) {
                 level[x][y] = i;
                 i++;
             }
-            if(i==6)
+            if (i == 6)
                 generated = true;
         }
         return level;
     }
 
-    public int[][] getLevel(){
+    public int[][] getRawLevel() {
         return level;
     }
 
-    public void printLevel(){
-        for(int i = 0; i<width; i++){
-            for(int j = 0; j<height; j++){
+
+    public void printLevel() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 System.out.print(level[i][j] + " ");
             }
             System.out.println();
@@ -76,7 +110,7 @@ public class Level {
         return width;
     }
 
-    public int at(int width, int height){
+    public int at(int width, int height) {
         return level[width][height];
     }
 }
