@@ -2,6 +2,7 @@ package local.oop.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import local.oop.Level;
 import local.oop.model.ArenaState;
 import local.oop.model.BlockType;
 import local.oop.model.Bomb;
@@ -27,6 +28,7 @@ public class ViewImpl implements View {
     @Override
     public void renderArena(ArenaState arenaState) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        levelRenderTest(); // tylko do zobaczenia jak renderuje
         renderTest(); // tylko do zobaczenia jak renderuje
 
     }
@@ -38,9 +40,15 @@ public class ViewImpl implements View {
         playerRenderer.render(300,50, Direction.DOWN);
         bombRenderer.render(300,300, Bomb.NORMAL);
         bombRenderer.render(300,400, Bomb.FIRE);
-        blockRenderer.render(500,500, BlockType.BACKGROUNG);
-        blockRenderer.render(500,700, BlockType.EXPLODABLE);
-        blockRenderer.render(500,600, BlockType.SOLID);
+
+    }
+
+    private void levelRenderTest(){
+        Level l = new Level(15,15);
+       BlockType[][] lev =  l.getEnumLevel();
+        blockRenderer.renderLevel(100,100,lev);
+
+
     }
 
 }
