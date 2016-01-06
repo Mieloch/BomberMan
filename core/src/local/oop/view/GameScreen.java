@@ -1,12 +1,16 @@
 package local.oop.view;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import local.oop.GameImpl;
 import local.oop.Level;
 import local.oop.model.ArenaState;
 import local.oop.model.BlockType;
 import local.oop.model.Bomb;
 import local.oop.model.Direction;
+import local.oop.presenter.Presenter;
 import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
 import local.oop.view.renderer.PlayerRenderer;
@@ -14,23 +18,20 @@ import local.oop.view.renderer.PlayerRenderer;
 /**
  * Created by echomil on 2015-12-25.
  */
-public class ViewImpl implements View {
+public class GameScreen implements Screen {
 
+    private GameImpl game;
+    private Presenter presenter;
     private PlayerRenderer playerRenderer;
     private BombRenderer bombRenderer;
     private BlockRenderer blockRenderer;
-    public ViewImpl() {
+
+    public GameScreen(GameImpl game) {
         playerRenderer = new PlayerRenderer();
         bombRenderer = new BombRenderer();
         blockRenderer = new BlockRenderer();
-    }
-
-    @Override
-    public void renderArena(ArenaState arenaState) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        levelRenderTest(); // tylko do zobaczenia jak renderuje
-        renderTest(); // tylko do zobaczenia jak renderuje
-
+        this.game = game;
+        this.presenter = game.getPresenter();
     }
 
     private void renderTest(){
@@ -47,8 +48,43 @@ public class ViewImpl implements View {
         Level l = new Level(15,15);
        BlockType[][] lev =  l.getEnumLevel();
         blockRenderer.renderLevel(100,100,lev);
+    }
 
+    @Override
+    public void show() {
 
     }
 
+    @Override
+    public void render(float delta) {
+        presenter.getCurrentState(); // ArenaState
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        levelRenderTest(); // tylko do zobaczenia jak renderuje
+        renderTest(); // tylko do zobaczenia jak renderuje
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 }
