@@ -1,6 +1,6 @@
 package local.oop.desktop;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.google.inject.Guice;
@@ -13,7 +13,8 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.height = 768;
         config.width = 1366;
-        ApplicationListener application = injector.getInstance(ApplicationListener.class);
+        config.resizable = false;
+        Game application = injector.getInstance(Game.class);
         new LwjglApplication(application, config);
 
     }

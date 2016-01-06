@@ -1,6 +1,5 @@
 package local.oop;
 
-import jdk.nashorn.internal.ir.Block;
 import local.oop.model.BlockType;
 
 import java.util.Random;
@@ -14,17 +13,6 @@ public class Level {
     public Level(int width, int height) {
         this.level = generate(width, height);
     }
-
-    /**
-     * Returns matrix representing our level with integer values.
-     * 0 - empty field
-     * 1 - destructible block
-     * 2 - indestructible block
-     * Every other value represents a bonus
-     * 3 - stronger bombs
-     * 4 - faster character
-     * 5 - more bombs ( 3 instead of 1 )
-     */
 
     public BlockType[][] getEnumLevel() {
         BlockType[][] enumLevel = new BlockType[width][height];
@@ -55,6 +43,16 @@ public class Level {
         return enumLevel;
     }
 
+    /**
+     * Returns matrix representing our level with integer values.
+     * 0 - empty field
+     * 1 - destructible block
+     * 2 - indestructible block
+     * Every other value represents a bonus
+     * 3 - stronger bombs
+     * 4 - faster character
+     * 5 - more bombs ( 3 instead of 1 )
+     */
     private int[][] generate(int width, int height) {
         this.width = width;
         this.height = height;

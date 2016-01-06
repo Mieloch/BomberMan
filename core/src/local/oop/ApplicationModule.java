@@ -1,6 +1,7 @@
 package local.oop;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputProcessor;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
@@ -18,6 +19,6 @@ public class ApplicationModule extends AbstractModule {
         bind(Arena.class).to(ArenaImpl.class);
         bind(InputProcessor.class).annotatedWith(Names.named("PlayerInputProcessor")).to(PlayerInputProcessor.class);
         bind(InputProcessor.class).annotatedWith(Names.named("WindowInputProcessor")).to(WindowInputProcessor.class);
-        bind(ApplicationListener.class).to(Game.class);
+        bind(Game.class).to(GameImpl.class);
     }
 }
