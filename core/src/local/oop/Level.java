@@ -20,7 +20,7 @@ public class Level {
             for (int j = 0; j < height; j++) {
                 switch (level[i][j]) {
                     case 0:
-                        enumLevel[i][j] = BlockType.BACKGROUNG;
+                        enumLevel[i][j] = BlockType.BACKGROUND;
                         break;
                     case 1:
                         enumLevel[i][j] = BlockType.EXPLODABLE;
