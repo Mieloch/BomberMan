@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-/**
- * Created by admin on 2015-12-27.
- */
 public abstract class AbstractRenderer {
     SpriteBatch sprite;
     float stateTime;
@@ -18,14 +15,13 @@ public abstract class AbstractRenderer {
         stateTime=0;
     }
 
-    //tworzy teksture w pamieci
     Texture createTexture(String texturePath){
         Texture texture = new Texture(texturePath);
 
         return texture;
     }
-    // tworzy animacje z pliku png
-     Animation createAnimation(String sheetPath, int frameRows, int frameCols, float duration){
+
+    Animation createAnimation(String sheetPath, int frameRows, int frameCols, float duration){
         Animation animation;
         Texture forwardSheet = new Texture(Gdx.files.internal(sheetPath));
         TextureRegion[][] tmp = TextureRegion.split(forwardSheet,forwardSheet.getWidth()/frameCols, forwardSheet.getHeight()/frameRows);

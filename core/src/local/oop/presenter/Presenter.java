@@ -5,5 +5,6 @@ import local.oop.model.ArenaState;
 
 public interface Presenter {
     ArenaState getCurrentState();
+    PlayerManager getPlayerManager();
 
 }

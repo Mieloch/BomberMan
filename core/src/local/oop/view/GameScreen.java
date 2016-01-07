@@ -1,12 +1,10 @@
 package local.oop.view;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import local.oop.GameImpl;
 import local.oop.Level;
-import local.oop.model.ArenaState;
 import local.oop.model.BlockType;
 import local.oop.model.Bomb;
 import local.oop.model.Direction;
@@ -15,9 +13,6 @@ import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
 import local.oop.view.renderer.PlayerRenderer;
 
-/**
- * Created by echomil on 2015-12-25.
- */
 public class GameScreen implements Screen {
 
     private GameImpl game;
@@ -57,10 +52,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        presenter.getCurrentState(); // ArenaState
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        levelRenderTest(); // tylko do zobaczenia jak renderuje
-        renderTest(); // tylko do zobaczenia jak renderuje
+        levelRenderTest();
+        renderTest();
     }
 
     @Override

@@ -7,11 +7,6 @@ import local.oop.model.Direction;
 
 import java.util.HashMap;
 
-
-/**
- * KLASA RENDERUJACA ANIMACJE GRACZA
- * Created by echomil on 2015-12-26.
- */
 public class PlayerRenderer extends AbstractRenderer{
 
     private static final int FRAME_COLS = 4;
@@ -27,7 +22,6 @@ public class PlayerRenderer extends AbstractRenderer{
         initAnimationMap();
     }
 
-    //renderuje animacje gracza zaleznie od jego kierunku
     public void render(float x, float y, Direction direction){
         Animation animation = animationMap.get(direction);
         stateTime += Gdx.graphics.getDeltaTime();
@@ -43,9 +37,8 @@ public class PlayerRenderer extends AbstractRenderer{
         sprite.end();
     }
 
-    //tworzy mape gdzie kluczem jest kierunek a wartoscia animacja ruchu dla tego kierunku
     private void initAnimationMap(){
-        animationMap = new HashMap<Direction, Animation>();
+        animationMap = new HashMap<>();
         animationMap.put(Direction.DOWN,createAnimation(FRONT_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
         animationMap.put(Direction.UP,createAnimation(BACK_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
         Animation sideAnimSheet = createAnimation(SIDE_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f);
