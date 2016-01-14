@@ -1,6 +1,7 @@
 package local.oop;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.utils.Timer;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import local.oop.presenter.Presenter;
@@ -22,6 +23,7 @@ public class GameImpl extends Game {
 
     @Override
     public void create() {
+        Timer timer = new Timer();
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(windowInputProcessor);
         inputMultiplexer.addProcessor(playerInputProcessor);

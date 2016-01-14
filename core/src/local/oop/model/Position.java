@@ -1,6 +1,6 @@
 package local.oop.model;
 
-public class Position {
+public abstract class Position {
     public final int x, y;
 
     public Position(int x, int y) {

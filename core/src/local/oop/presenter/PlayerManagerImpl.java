@@ -11,9 +11,8 @@ public class PlayerManagerImpl implements PlayerManager{
     private List<String> players;
 
     @Override
-    public Map<String, CommandSequence> getPlayersMoves(){
-        Map<String, CommandSequence> map = new HashMap<>();
-        return map;
+    public List<CommandSequence> getPlayersMoves(){
+        return new ArrayList<>();
     }
 
     @Override
