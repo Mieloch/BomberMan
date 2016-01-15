@@ -3,9 +3,9 @@ package local.oop.view.renderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import local.oop.model.Direction;
-import local.oop.model.Player;
-import local.oop.model.PlayerId;
+import local.oop.model.player.Direction;
+import local.oop.model.player.Player;
+import local.oop.model.player.PlayerId;
 
 import java.util.HashMap;
 

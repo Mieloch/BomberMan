@@ -1,4 +1,6 @@
-package local.oop.model;
+package local.oop.model.player;
+
+import local.oop.model.Position;
 
 public class PlayerPosition extends Position {
 

@@ -1,4 +1,8 @@
-package local.oop.model;
+package local.oop.model.arena;
+
+import local.oop.model.player.Direction;
+import local.oop.model.player.Player;
+import local.oop.model.player.PlayerId;
 
 import java.util.*;
 import java.util.stream.Collectors;

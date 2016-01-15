@@ -2,13 +2,12 @@ package local.oop;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.utils.Timer;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import local.oop.events.PlayerInputProcessor;
 import local.oop.events.WindowInputProcessor;
-import local.oop.model.Arena;
-import local.oop.model.ArenaImpl;
+import local.oop.model.arena.Arena;
+import local.oop.model.arena.ArenaImpl;
 import local.oop.presenter.PlayerManager;
 import local.oop.presenter.PlayerManagerImpl;
 import local.oop.presenter.Presenter;

@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import local.oop.GameImpl;
-import local.oop.Level;
-import local.oop.model.*;
+import local.oop.model.arena.BlockPosition;
+import local.oop.model.arena.BlockType;
+import local.oop.model.player.Direction;
+import local.oop.model.player.Player;
+import local.oop.model.player.PlayerId;
+import local.oop.model.player.PlayerPosition;
 import local.oop.presenter.Presenter;
 import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
@@ -31,7 +35,7 @@ public class GameScreen implements Screen {
     }
 
     public void renderPlayerTest(){
-        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_1,new PlayerPosition(100,100,Direction.DOWN)));
+        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_1,new PlayerPosition(100,100, Direction.DOWN)));
         playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_2,new PlayerPosition(200,100,Direction.DOWN)));
         playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_3,new PlayerPosition(300,100,Direction.DOWN)));
         playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_4,new PlayerPosition(400,100,Direction.DOWN)));

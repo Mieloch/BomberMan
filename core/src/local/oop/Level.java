@@ -1,6 +1,6 @@
 package local.oop;
 
-import local.oop.model.BlockType;
+import local.oop.model.arena.BlockType;
 
 import java.util.Random;
 

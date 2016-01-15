@@ -1,5 +1,7 @@
 package local.oop.model;
 
+import local.oop.model.player.PlayerId;
+
 import java.util.List;
 
 public class CommandSequence {

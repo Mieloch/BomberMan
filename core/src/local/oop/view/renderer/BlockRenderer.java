@@ -1,9 +1,8 @@
 package local.oop.view.renderer;
 
 import com.badlogic.gdx.graphics.Texture;
-import local.oop.model.BlockPosition;
-import local.oop.model.BlockType;
-import local.oop.model.Position;
+import local.oop.model.arena.BlockPosition;
+import local.oop.model.arena.BlockType;
 
 import java.util.HashMap;
 

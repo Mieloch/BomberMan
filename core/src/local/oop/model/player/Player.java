@@ -1,4 +1,4 @@
-package local.oop.model;
+package local.oop.model.player;
 
 public class Player {
     private PlayerPosition position;

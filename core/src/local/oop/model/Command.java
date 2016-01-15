@@ -1,5 +1,7 @@
 package local.oop.model;
 
+import local.oop.model.player.Direction;
+
 public enum Command {
     LEFT,
     RIGHT,

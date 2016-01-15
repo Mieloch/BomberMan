@@ -3,7 +3,7 @@ package local.oop.view.renderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import local.oop.model.Bomb;
+import local.oop.model.arena.Bomb;
 
 import java.util.HashMap;
 
