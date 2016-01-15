@@ -30,6 +30,12 @@ public class GameScreen implements Screen {
         this.presenter = game.getPresenter();
     }
 
+    public void renderPlayerTest(){
+        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_1,new PlayerPosition(100,100,Direction.DOWN)));
+        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_2,new PlayerPosition(200,100,Direction.DOWN)));
+        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_3,new PlayerPosition(300,100,Direction.DOWN)));
+        playerRenderer.renderPlayer(new Player(PlayerId.PLAYER_4,new PlayerPosition(400,100,Direction.DOWN)));
+    }
 
     @Override
     public void show() {
@@ -39,9 +45,10 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        ArenaState arenaState = presenter.getCurrentState();
+        renderPlayerTest();
+       /* ArenaState arenaState = presenter.getCurrentState();
         renderPlayers(arenaState.getPlayers());
-        renderLevel(arenaState.getBlocks());
+        renderLevel(arenaState.getBlocks());*/
     }
 
     @Override

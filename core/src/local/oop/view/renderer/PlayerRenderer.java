@@ -5,52 +5,63 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import local.oop.model.Direction;
 import local.oop.model.Player;
-import local.oop.model.PlayerPosition;
+import local.oop.model.PlayerId;
 
 import java.util.HashMap;
 
-public class PlayerRenderer extends AbstractRenderer{
+public class PlayerRenderer extends AbstractRenderer {
 
     private static final int FRAME_COLS = 4;
-    private static final int FRAME_ROWS= 2;
-    private final String FRONT_SHEET_PATH = "front3.png";
-    private final String BACK_SHEET_PATH = "back3.png";
-    private final String SIDE_SHEET_PATH = "side3.png";
+    private static final int FRAME_ROWS = 2;
+    private final String FRONT_SHEET_PATH = "player_sprites/front";
+    private final String BACK_SHEET_PATH = "player_sprites/back";
+    private final String SIDE_SHEET_PATH = "player_sprites/side";
+    private final String FILE_EXTENSION = ".png";
 
-   private HashMap<Direction, Animation> animationMap;
+
+    private HashMap<PlayerId, HashMap<Direction, Animation>> playerAnimationMap;
 
 
-    public PlayerRenderer(){
-        initAnimationMap();
+    public PlayerRenderer() {
+        initPlayerAnimationMap();
     }
 
-    public void renderPlayer(Player player){
-        render(player.getPosition().x,player.getPosition().x,player.getDirection());
+    public void renderPlayer(Player player) {
+        HashMap<Direction, Animation> animationMap = playerAnimationMap.get(player.getId());
+        Animation animation = animationMap.get(player.getDirection());
+        render(player.getPosition().x, player.getPosition().x, player.getDirection(), animation);
     }
 
 
-    private void render(float x, float y, Direction direction){
-        Animation animation = animationMap.get(direction);
+    private void render(float x, float y, Direction direction, Animation animation) {
         stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion frame = animation.getKeyFrame(stateTime,true);
+        TextureRegion frame = animation.getKeyFrame(stateTime, true);
         sprite.begin();
-        if(direction == Direction.LEFT && !frame.isFlipX()){
-            frame.flip(true,false);
+
+        if (direction == Direction.LEFT && !frame.isFlipX()) {
+            frame.flip(true, false);
         }
-        if(frame.isFlipX() && direction == Direction.RIGHT){
-            frame.flip(true,false);
+        if (frame.isFlipX() && direction == Direction.RIGHT) {
+            frame.flip(true, false);
         }
-        sprite.draw(frame,x,y,frame.getRegionWidth()/2,frame.getRegionHeight()/2);
+        sprite.draw(frame, x, y, frame.getRegionWidth() / 2, frame.getRegionHeight() / 2);
+
         sprite.end();
+
     }
 
-    private void initAnimationMap(){
-        animationMap = new HashMap<>();
-        animationMap.put(Direction.DOWN,createAnimation(FRONT_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
-        animationMap.put(Direction.UP,createAnimation(BACK_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f));
-        Animation sideAnimSheet = createAnimation(SIDE_SHEET_PATH,FRAME_ROWS,FRAME_COLS,0.125f);
-        animationMap.put(Direction.LEFT,sideAnimSheet);
-        animationMap.put(Direction.RIGHT,sideAnimSheet);
+    private void initPlayerAnimationMap() {
+        playerAnimationMap = new HashMap<>();
+        for (int i = 1; i <= 4; i++) {
+            HashMap<Direction, Animation> animationMap = new HashMap<>();
+            animationMap.put(Direction.DOWN, createAnimation(FRONT_SHEET_PATH + i + FILE_EXTENSION, FRAME_ROWS, FRAME_COLS, 0.125f));
+            animationMap.put(Direction.UP, createAnimation(BACK_SHEET_PATH + i + FILE_EXTENSION, FRAME_ROWS, FRAME_COLS, 0.125f));
+            Animation sideAnimSheet = createAnimation(SIDE_SHEET_PATH + i + FILE_EXTENSION, FRAME_ROWS, FRAME_COLS, 0.125f);
+            animationMap.put(Direction.LEFT, sideAnimSheet);
+            animationMap.put(Direction.RIGHT, sideAnimSheet);
+            playerAnimationMap.put(PlayerId.getId(i), animationMap);
+        }
+
     }
 
 }
