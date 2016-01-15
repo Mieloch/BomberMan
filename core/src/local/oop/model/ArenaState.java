@@ -36,11 +36,11 @@ public class ArenaState {
         private ArenaState state;
 
         public Builder() {
-            state = new ArenaState();
+            this(null);
         }
 
         public Builder(ArenaState arenaState) {
-            state = new ArenaState(Optional.of(arenaState));
+            state = new ArenaState(Optional.ofNullable(arenaState));
         }
 
         public Builder setBlock(BlockPosition blockPosition, BlockType blockType) {
@@ -59,6 +59,10 @@ public class ArenaState {
 
         public ArenaState get() {
             return state;
+        }
+
+        public void clear() {
+            state = new ArenaState(Optional.ofNullable(state));
         }
     }
 }

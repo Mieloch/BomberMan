@@ -19,8 +19,10 @@ public class ArenaImpl implements Arena {
     int blockResolution;
 
     @Inject
-    public ArenaImpl(Timer timer) {
+    public ArenaImpl(Timer timer, ArenaState.Builder builder) {
         this.timer = timer;
+        this.nextStateBuilder = builder;
+        currentState = nextStateBuilder.get();
     }
 
     @Override
@@ -50,6 +52,7 @@ public class ArenaImpl implements Arena {
         nextStateBuilder = new ArenaState.Builder(currentState);
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
+        nextStateBuilder.clear();
     }
 
     private void acquireAndExecuteCommands() {
