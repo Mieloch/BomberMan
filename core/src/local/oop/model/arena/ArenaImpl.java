@@ -3,7 +3,7 @@ package local.oop.model.arena;
 import com.google.inject.Inject;
 import local.oop.model.*;
 import local.oop.model.player.PlayerId;
-import local.oop.model.player.PlayerPosition;
+import local.oop.model.PlayerPosition;
 import local.oop.presenter.Presenter;
 
 import java.util.List;

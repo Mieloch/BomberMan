@@ -1,4 +1,7 @@
-package local.oop.model.player;
+package local.oop.model;
+
+import local.oop.model.player.Direction;
+import local.oop.model.player.PlayerId;
 
 public class Player {
     private PlayerPosition position;

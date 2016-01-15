@@ -2,7 +2,7 @@ package local.oop.presenter;
 
 import com.google.inject.Inject;
 import local.oop.model.arena.Arena;
-import local.oop.model.arena.ArenaState;
+import local.oop.model.ArenaState;
 import local.oop.model.CommandSequence;
 
 import java.util.List;

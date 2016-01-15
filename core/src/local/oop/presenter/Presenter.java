@@ -1,6 +1,6 @@
 package local.oop.presenter;
 
-import local.oop.model.arena.ArenaState;
+import local.oop.model.ArenaState;
 import local.oop.model.CommandSequence;
 
 import java.util.List;

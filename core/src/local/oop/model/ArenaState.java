@@ -1,7 +1,8 @@
-package local.oop.model.arena;
+package local.oop.model;
 
+import local.oop.model.arena.BlockPosition;
+import local.oop.model.arena.BlockType;
 import local.oop.model.player.Direction;
-import local.oop.model.player.Player;
 import local.oop.model.player.PlayerId;
 
 import java.util.*;
