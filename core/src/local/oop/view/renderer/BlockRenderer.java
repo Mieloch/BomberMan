@@ -1,7 +1,9 @@
 package local.oop.view.renderer;
 
 import com.badlogic.gdx.graphics.Texture;
+import local.oop.model.BlockPosition;
 import local.oop.model.BlockType;
+import local.oop.model.Position;
 
 import java.util.HashMap;
 
@@ -19,20 +21,13 @@ public class BlockRenderer extends AbstractRenderer {
         BLOCK_SIZE = blocksMap.get(BlockType.BACKGROUND).getWidth()*SCALE;
     }
 
-    public void render(float x, float y, BlockType type){
+    public void renderBlock(BlockPosition position, BlockType type){
         Texture blockTexture = blocksMap.get(type);
         sprite.begin();
-        sprite.draw(blockTexture,x,y,BLOCK_SIZE,BLOCK_SIZE);
+        sprite.draw(blockTexture,position.x*BLOCK_SIZE,position.y*BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE);
         sprite.end();
     }
 
-    public void renderLevel(float x, float y, BlockType[][] level){
-        for(int i=0;i<level.length;i++){
-            for(int j=0;j<level[i].length;j++){
-               render(x+i*BLOCK_SIZE,y+j*BLOCK_SIZE,level[i][j]);
-            }
-        }
-    }
 
 
     private void initBlocksMap(){

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import local.oop.model.Direction;
+import local.oop.model.PlayerPosition;
 
 import java.util.HashMap;
 
@@ -15,14 +16,19 @@ public class PlayerRenderer extends AbstractRenderer{
     private final String BACK_SHEET_PATH = "back3.png";
     private final String SIDE_SHEET_PATH = "side3.png";
 
-    HashMap<Direction, Animation> animationMap;
+   private HashMap<Direction, Animation> animationMap;
 
 
     public PlayerRenderer(){
         initAnimationMap();
     }
 
-    public void render(float x, float y, Direction direction){
+    public void renderPlayer(PlayerPosition position){
+        render(position.x,position.y,position.getDirection());
+    }
+
+
+    private void render(float x, float y, Direction direction){
         Animation animation = animationMap.get(direction);
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = animation.getKeyFrame(stateTime,true);
