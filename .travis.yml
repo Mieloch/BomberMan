@@ -1,6 +1,16 @@
 language: java
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 notifications:
   slack: oop2:8zAns9RNhGkcs0JvYSNtIQ8T
+before_deploy: './gradlew dist'
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: iZRYLAXaMzdlxYJvVuiBC1FQYlH7zZizfDKCeLiKd2QwQIimmCT7mFUTUwszAF9FhkCKPyIyICIIoYtwiJCDGYipCxCbpgYKAQF6Aa+iUVIuYWvkNMS4nt1WVk2E2xmY65sLtErxweYMuR3cLDrijK3+H90qtUVTTi/isq7YZAdaOBtyxysulZXNs4GAxmjwg/taeIqZvcT/PW2EfB2y5O56pYtJiDdnmCTdvKalXVSgRyQk6LF6tYxt3b4NydIEQ/2DQo8aIu7DE8UgGuAx/OTvRVDLQp6QCYTED9KYPWWJ8XIplfLt50zGASTIFEd+lVkBNbS9MAoLk8ZSuxiWP5rWuI/GGgcYTIIqxNwNTUd2IOTubY9YEI1kMNR5jXWZXnyvv22cjs7ListQWPfTMV7Kw4IXrNkIr67f6QqlywyK2yMnqVX9wC40LVmWalI04vgS9BLICzKraNWAV48fCiAUgMlZrJWZ5VNJh+cB9yrlyCzHCg9Sl4OXWYYVVmTZRaRkr2VxSiCXTbeqlhkPYlj8CW3aRrT0NszNxllQMLTfB1PKiNqRIIOtzIFsc8Fb+ok+A1o618O9HBsgvnfSNqYsflfTGo/EP5d3mnrcgqjg/uvRYzBQrDn4vQ0ftQ1zs3WAnMCF7Mp1Mwt4ojnAfiLWXLP0buigc/3qf6HVIGE=
+  file: desktop/build/libs/Bomberman-$(cat .version).jar
+  on:
+    repo: filajacek/oop2
+    all_branches: true
+    tags: true
