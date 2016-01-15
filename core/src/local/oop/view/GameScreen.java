@@ -11,6 +11,7 @@ import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
 import local.oop.view.renderer.PlayerRenderer;
 
+import java.util.List;
 import java.util.Map;
 
 public class GameScreen implements Screen {
@@ -68,9 +69,9 @@ public class GameScreen implements Screen {
 
     }
 
-    private void renderPlayers(Map<String, PlayerPosition> players) {
-        for (PlayerPosition playerPosition : players.values()) {
-            playerRenderer.renderPlayer(playerPosition);
+    private void renderPlayers( List<Player> players) {
+        for (Player player : players) {
+            playerRenderer.renderPlayer(player);
         }
     }
     

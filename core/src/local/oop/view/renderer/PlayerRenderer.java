@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import local.oop.model.Direction;
+import local.oop.model.Player;
 import local.oop.model.PlayerPosition;
 
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class PlayerRenderer extends AbstractRenderer{
         initAnimationMap();
     }
 
-    public void renderPlayer(PlayerPosition position){
-        render(position.x,position.y,position.getDirection());
+    public void renderPlayer(Player player){
+        render(player.getPosition().x,player.getPosition().x,player.getDirection());
     }
 
 
