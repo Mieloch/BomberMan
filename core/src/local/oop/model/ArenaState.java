@@ -1,6 +1,7 @@
 package local.oop.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArenaState {
     List<Player> players;
@@ -49,11 +50,27 @@ public class ArenaState {
         }
 
         public Builder movePlayer(PlayerId playerId, Direction direction, int step) {
-            state.getPlayers()
+            state.players
                     .stream()
                     .filter(player -> player.getId() == playerId)
                     .findFirst()
                     .ifPresent(player -> player.move(direction, step));
+            return this;
+        }
+
+        public Builder addPlayer(Player player) {
+            if (state.players.stream().noneMatch(p -> p.equals(player))) {
+                state.players.add(player);
+            } else {
+                throw new RuntimeException("Player already exists");
+            }
+            return this;
+        }
+
+        public Builder removePlayer(Player player) {
+            state.players = state.getPlayers().stream()
+                    .filter(p -> p.equals(player))
+                    .collect(Collectors.toList());
             return this;
         }
 

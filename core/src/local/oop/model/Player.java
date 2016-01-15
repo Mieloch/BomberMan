@@ -6,8 +6,13 @@ public class Player {
     private final PlayerId id;
 
     public Player(PlayerId id, PlayerPosition position) {
+        this(id, position, Direction.DOWN);
+    }
+
+    public Player(PlayerId id, PlayerPosition position, Direction direction) {
         this.id = id;
         this.position = position;
+        this.direction = direction;
     }
 
     public PlayerId getId() {
@@ -41,5 +46,24 @@ public class Player {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Player that = (Player) obj;
+
+        return this.id == that.id;
     }
 }
