@@ -5,13 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import local.oop.GameImpl;
 import local.oop.Level;
-import local.oop.model.BlockType;
-import local.oop.model.Bomb;
-import local.oop.model.Direction;
+import local.oop.model.*;
 import local.oop.presenter.Presenter;
 import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
 import local.oop.view.renderer.PlayerRenderer;
+
+import java.util.Map;
 
 public class GameScreen implements Screen {
 
@@ -29,21 +29,6 @@ public class GameScreen implements Screen {
         this.presenter = game.getPresenter();
     }
 
-    private void renderTest(){
-        playerRenderer.render(50,50, Direction.LEFT);
-        playerRenderer.render(100,50, Direction.RIGHT);
-        playerRenderer.render(200,50, Direction.UP);
-        playerRenderer.render(300,50, Direction.DOWN);
-        bombRenderer.render(300,300, Bomb.NORMAL);
-        bombRenderer.render(300,400, Bomb.FIRE);
-
-    }
-
-    private void levelRenderTest(){
-        Level l = new Level(15,15);
-       BlockType[][] lev =  l.getEnumLevel();
-        blockRenderer.renderLevel(100,100,lev);
-    }
 
     @Override
     public void show() {
@@ -53,8 +38,9 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        levelRenderTest();
-        renderTest();
+        ArenaState arenaState = presenter.getCurrentState();
+        renderPlayers(arenaState.getPlayers());
+        renderLevel(arenaState.getBlocks());
     }
 
     @Override
@@ -80,5 +66,17 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    private void renderPlayers(Map<String, PlayerPosition> players) {
+        for (PlayerPosition playerPosition : players.values()) {
+            playerRenderer.renderPlayer(playerPosition);
+        }
+    }
+    
+    private void renderLevel(Map<BlockPosition, BlockType> blocks){
+        for (Map.Entry<BlockPosition, BlockType> blockPositionBlockTypeEntry : blocks.entrySet()) {
+            blockRenderer.renderBlock(blockPositionBlockTypeEntry.getKey(),blockPositionBlockTypeEntry.getValue());
+        }
     }
 }
