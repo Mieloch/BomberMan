@@ -1,6 +1,7 @@
 package local.oop.model;
 
 import com.google.inject.Inject;
+import local.oop.presenter.PlayerManagerImpl;
 import local.oop.presenter.Presenter;
 
 import java.util.List;
@@ -53,31 +54,17 @@ public class ArenaImpl implements Arena {
 
     private void acquireAndExecuteCommands() {
         for (CommandSequence commandSequence : presenter.getPlayersMoves()) {
-            for (Command command: commandSequence.getCommands()) {
+            for (Command command : commandSequence.getCommands()) {
                 executeCommand(commandSequence.getPlayerId(), command);
             }
         }
     }
 
-    private void executeCommand(String playerId, Command command) {
-        PlayerPosition currentPosition = currentState.getPlayers().get(playerId);
-        switch (command) {
-            case RIGHT:
-                nextStateBuilder.setPlayer(playerId, currentPosition.moveRight(step));
-                break;
-            case UP:
-                nextStateBuilder.setPlayer(playerId, currentPosition.moveUp(step));
-                break;
-            case DOWN:
-                nextStateBuilder.setPlayer(playerId, currentPosition.moveDown(step));
-                break;
-            case LEFT:
-                nextStateBuilder.setPlayer(playerId, currentPosition.moveLeft(step));
-                break;
-            case BOMB:
-                placeBomb(convertPlayerToBlock(currentPosition));
-                break;
-
+    private void executeCommand(PlayerId playerId, Command command) {
+        if (command == Command.BOMB) {
+            placeBomb(convertPlayerToBlock(currentState.getPlayer(playerId).getPosition()));
+        } else {
+            nextStateBuilder.movePlayer(playerId, command.getDirection(), step);
         }
     }
 

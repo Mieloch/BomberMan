@@ -4,9 +4,9 @@ import java.util.List;
 
 public class CommandSequence {
     private List<Command> commands;
-    private String playerId;
+    private PlayerId playerId;
 
-    public CommandSequence(List<Command> commands, String playerId) {
+    public CommandSequence(List<Command> commands, PlayerId playerId) {
         this.commands = commands;
         this.playerId = playerId;
     }
@@ -15,7 +15,7 @@ public class CommandSequence {
         return commands;
     }
 
-    public String getPlayerId() {
+    public PlayerId getPlayerId() {
         return playerId;
     }
 }

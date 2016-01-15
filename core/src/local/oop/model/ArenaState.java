@@ -1,28 +1,35 @@
 package local.oop.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ArenaState {
-    Map<String, PlayerPosition> players;
+    List<Player> players;
     Map<BlockPosition, BlockType> blocks;
 
     private ArenaState() {
-        players = new HashMap<>();
-        blocks = new HashMap<>();
+        this(Optional.empty());
     }
 
-    private ArenaState(ArenaState arenaState) {
-        players = new HashMap<>(arenaState.getPlayers());
-        blocks = new HashMap<>(arenaState.getBlocks());
+    private ArenaState(Optional<ArenaState> arenaState) {
+        arenaState.ifPresent(state -> {
+            players = new ArrayList<>(arenaState.get().getPlayers());
+            blocks = new HashMap<>(arenaState.get().getBlocks());
+        });
     }
 
     public Map<BlockPosition, BlockType> getBlocks() {
         return blocks;
     }
 
-    public Map<String, PlayerPosition> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
+    }
+
+    public Player getPlayer(PlayerId playerId) {
+        return players.stream()
+                .filter(player -> player.getId() == playerId)
+                .findFirst()
+                .get();
     }
 
     public static class Builder {
@@ -33,7 +40,7 @@ public class ArenaState {
         }
 
         public Builder(ArenaState arenaState) {
-            state = new ArenaState(arenaState);
+            state = new ArenaState(Optional.of(arenaState));
         }
 
         public Builder setBlock(BlockPosition blockPosition, BlockType blockType) {
@@ -41,8 +48,12 @@ public class ArenaState {
             return this;
         }
 
-        public Builder setPlayer(String playerId, PlayerPosition playerPosition) {
-            state.players.put(playerId, playerPosition);
+        public Builder movePlayer(PlayerId playerId, Direction direction, int step) {
+            state.getPlayers()
+                    .stream()
+                    .filter(player -> player.getId() == playerId)
+                    .findFirst()
+                    .ifPresent(player -> player.move(direction, step));
             return this;
         }
 
