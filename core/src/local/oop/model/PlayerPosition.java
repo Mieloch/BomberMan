@@ -6,6 +6,8 @@ public class PlayerPosition extends Position {
 
     private Direction direction;
 
+    private static final int SIZE = 32;
+
     public PlayerPosition(int x, int y, Direction direction) {
         super(x, y);
         this.direction = direction;

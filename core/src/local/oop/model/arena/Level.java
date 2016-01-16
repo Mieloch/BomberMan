@@ -83,6 +83,7 @@ public class Level {
             if (i == 6)
                 generated = true;
         }
+
         return level;
     }
 

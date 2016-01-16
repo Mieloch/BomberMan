@@ -17,6 +17,7 @@ public class PlayerRenderer extends AbstractRenderer {
     private final String BACK_SHEET_PATH = "player_sprites/back";
     private final String SIDE_SHEET_PATH = "player_sprites/side";
     private final String FILE_EXTENSION = ".png";
+    private final float SCALE = 0.492f;
 
 
     private HashMap<PlayerId, HashMap<Direction, Animation>> playerAnimationMap;
@@ -44,7 +45,7 @@ public class PlayerRenderer extends AbstractRenderer {
         if (frame.isFlipX() && direction == Direction.RIGHT) {
             frame.flip(true, false);
         }
-        sprite.draw(frame, x, y, frame.getRegionWidth() / 2, frame.getRegionHeight() / 2);
+        sprite.draw(frame, x, y, frame.getRegionWidth()*SCALE, frame.getRegionHeight()*SCALE);
 
         sprite.end();
 

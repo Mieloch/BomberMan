@@ -11,13 +11,12 @@ public class BlockRenderer extends AbstractRenderer {
     private static final String SOLID_BLOCK_PATH = "SolidBlock.png";
     private static final String BACKGROUNG_TILE_PATH= "BackgroundTile.png";
     private static final String EXPLODABLE_BLOCK_PATH = "ExplodableBlock.png";
-    private final float BLOCK_SIZE;
+    private final float BLOCK_SIZE = 32;
     private final float SCALE = 0.6f;
     HashMap<BlockType,Texture> blocksMap;
 
     public BlockRenderer(){
         initBlocksMap();
-        BLOCK_SIZE = blocksMap.get(BlockType.BACKGROUND).getWidth()*SCALE;
     }
 
     public void renderBlock(BlockPosition position, BlockType type){
