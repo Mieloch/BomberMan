@@ -14,13 +14,26 @@ public class ArenaState {
 
     private ArenaState() {
         this(Optional.empty());
+
     }
 
     private ArenaState(Optional<ArenaState> arenaState) {
-        arenaState.ifPresent(state -> {
-            players = new ArrayList<>(arenaState.get().getPlayers());
-            blocks = new HashMap<>(arenaState.get().getBlocks());
-        });
+        if(arenaState.isPresent()) {
+            arenaState.ifPresent(state -> {
+                players = new ArrayList<>(arenaState.get().getPlayers());
+                blocks = new HashMap<>(arenaState.get().getBlocks());
+            });
+        }
+        else{
+            if(players == null){
+                players = new ArrayList<>();
+            }
+            if(blocks == null){
+                blocks = new HashMap<>();
+            }
+
+        }
+
     }
 
     public Map<BlockPosition, BlockType> getBlocks() {

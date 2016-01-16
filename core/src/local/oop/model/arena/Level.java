@@ -1,4 +1,4 @@
-package local.oop;
+package local.oop.model.arena;
 
 import local.oop.model.arena.BlockType;
 
