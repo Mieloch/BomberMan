@@ -2,6 +2,7 @@ package local.oop.model;
 
 import local.oop.model.player.PlayerId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandSequence {
@@ -19,5 +20,12 @@ public class CommandSequence {
 
     public PlayerId getPlayerId() {
         return playerId;
+    }
+
+    public void addCommand(Command command){
+        if(this.commands==null){
+            this.commands = new ArrayList<>();
+        }
+        this.commands.add(command);
     }
 }

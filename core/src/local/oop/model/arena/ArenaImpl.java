@@ -18,17 +18,14 @@ public class ArenaImpl implements Arena {
     int step;
     int bombTimeout;
     int blockResolution;
-    private final int MAP_SIZE = 17;
+    public final static int MAP_SIZE = 17;
     private Level level;
-    private Map<PlayerId,PlayerPosition> spawningMap;
 
     @Inject
     public ArenaImpl(Timer timer, ArenaState.Builder builder) {
         this.timer = timer;
         this.nextStateBuilder = builder;
         currentState = nextStateBuilder.get();
-        level = new Level(MAP_SIZE,MAP_SIZE);
-        initSpawningMap();
         initArenaState();
 
     }
@@ -38,8 +35,10 @@ public class ArenaImpl implements Arena {
         return currentState;
     }
 
+    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        this.currentState = this.nextStateBuilder.setPresenter(presenter).get();
     }
 
     @Override
@@ -47,27 +46,13 @@ public class ArenaImpl implements Arena {
         timer.schedule(getLoopTask(), 0, 25);
     }
 
-    private void initSpawningMap(){
-        spawningMap = new HashMap<>();
-        int blockSize = BlockPosition.SIZE;
-        spawningMap.put(PlayerId.PLAYER_1,new PlayerPosition(0*blockSize,0*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_2,new PlayerPosition((MAP_SIZE-1) *blockSize,0*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_3,new PlayerPosition(0*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_4,new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN));
-    }
 
     private void initArenaState(){
         nextStateBuilder = new ArenaState.Builder(currentState);
         loadBlocksToState();
-        createPlayers();
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
 
-    }
-
-    private void createPlayers(){ // tmp until someone make method to take player count from player choose screen
-        nextStateBuilder.addPlayer(new Player(PlayerId.PLAYER_1,spawningMap.get(PlayerId.PLAYER_1)));
-        nextStateBuilder.addPlayer(new Player(PlayerId.PLAYER_2,spawningMap.get(PlayerId.PLAYER_2)));
     }
 
     private void loadBlocksToState(){

@@ -4,6 +4,7 @@ import local.oop.model.arena.BlockPosition;
 import local.oop.model.arena.BlockType;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
+import local.oop.presenter.Presenter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,10 +12,10 @@ import java.util.stream.Collectors;
 public class ArenaState {
     List<Player> players;
     Map<BlockPosition, BlockType> blocks;
+    Presenter presenter;
 
     private ArenaState() {
         this(Optional.empty());
-
     }
 
     private ArenaState(Optional<ArenaState> arenaState) {
@@ -41,6 +42,11 @@ public class ArenaState {
     }
 
     public List<Player> getPlayers() {
+        if(players.isEmpty() && presenter != null){
+            for (int i = 1; i <= presenter.getPlayersInputCache().getNumberOfPlayers(); i++) {
+                players.add(new Player(PlayerId.getId(i)));
+            }
+        }
         return players;
     }
 
@@ -62,6 +68,11 @@ public class ArenaState {
             state = new ArenaState(Optional.ofNullable(arenaState));
         }
 
+        public Builder setPresenter(Presenter presenter){
+            state.presenter = presenter;
+            return this;
+        }
+
         public Builder setBlock(BlockPosition blockPosition, BlockType blockType) {
             state.blocks.put(blockPosition, blockType);
             return this;
@@ -73,6 +84,11 @@ public class ArenaState {
                     .filter(player -> player.getId() == playerId)
                     .findFirst()
                     .ifPresent(player -> player.move(direction, step));
+            return this;
+        }
+
+        public Builder addPlayers(List<Player> players){
+            players.forEach(this::addPlayer);
             return this;
         }
 

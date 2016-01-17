@@ -1,5 +1,7 @@
 package local.oop.model;
 
+import local.oop.model.arena.ArenaImpl;
+import local.oop.model.arena.BlockPosition;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 
@@ -9,6 +11,27 @@ public class Player {
     private final PlayerId id;
     private int speed;
     private int power;
+
+    public Player(PlayerId id){
+        this.id = id;
+        int blockSize = BlockPosition.SIZE;
+        int MAP_SIZE = ArenaImpl.MAP_SIZE;
+        switch (id){
+            case PLAYER_1:
+                position = new PlayerPosition(0,0, Direction.DOWN);
+                break;
+            case PLAYER_2:
+                position = new PlayerPosition((MAP_SIZE-1) *blockSize,0,Direction.DOWN);
+                break;
+            case PLAYER_3:
+                position = new PlayerPosition(0,(MAP_SIZE-1)*blockSize,Direction.DOWN);
+                break;
+            case PLAYER_4:
+                position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
+                break;
+        }
+        this.direction = Direction.DOWN;
+    }
 
     public Player(PlayerId id, PlayerPosition position) {
         this(id, position, Direction.DOWN);
@@ -21,7 +44,7 @@ public class Player {
     }
 
 
-    void move(Direction direction, int step) {
+    public void move(Direction direction, int step) {
         switch (direction) {
             case UP:
                 position = position.moveUp(step);

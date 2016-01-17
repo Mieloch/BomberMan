@@ -116,7 +116,7 @@ public class ChoosePlayersScreen implements Screen {
 
         java.util.List<SelectBox<String>> selectBoxList = new ArrayList<>();
         java.util.List<Label> labelList = new ArrayList<>();
-        for(int i = 0; i < game.getPresenter().getPlayerManager().getNumberOfPlayers(); i++){
+        for(int i = 0; i < game.getPresenter().getPlayersInputCache().getNumberOfPlayers(); i++){
             SelectBox<String> selectBox = new SelectBox<>(selectBoxStyle);
             selectBox.setItems(list);
             selectBox.setSelectedIndex(i+1);

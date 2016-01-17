@@ -3,8 +3,13 @@ package local.oop.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import local.oop.GameImpl;
 import local.oop.model.ArenaState;
+import local.oop.model.arena.Arena;
+import local.oop.model.arena.ArenaImpl;
 import local.oop.model.arena.BlockPosition;
 import local.oop.model.arena.BlockType;
 import local.oop.model.player.Direction;
@@ -33,6 +38,7 @@ public class GameScreen implements Screen {
         blockRenderer = new BlockRenderer();
         this.game = game;
         this.presenter = game.getPresenter();
+        presenter.startGame();
     }
 
     @Override

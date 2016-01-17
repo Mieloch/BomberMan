@@ -17,6 +17,6 @@ public enum PlayerId {
             case 4:
                 return PLAYER_4;
         }
-        return null;
+        throw new EnumConstantNotPresentException(PlayerId.class, "PlayerId cannot be larger than 4");
     }
 }

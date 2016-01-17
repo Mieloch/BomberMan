@@ -22,16 +22,17 @@ public class Settings {
 
     public Settings(){
         prefs = Gdx.app.getPreferences("config");
-        playerOneUpKeycode = prefs.getInteger("oneup", Input.Keys.W);
-        playerOneDownKeycode = prefs.getInteger("onedown", Input.Keys.S);
-        playerOneLeftKeycode = prefs.getInteger("oneleft", Input.Keys.A);
-        playerOneRightKeycode = prefs.getInteger("oneright", Input.Keys.D);
-        playerOneBombKeycode = prefs.getInteger("onebomb", Input.Keys.SPACE);
-        playerTwoUpKeycode = prefs.getInteger("twoup", Input.Keys.UP);
-        playerTwoDownKeycode = prefs.getInteger("twodown", Input.Keys.DOWN);
-        playerTwoLeftKeycode = prefs.getInteger("twoleft", Input.Keys.LEFT);
-        playerTwoRightKeycode = prefs.getInteger("tworight", Input.Keys.RIGHT);
-        playerTwoBombKeycode = prefs.getInteger("twobomb", Input.Keys.ENTER);
+        playerOneUpKeycode = prefs.getInteger(Setting.ONE_UP.toString(), Input.Keys.W);
+        playerOneDownKeycode = prefs.getInteger(Setting.ONE_DOWN.toString(), Input.Keys.S);
+        playerOneLeftKeycode = prefs.getInteger(Setting.ONE_LEFT.toString(), Input.Keys.A);
+        playerOneRightKeycode = prefs.getInteger(Setting.ONE_RIGHT.toString(), Input.Keys.D);
+        playerOneBombKeycode = prefs.getInteger(Setting.ONE_BOMB.toString(), Input.Keys.SPACE);
+        playerTwoUpKeycode = prefs.getInteger(Setting.TWO_UP.toString(), Input.Keys.UP);
+        playerTwoDownKeycode = prefs.getInteger(Setting.TWO_DOWN.toString(), Input.Keys.DOWN);
+        playerTwoLeftKeycode = prefs.getInteger(Setting.TWO_LEFT.toString(), Input.Keys.LEFT);
+        playerTwoRightKeycode = prefs.getInteger(Setting.TWO_RIGHT.toString(), Input.Keys.RIGHT);
+        playerTwoBombKeycode = prefs.getInteger(Setting.TWO_BOMB.toString(), Input.Keys.ENTER);
+
     }
 
     public void save(Map<String, Integer> map){
@@ -41,16 +42,16 @@ public class Settings {
 
     public Map<String, Integer> getKeycodesMap(){
         Map<String, Integer> map = new HashMap<>();
-        map.put("oneup", playerOneUpKeycode);
-        map.put("onedown", playerOneDownKeycode);
-        map.put("oneleft", playerOneLeftKeycode);
-        map.put("oneright", playerOneRightKeycode);
-        map.put("onebomb", playerOneBombKeycode);
-        map.put("twoup", playerTwoUpKeycode);
-        map.put("twodown", playerTwoDownKeycode);
-        map.put("twoleft", playerTwoLeftKeycode);
-        map.put("tworight", playerTwoRightKeycode);
-        map.put("twobomb", playerTwoBombKeycode);
+        map.put(Setting.ONE_UP.toString(), playerOneUpKeycode);
+        map.put(Setting.ONE_DOWN.toString(), playerOneDownKeycode);
+        map.put(Setting.ONE_LEFT.toString(), playerOneLeftKeycode);
+        map.put(Setting.ONE_RIGHT.toString(), playerOneRightKeycode);
+        map.put(Setting.ONE_BOMB.toString(), playerOneBombKeycode);
+        map.put(Setting.TWO_UP.toString(), playerTwoUpKeycode);
+        map.put(Setting.TWO_DOWN.toString(), playerTwoDownKeycode);
+        map.put(Setting.TWO_LEFT.toString(), playerTwoLeftKeycode);
+        map.put(Setting.TWO_RIGHT.toString(), playerTwoRightKeycode);
+        map.put(Setting.TWO_BOMB.toString(), playerTwoBombKeycode);
         return map;
     }
 

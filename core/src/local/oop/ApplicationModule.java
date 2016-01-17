@@ -8,15 +8,15 @@ import local.oop.events.PlayerInputProcessor;
 import local.oop.events.WindowInputProcessor;
 import local.oop.model.arena.Arena;
 import local.oop.model.arena.ArenaImpl;
-import local.oop.presenter.PlayerManager;
-import local.oop.presenter.PlayerManagerImpl;
+import local.oop.presenter.PlayersInputCache;
+import local.oop.presenter.PlayersInputCacheImpl;
 import local.oop.presenter.Presenter;
 import local.oop.presenter.PresenterImpl;
 
 public class ApplicationModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(PlayerManager.class).to(PlayerManagerImpl.class);
+        bind(PlayersInputCache.class).to(PlayersInputCacheImpl.class);
         bind(Presenter.class).to(PresenterImpl.class);
         bind(Arena.class).to(ArenaImpl.class);
         bind(InputProcessor.class).annotatedWith(Names.named("PlayerInputProcessor")).to(PlayerInputProcessor.class);
