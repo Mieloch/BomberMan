@@ -16,6 +16,8 @@ public class Player {
         this.id = id;
         int blockSize = BlockPosition.SIZE;
         int MAP_SIZE = ArenaImpl.MAP_SIZE;
+        speed = 2;
+        power = 2;
         switch (id){
             case PLAYER_1:
                 position = new PlayerPosition(0,0, Direction.DOWN);
