@@ -98,7 +98,7 @@ public class ArenaImpl implements Arena {
                 break;
         }
 
-        return level.areAllCornersOnFreeSpace(pX, pY);
+        return areAllCornersOnFreeSpace(pX, pY);
 
     }
 
@@ -117,7 +117,44 @@ public class ArenaImpl implements Arena {
             nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
         }
     }
+    public boolean areAllCornersOnFreeSpace(int x, int y) {
+        int playerSize = PlayerPosition.SIZE;
+        int xShift = playerSize, yShift = playerSize;
+        if(x%32==0){
+            xShift=0;
+        }
+        if(y%32==0){
+            yShift=0;
+        }
+        boolean leftBottomCorner = isFreeSpace(x, y);
 
+        boolean rightBottomCorner = isFreeSpace(x + xShift, y);
+        boolean leftTopCorner = isFreeSpace(x, y + yShift);
+        boolean rightTopCorner = isFreeSpace(x + xShift, y + yShift);
+        return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
+    }
+
+    public boolean isFreeSpace(int x, int y) {
+        int size = BlockType.SIZE;
+        int blockX = x / size, blockY = y / size;
+
+
+        if(x < 0 || x >= MAP_SIZE*32){
+            return false;
+        }
+        if(y < 0 || y >= MAP_SIZE*32){
+            return false;
+        }
+        if(blockX <0 || blockY <0){
+            return false;
+        }
+        if(blockX >= MAP_SIZE || blockY >= MAP_SIZE){
+            return false;
+        }
+
+        BlockType block = currentState.getBlocks().entrySet().stream().filter(entry -> entry.getKey().x==blockX && entry.getKey().y == blockY).collect(Collectors.toList()).get(0).getValue();
+        return block == BlockType.BACKGROUND;
+    }
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
         nextStateBuilder.setBomb(position, Bomb.NORMAL);
