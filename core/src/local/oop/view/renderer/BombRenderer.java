@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class BombRenderer extends AbstractRenderer{
     private static final String BOMB_SHEET_PATH = "bomb.png";
     private static final String FIRE_SHEET_PATH = "fire.png";
+    private final float BLOCK_SIZE = 32;
 
     HashMap<Bomb,Animation> bombMap;
     public BombRenderer(){
@@ -21,7 +22,7 @@ public class BombRenderer extends AbstractRenderer{
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = bomb.getKeyFrame(stateTime,true);
         sprite.begin();
-        sprite.draw(frame,x,y);
+        sprite.draw(frame,x*BLOCK_SIZE,y*BLOCK_SIZE,BLOCK_SIZE,BLOCK_SIZE);
         sprite.end();
     }
 

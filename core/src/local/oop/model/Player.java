@@ -10,6 +10,7 @@ public class Player {
     private final PlayerId id;
     private int speed;
     private int power;
+    private int bombs = 1;
 
     public Player(PlayerId id){
         this.id = id;
@@ -77,6 +78,14 @@ public class Player {
         Player that = (Player) obj;
 
         return this.id == that.id;
+    }
+
+    public int getBombs() {
+        return bombs;
+    }
+
+    public void setBombs(int bombs) {
+        this.bombs = bombs;
     }
 
     public void setPosition(PlayerPosition position) {
