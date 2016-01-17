@@ -7,9 +7,8 @@ public enum Command {
     RIGHT,
     UP,
     DOWN,
-    BOMB;
-
-    private Direction direction = null;
+    BOMB,
+    STOP;
 
     static {
         LEFT.direction = Direction.LEFT;
@@ -17,6 +16,8 @@ public enum Command {
         UP.direction = Direction.UP;
         DOWN.direction = Direction.DOWN;
     }
+
+    private Direction direction = null;
 
     public Direction getDirection() {
         return direction;
