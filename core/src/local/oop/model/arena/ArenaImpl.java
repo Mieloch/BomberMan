@@ -18,16 +18,15 @@ public class ArenaImpl implements Arena {
     int step;
     int bombTimeout;
     int blockResolution;
-    private final int MAP_SIZE = 17;
+    private int MAP_SIZE;
     private Level level;
-    private Map<PlayerId,PlayerPosition> spawningMap;
 
     @Inject
     public ArenaImpl(Timer timer, ArenaState.Builder builder) {
         this.timer = timer;
         this.nextStateBuilder = builder;
         currentState = nextStateBuilder.get();
-        initSpawningMap();
+        MAP_SIZE = currentState.getMAP_SIZE();
         initArenaState();
 
     }
@@ -46,27 +45,14 @@ public class ArenaImpl implements Arena {
         timer.schedule(getLoopTask(), 0, 25);
     }
 
-    private void initSpawningMap(){
-        spawningMap = new HashMap<>();
-        int blockSize = BlockPosition.SIZE;
-        spawningMap.put(PlayerId.PLAYER_1,new PlayerPosition(0*blockSize,0*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_2,new PlayerPosition((MAP_SIZE-1) *blockSize,0*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_3,new PlayerPosition(0*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN));
-        spawningMap.put(PlayerId.PLAYER_4,new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN));
-    }
 
     private void initArenaState(){
         nextStateBuilder = new ArenaState.Builder(currentState);
         loadBlocksToState();
-        createPlayers();
+        nextStateBuilder.addPlayers(presenter.getPlayerManager().getPlayers());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
 
-    }
-
-    private void createPlayers(){ // tmp until someone make method to take player count from player choose screen
-        nextStateBuilder.addPlayer(new Player(PlayerId.PLAYER_1,spawningMap.get(PlayerId.PLAYER_1)));
-        nextStateBuilder.addPlayer(new Player(PlayerId.PLAYER_2,spawningMap.get(PlayerId.PLAYER_2)));
     }
 
     private void loadBlocksToState(){
@@ -154,5 +140,4 @@ public class ArenaImpl implements Arena {
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
         return new BlockPosition(playerPosition.x / blockResolution, playerPosition.y / blockResolution);
     }
-
 }

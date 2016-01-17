@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class ArenaState {
     List<Player> players;
     Map<BlockPosition, BlockType> blocks;
+    private final int MAP_SIZE = 17;
 
     private ArenaState() {
         this(Optional.empty());
@@ -51,6 +52,10 @@ public class ArenaState {
                 .get();
     }
 
+    public int getMAP_SIZE() {
+        return MAP_SIZE;
+    }
+
     public static class Builder {
         private ArenaState state;
 
@@ -73,6 +78,11 @@ public class ArenaState {
                     .filter(player -> player.getId() == playerId)
                     .findFirst()
                     .ifPresent(player -> player.move(direction, step));
+            return this;
+        }
+
+        public Builder addPlayers(List<Player> players){
+            players.forEach(this::addPlayer);
             return this;
         }
 
