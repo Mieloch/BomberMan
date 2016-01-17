@@ -35,7 +35,7 @@ public class PlayersNumberScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        atlas = new TextureAtlas(Gdx.files.internal("ui-green.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("ui_green.atlas"));
         skin = new Skin();
         skin.addRegions(atlas);
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();

@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class BlockRenderer extends AbstractRenderer {
 
-    private static final String SOLID_BLOCK_PATH = "SolidBlock.png";
-    private static final String BACKGROUNG_TILE_PATH= "BackgroundTile.png";
-    private static final String EXPLODABLE_BLOCK_PATH = "ExplodableBlock.png";
+    private static final String SOLID_BLOCK_PATH = "solid_block.png";
+    private static final String BACKGROUNG_TILE_PATH= "background_tile.png";
+    private static final String EXPLODABLE_BLOCK_PATH = "explodable_block.png";
     private final float BLOCK_SIZE = 32;
     private final float SCALE = 0.6f;
     HashMap<BlockType,Texture> blocksMap;

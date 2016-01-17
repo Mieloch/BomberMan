@@ -35,7 +35,7 @@ public class StartScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui-green.atlas"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui_green.atlas"));
         Skin skin = new Skin();
         skin.addRegions(atlas);
         TextButtonStyle buttonStyle = new TextButtonStyle();

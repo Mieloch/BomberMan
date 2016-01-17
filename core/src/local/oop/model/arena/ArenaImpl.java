@@ -165,11 +165,11 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                player.incrementBombs();
                 explosions.addAll(getPlacesWhereFireCanBe( position ,player.getPower()));
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
+                player.incrementBombs();
             }
         };
     }

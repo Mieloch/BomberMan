@@ -94,7 +94,7 @@ public class OptionsScreen implements Screen {
         batch = new SpriteBatch();
         settings = new Settings();
 
-        atlas = new TextureAtlas(Gdx.files.internal("ui-green.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("ui_green.atlas"));
         skin = new Skin();
         skin.addRegions(atlas);
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
