@@ -68,7 +68,6 @@ public class ArenaImpl implements Arena {
     }
 
     private void loop() {
-        nextStateBuilder = new ArenaState.Builder(currentState);
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -132,7 +131,7 @@ public class ArenaImpl implements Arena {
             public void run() {
                 explosions.addAll(level.getBlockWhereFireCanBe(position,power));
                 for (BlockPosition explosion : explosions) {
-                    currentState = nextStateBuilder.setBomb(explosion, Bomb.FIRE).get();
+                    nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
             }
         };
