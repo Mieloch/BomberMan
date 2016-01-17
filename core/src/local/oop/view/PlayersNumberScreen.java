@@ -16,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import local.oop.GameImpl;
-import local.oop.view.ChoosePlayersScreen;
-import local.oop.view.StartScreen;
 
 public class PlayersNumberScreen implements Screen {
 
@@ -92,7 +90,7 @@ public class PlayersNumberScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.getPresenter().getPlayerManager().setPlayerCount(Integer.valueOf(selectBox.getSelected()));
+                game.getPresenter().getPlayersInputCache().setPlayerCount(Integer.valueOf(selectBox.getSelected()));
                 game.setScreen(new ChoosePlayersScreen(game));
                 game.getInputMultiplexer().removeProcessor(stage);
             }

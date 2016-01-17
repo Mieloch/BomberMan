@@ -1,5 +1,6 @@
 package local.oop.model;
 
+import local.oop.model.arena.ArenaImpl;
 import local.oop.model.arena.BlockPosition;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
@@ -10,9 +11,10 @@ public class Player {
     private final PlayerId id;
     private int speed;
 
-    public Player(PlayerId id, int MAP_SIZE){
+    public Player(PlayerId id){
         this.id = id;
         int blockSize = BlockPosition.SIZE;
+        int MAP_SIZE = ArenaImpl.MAP_SIZE;
         switch (id){
             case PLAYER_1:
                 position = new PlayerPosition(0,0, Direction.DOWN);
@@ -27,6 +29,7 @@ public class Player {
                 position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
                 break;
         }
+        this.direction = Direction.DOWN;
     }
 
     public Player(PlayerId id, PlayerPosition position) {

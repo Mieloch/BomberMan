@@ -8,14 +8,14 @@ import local.oop.model.CommandSequence;
 import java.util.List;
 
 public class PresenterImpl implements Presenter {
-    private PlayerManager playerManager;
+    private PlayersInputCache playersInputCache;
     private Arena arena;
 
     @Inject
-    public PresenterImpl(PlayerManager playerManager, Arena arena){
-        this.playerManager = playerManager;
+    public PresenterImpl(PlayersInputCache playersInputCache, Arena arena){
+        this.playersInputCache = playersInputCache;
         this.arena = arena;
-        arena.setPresenter(this);
+        this.arena.setPresenter(this);
     }
 
     @Override
@@ -23,14 +23,13 @@ public class PresenterImpl implements Presenter {
         return arena.getCurrentState();
     }
 
-    @Override
-    public PlayerManager getPlayerManager() {
-        return playerManager;
+    public PlayersInputCache getPlayersInputCache() {
+        return playersInputCache;
     }
 
     @Override
     public List<CommandSequence> getPlayersMoves() {
-        return playerManager.getPlayersMoves();
+        return playersInputCache.getPlayersMoves();
     }
 
     @Override

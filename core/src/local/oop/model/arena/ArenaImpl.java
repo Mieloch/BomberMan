@@ -18,7 +18,7 @@ public class ArenaImpl implements Arena {
     int step;
     int bombTimeout;
     int blockResolution;
-    private int MAP_SIZE;
+    public final static int MAP_SIZE = 17;
     private Level level;
 
     @Inject
@@ -26,7 +26,6 @@ public class ArenaImpl implements Arena {
         this.timer = timer;
         this.nextStateBuilder = builder;
         currentState = nextStateBuilder.get();
-        MAP_SIZE = currentState.getMAP_SIZE();
         initArenaState();
 
     }
@@ -36,8 +35,10 @@ public class ArenaImpl implements Arena {
         return currentState;
     }
 
+    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        this.currentState = this.nextStateBuilder.setPresenter(presenter).get();
     }
 
     @Override
@@ -49,7 +50,6 @@ public class ArenaImpl implements Arena {
     private void initArenaState(){
         nextStateBuilder = new ArenaState.Builder(currentState);
         loadBlocksToState();
-        nextStateBuilder.addPlayers(presenter.getPlayerManager().getPlayers());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
 

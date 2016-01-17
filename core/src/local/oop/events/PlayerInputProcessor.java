@@ -1,27 +1,22 @@
 package local.oop.events;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.google.inject.Inject;
 import local.oop.model.Setting;
 import local.oop.model.Settings;
 import local.oop.model.player.PlayerId;
-import local.oop.presenter.PlayerManager;
+import local.oop.presenter.PlayersInputCache;
 
 import javax.inject.Named;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Named("PlayerInputProcessor")
 public class PlayerInputProcessor extends InputAdapter {
 
     private Settings settings;
-    private PlayerManager manager;
+    private PlayersInputCache manager;
 
     @Inject
-    public PlayerInputProcessor(PlayerManager manager){
+    public PlayerInputProcessor(PlayersInputCache manager){
         this.manager = manager;
     }
 
