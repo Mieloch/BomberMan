@@ -158,10 +158,10 @@ public class ArenaImpl implements Arena {
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
         nextStateBuilder.setBomb(position, Bomb.NORMAL);
-        timer.schedule(getBombTask(player), bombTimeout);
+        timer.schedule(getBombTask(player, position), bombTimeout);
     }
 
-    private TimerTask getBombTask(Player player) {
+    private TimerTask getBombTask(Player player, BlockPosition position) {
         return new TimerTask() {
             @Override
             public void run() {
@@ -173,7 +173,16 @@ public class ArenaImpl implements Arena {
             }
         };
     }
-
+    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition position, int power){
+        return currentState.getBlocks()
+                .entrySet()
+                .stream()
+                .filter(entry -> (entry.getKey().x == position.x && entry.getKey().y < power && entry.getKey().y > -power) ||
+                        (entry.getKey().y == position.y && entry.getKey().x < power && entry.getKey().x > -power) &&
+                                entry.getValue() != BlockType.SOLID)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
         return new BlockPosition(playerPosition.x / BlockPosition.SIZE, playerPosition.y / BlockPosition.SIZE);
     }
