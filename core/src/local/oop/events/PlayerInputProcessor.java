@@ -2,6 +2,7 @@ package local.oop.events;
 
 import com.badlogic.gdx.InputAdapter;
 import com.google.inject.Inject;
+import local.oop.model.Command;
 import local.oop.model.Setting;
 import local.oop.model.Settings;
 import local.oop.model.player.PlayerId;
@@ -32,6 +33,24 @@ public class PlayerInputProcessor extends InputAdapter {
                 .map(stringIntegerEntry -> Setting.valueOf(stringIntegerEntry.getKey()))
                 .findFirst()
                 .ifPresent(setting -> manager.movePlayer(PlayerId.getId(setting.getPlayerNumber()), setting.getCommand()));
+
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        if (settings == null) {
+            settings = new Settings();
+        }
+        settings.getKeycodesMap()
+                .entrySet()
+                .stream()
+                .filter(s -> s.getValue() == keycode)
+                .filter(s -> !s.getKey().equals("ONE_BOMB"))
+                .filter(s -> !s.getKey().equals("TWO_BOMB"))
+                .map(stringIntegerEntry -> Setting.valueOf(stringIntegerEntry.getKey()))
+                .findFirst()
+                .ifPresent(setting -> manager.movePlayer(PlayerId.getId(setting.getPlayerNumber()), Command.STOP));
 
         return true;
     }
