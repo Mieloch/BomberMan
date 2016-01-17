@@ -50,8 +50,8 @@ public class ArenaImpl implements Arena {
     }
 
 
-    private void initArenaState(){
-        level = new Level(MAP_SIZE,MAP_SIZE);
+    private void initArenaState() {
+        level = new Level(MAP_SIZE, MAP_SIZE);
         nextStateBuilder = new ArenaState.Builder(level.getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -81,55 +81,57 @@ public class ArenaImpl implements Arena {
         }
     }
 
-    private boolean isMoveMakeCollision(Player player, Direction direction){
+    private boolean isMoveMakeCollision(Player player, Direction direction) {
 
         int speed = player.getSpeed();
         int pX = player.getPosition().x, pY = player.getPosition().y;
         switch (direction) {
             case UP:
-                pY +=speed;
+                pY += speed;
                 break;
             case DOWN:
-                pY -=speed;
+                pY -= speed;
                 break;
             case LEFT:
-                pX -=speed;
+                pX -= speed;
                 break;
             case RIGHT:
-                pX +=speed;
+                pX += speed;
                 break;
         }
 
-       return level.areAllCornersOnFreeSpace(pX,pY);
+        return level.areAllCornersOnFreeSpace(pX, pY);
 
     }
 
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
         if (command == Command.BOMB) {
-            if(player.getBombs()>0) {
-                placeBomb(convertPlayerToBlock(player.getPosition()), player.getPower());
-                player.setBombs(player.getBombs()-1);
+            if (player.getBombs() > 0) {
+                placeBomb(player);
+                player.decrementBombs();
             }
 
         } else {
-            if(isMoveMakeCollision(player,command.getDirection())){
+            if (isMoveMakeCollision(player, command.getDirection())) {
                 nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
             }
-            nextStateBuilder.movePlayer(playerId, command.getDirection(),0 );
+            nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
         }
     }
 
-    private void placeBomb(BlockPosition position, int power) {
+    private void placeBomb(Player player) {
+        BlockPosition position = convertPlayerToBlock(player.getPosition());
         nextStateBuilder.setBomb(position, Bomb.NORMAL);
-        timer.schedule(getBombTask(position, power), bombTimeout);
+        timer.schedule(getBombTask(player), bombTimeout);
     }
 
-    private TimerTask getBombTask(BlockPosition position, int power) {
+    private TimerTask getBombTask(Player player) {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.addAll(level.getBlockWhereFireCanBe(position,power));
+                player.incrementBombs();
+                explosions.addAll(level.getBlockWhereFireCanBe(convertPlayerToBlock(player.getPosition()), player.getPower()));
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
