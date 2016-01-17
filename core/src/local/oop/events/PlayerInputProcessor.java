@@ -16,26 +16,22 @@ public class PlayerInputProcessor extends InputAdapter {
     private PlayersInputCache manager;
 
     @Inject
-    public PlayerInputProcessor(PlayersInputCache manager){
+    public PlayerInputProcessor(PlayersInputCache manager) {
         this.manager = manager;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if(settings==null){
+        if (settings == null) {
             settings = new Settings();
         }
-        Setting setting = settings
-                .getKeycodesMap()
+        settings.getKeycodesMap()
                 .entrySet()
                 .stream()
-                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() == keycode )
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() == keycode)
                 .map(stringIntegerEntry -> Setting.valueOf(stringIntegerEntry.getKey()))
                 .findFirst()
-                .get();
-
-        if(setting!=null)
-            manager.movePlayer(PlayerId.getId(setting.getPlayerNumber()), setting.getCommand());
+                .ifPresent(setting -> manager.movePlayer(PlayerId.getId(setting.getPlayerNumber()), setting.getCommand()));
 
         return true;
     }
