@@ -8,10 +8,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import local.oop.GameImpl;
 import local.oop.model.ArenaState;
-import local.oop.model.arena.Arena;
-import local.oop.model.arena.ArenaImpl;
-import local.oop.model.arena.BlockPosition;
-import local.oop.model.arena.BlockType;
+import local.oop.model.arena.*;
 import local.oop.model.player.Direction;
 import local.oop.model.Player;
 import local.oop.model.player.PlayerId;
@@ -51,7 +48,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         ArenaState arenaState = presenter.getCurrentState();
-        renderLevel(arenaState.getBlocks());
+        renderLevel(arenaState.getBlocks(), arenaState.getBombs());
         renderPlayers(arenaState.getPlayers());
     }
 
@@ -86,9 +83,12 @@ public class GameScreen implements Screen {
         }
     }
     
-    private void renderLevel(Map<BlockPosition, BlockType> blocks){
+    private void renderLevel(Map<BlockPosition, BlockType> blocks, Map<BlockPosition, Bomb> bombs){
         for (Map.Entry<BlockPosition, BlockType> blockPositionBlockTypeEntry : blocks.entrySet()) {
             blockRenderer.renderBlock(blockPositionBlockTypeEntry.getKey(),blockPositionBlockTypeEntry.getValue());
+        }
+        for (Map.Entry<BlockPosition, Bomb> bomb : bombs.entrySet()) {
+            bombRenderer.render(bomb.getKey().x, bomb.getKey().y, bomb.getValue());
         }
     }
 }

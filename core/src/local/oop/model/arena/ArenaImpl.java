@@ -6,6 +6,7 @@ import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +19,7 @@ public class ArenaImpl implements Arena {
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
     int step;
-    int bombTimeout;
+    int bombTimeout = 3000;
     int blockResolution;
     private Level level;
 
@@ -26,6 +27,7 @@ public class ArenaImpl implements Arena {
     public ArenaImpl(Timer timer, ArenaState.Builder builder) {
         this.timer = timer;
         this.nextStateBuilder = builder;
+        explosions = new ArrayList<>();
         currentState = nextStateBuilder.get();
         initArenaState();
 
@@ -106,7 +108,10 @@ public class ArenaImpl implements Arena {
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
         if (command == Command.BOMB) {
-            placeBomb(convertPlayerToBlock(player.getPosition()),player.getPower());
+            if(player.getBombs()>0) {
+                placeBomb(convertPlayerToBlock(player.getPosition()), player.getPower());
+                player.setBombs(player.getBombs()-1);
+            }
 
         } else {
             if(isMoveMakeCollision(player,command.getDirection())){
@@ -117,7 +122,7 @@ public class ArenaImpl implements Arena {
     }
 
     private void placeBomb(BlockPosition position, int power) {
-        nextStateBuilder.setBlock(position, BlockType.BOMB);
+        nextStateBuilder.setBomb(position, Bomb.NORMAL);
         timer.schedule(getBombTask(position, power), bombTimeout);
     }
 
@@ -126,6 +131,9 @@ public class ArenaImpl implements Arena {
             @Override
             public void run() {
                 explosions.addAll(level.getBlockWhereFireCanBe(position,power));
+                for (BlockPosition explosion : explosions) {
+                    nextStateBuilder.setBomb(explosion, Bomb.FIRE);
+                }
             }
         };
     }
