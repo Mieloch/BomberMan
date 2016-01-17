@@ -29,6 +29,13 @@ public class Level {
     public boolean isFreeSpace(int x, int y) {
         int size = BlockType.SIZE;
         int blockX = x / size, blockY = y / size;
+        if(blockX < 0 || blockX >= 17){
+            return false;
+        }
+        if(blockY < 0 || blockY >= 17){
+            return false;
+        }
+
         BlockType block = enumLevel[blockX][blockY];
         return block == BlockType.BACKGROUND;
     }
