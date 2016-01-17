@@ -7,8 +7,7 @@ public enum Command {
     RIGHT,
     UP,
     DOWN,
-    BOMB,
-    STOP;
+    BOMB;
 
     static {
         LEFT.direction = Direction.LEFT;

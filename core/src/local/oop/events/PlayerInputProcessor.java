@@ -50,7 +50,7 @@ public class PlayerInputProcessor extends InputAdapter {
                 .filter(s -> !s.getKey().equals("TWO_BOMB"))
                 .map(stringIntegerEntry -> Setting.valueOf(stringIntegerEntry.getKey()))
                 .findFirst()
-                .ifPresent(setting -> manager.movePlayer(PlayerId.getId(setting.getPlayerNumber()), Command.STOP));
+                .ifPresent(setting -> manager.stopMovement(PlayerId.getId(setting.getPlayerNumber()), setting.getCommand()));
 
         return true;
     }

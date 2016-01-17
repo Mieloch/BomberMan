@@ -12,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ArenaImpl implements Arena {
-    public final static int MAP_SIZE = 17;
+    public final static int MAP_SIZE = 25;
     Presenter presenter;
     Timer timer;
     ArenaState currentState;
