@@ -27,6 +27,7 @@ public class ArenaImpl implements Arena {
         this.timer = timer;
         this.nextStateBuilder = builder;
         currentState = nextStateBuilder.get();
+        level = new Level(MAP_SIZE,MAP_SIZE);
         initSpawningMap();
         initArenaState();
 
@@ -70,7 +71,7 @@ public class ArenaImpl implements Arena {
     }
 
     private void loadBlocksToState(){
-        level = new Level(MAP_SIZE,MAP_SIZE);
+
         BlockType[][] blocks = level.getEnumLevel();
         for(int i = 0; i< MAP_SIZE; i++){
             for(int j=0;j<MAP_SIZE;j++){
@@ -127,26 +128,28 @@ public class ArenaImpl implements Arena {
     }
 
     private void executeCommand(PlayerId playerId, Command command) {
+        Player player = currentState.getPlayer(playerId);
         if (command == Command.BOMB) {
-            placeBomb(convertPlayerToBlock(currentState.getPlayer(playerId).getPosition()));
+            placeBomb(convertPlayerToBlock(player.getPosition()),player.getPower());
+
         } else {
-            if(isMoveMakeCollision(currentState.getPlayer(playerId),command.getDirection())){
+            if(isMoveMakeCollision(player,command.getDirection())){
                 nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
             }
             nextStateBuilder.movePlayer(playerId, command.getDirection(), step);
         }
     }
 
-    private void placeBomb(BlockPosition position) {
+    private void placeBomb(BlockPosition position, int power) {
         nextStateBuilder.setBlock(position, BlockType.BOMB);
-        timer.schedule(getBombTask(position), bombTimeout);
+        timer.schedule(getBombTask(position, power), bombTimeout);
     }
 
-    private TimerTask getBombTask(BlockPosition position) {
+    private TimerTask getBombTask(BlockPosition position, int power) {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.add(position);
+                explosions.addAll(level.getBlockWhereFireCanBe(position,power));
             }
         };
     }

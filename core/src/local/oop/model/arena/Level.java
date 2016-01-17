@@ -2,6 +2,8 @@ package local.oop.model.arena;
 
 import local.oop.model.PlayerPosition;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Level {
@@ -31,6 +33,26 @@ public class Level {
         int blockX = x / size, blockY = y / size;
         BlockType block = enumLevel[blockX][blockY];
         return block == BlockType.BACKGROUND;
+    }
+
+    public List<BlockPosition> getBlockWhereFireCanBe(BlockPosition bombPosition, int bombPower){
+        List<BlockPosition> positions = new ArrayList<>();
+        int bombX = bombPosition.x;
+        int bombY = bombPosition.y;
+        for(int i=bombX-bombPower;i<bombX+bombPower;i++){
+            if(i<0 || i>=width){
+                break;
+            }
+            for(int j=bombY-bombPower;j<bombY+bombPower;j++) {
+                if(j<0 || j>=height){
+                  break;
+                }
+                if(enumLevel[i][j] == BlockType.BACKGROUND || enumLevel[i][j] == BlockType.EXPLODABLE){
+                    positions.add(new BlockPosition(i,j));
+                }
+            }
+        }
+        return positions;
     }
 
 

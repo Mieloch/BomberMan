@@ -8,6 +8,7 @@ public class Player {
     private Direction direction;
     private final PlayerId id;
     private int speed;
+    private int power;
 
     public Player(PlayerId id, PlayerPosition position) {
         this(id, position, Direction.DOWN);
@@ -82,5 +83,13 @@ public class Player {
 
     public PlayerPosition getPosition() {
         return position;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
     }
 }
