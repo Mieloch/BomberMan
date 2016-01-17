@@ -98,8 +98,8 @@ public class ArenaImpl implements Arena {
                 pY +=speed;
                 break;
         }
-        BlockPosition playerBlockPosition = convertPlayerToBlock(new PlayerPosition(pX,pY,direction));
-       return level.areAllCornersOnFreeSpace(playerBlockPosition.x,playerBlockPosition.y);
+
+       return level.areAllCornersOnFreeSpace(pX,pY);
 
     }
 
