@@ -16,7 +16,7 @@ public class PlayersInputCacheImpl implements PlayersInputCache {
     private List<CommandSequence> playerMoves;
 
     @Inject
-    public PlayersInputCacheImpl(Presenter presenter){
+    public PlayersInputCacheImpl(){
         this.playerMoves = new ArrayList<>();
     }
 

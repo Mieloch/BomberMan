@@ -112,7 +112,7 @@ public class ArenaImpl implements Arena {
             if(isMoveMakeCollision(player,command.getDirection())){
                 nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
             }
-            nextStateBuilder.movePlayer(playerId, command.getDirection(), step);
+            nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
         }
     }
 
