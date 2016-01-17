@@ -87,7 +87,7 @@ public class ArenaImpl implements Arena {
             for (Command command : commandSequence.getCommands()) {
                 executeCommand(commandSequence.getPlayerId(), command);
             }
-        }
+    }
     }
 
     private boolean isMoveMakeCollision(Player player, Direction direction){
@@ -108,8 +108,8 @@ public class ArenaImpl implements Arena {
                 pY +=speed;
                 break;
         }
-
-       return level.areAllCornersOnFreeSpace(pX,pY);
+        BlockPosition playerBlockPosition = convertPlayerToBlock(new PlayerPosition(pX,pY,direction));
+       return level.areAllCornersOnFreeSpace(playerBlockPosition.x,playerBlockPosition.y);
 
     }
 
@@ -141,7 +141,7 @@ public class ArenaImpl implements Arena {
     }
 
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
-        return new BlockPosition(playerPosition.x / blockResolution, playerPosition.y / blockResolution);
+        return new BlockPosition(playerPosition.x / BlockPosition.SIZE, playerPosition.y / BlockPosition.SIZE);
     }
 
 }
