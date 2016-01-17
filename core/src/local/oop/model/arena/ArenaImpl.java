@@ -97,7 +97,7 @@ public class ArenaImpl implements Arena {
                 pX -=speed;
                 break;
             case RIGHT:
-                pY +=speed;
+                pX +=speed;
                 break;
         }
 
@@ -115,9 +115,9 @@ public class ArenaImpl implements Arena {
 
         } else {
             if(isMoveMakeCollision(player,command.getDirection())){
-                nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
+                nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
             }
-            nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
+            nextStateBuilder.movePlayer(playerId, command.getDirection(),0 );
         }
     }
 
