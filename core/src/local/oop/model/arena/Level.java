@@ -62,11 +62,11 @@ public class Level {
         int bombY = bombPosition.y;
         for(int i=bombX-bombPower;i<bombX+bombPower;i++){
             if(i<0 || i>=width){
-                break;
+                continue;
             }
             for(int j=bombY-bombPower;j<bombY+bombPower;j++) {
                 if(j<0 || j>=height){
-                  break;
+                  continue;
                 }
                 if(enumLevel[i][j] == BlockType.BACKGROUND || enumLevel[i][j] == BlockType.EXPLODABLE){
                     positions.add(new BlockPosition(i,j));
