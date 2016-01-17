@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
     public final static int MAP_SIZE = 25;
@@ -170,7 +171,7 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.addAll(level.getBlockWhereFireCanBe(position,power));
+                explosions.addAll(level.getPlacesWhereFireCanBe(position,power));
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
