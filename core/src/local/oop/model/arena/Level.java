@@ -2,14 +2,12 @@ package local.oop.model.arena;
 
 import local.oop.model.PlayerPosition;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Level {
 
-    private int[][] level;
     BlockType[][] enumLevel;
+    private int[][] level;
     private int width;
     private int height;
 
@@ -87,6 +85,35 @@ public class Level {
                 }
             }
         }
+    }
+
+    public Map<BlockPosition, BlockType> getGeneratedLevel() {
+        Map<BlockPosition, BlockType> result = new HashMap<>();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (level[i][j]) {
+                    case 0:
+                        result.put(new BlockPosition(i, j), BlockType.BACKGROUND);
+                        break;
+                    case 1:
+                        result.put(new BlockPosition(i, j), BlockType.EXPLODABLE);
+                        break;
+                    case 2:
+                        result.put(new BlockPosition(i, j), BlockType.SOLID);
+                        break;
+                    case 3:
+                        result.put(new BlockPosition(i, j), BlockType.POWER_UP);
+                        break;
+                    case 4:
+                        result.put(new BlockPosition(i, j), BlockType.SPEED_UP);
+                        break;
+                    case 5:
+                        result.put(new BlockPosition(i, j), BlockType.EXTRA_BOMB);
+                        break;
+                }
+            }
+        }
+        return result;
     }
 
     /**

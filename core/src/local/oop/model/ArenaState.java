@@ -61,11 +61,16 @@ public class ArenaState {
         private ArenaState state;
 
         public Builder() {
-            this(null);
+            this((ArenaState) null);
         }
 
         public Builder(ArenaState arenaState) {
             state = new ArenaState(Optional.ofNullable(arenaState));
+        }
+
+        public Builder(Map<BlockPosition, BlockType> blocks) {
+            state = new ArenaState();
+            state.blocks = blocks;
         }
 
         public Builder setPresenter(Presenter presenter){

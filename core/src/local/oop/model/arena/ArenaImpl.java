@@ -4,12 +4,14 @@ import com.google.inject.Inject;
 import local.oop.model.*;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
-import local.oop.model.PlayerPosition;
 import local.oop.presenter.Presenter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ArenaImpl implements Arena {
+    public final static int MAP_SIZE = 17;
     Presenter presenter;
     Timer timer;
     ArenaState currentState;
@@ -18,7 +20,6 @@ public class ArenaImpl implements Arena {
     int step;
     int bombTimeout;
     int blockResolution;
-    public final static int MAP_SIZE = 17;
     private Level level;
 
     @Inject
@@ -49,21 +50,10 @@ public class ArenaImpl implements Arena {
 
     private void initArenaState(){
         level = new Level(MAP_SIZE,MAP_SIZE);
-        nextStateBuilder = new ArenaState.Builder(currentState);
-        loadBlocksToState();
+        nextStateBuilder = new ArenaState.Builder(level.getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
 
-    }
-
-    private void loadBlocksToState(){
-
-        BlockType[][] blocks = level.getEnumLevel();
-        for(int i = 0; i< MAP_SIZE; i++){
-            for(int j=0;j<MAP_SIZE;j++){
-                nextStateBuilder.setBlock(new BlockPosition(i,j), blocks[i][j]).get();
-            }
-        }
     }
 
     private TimerTask getLoopTask() {
