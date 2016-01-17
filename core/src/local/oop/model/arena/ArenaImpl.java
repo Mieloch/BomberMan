@@ -6,10 +6,8 @@ import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
     public final static int MAP_SIZE = 25;
@@ -50,8 +48,8 @@ public class ArenaImpl implements Arena {
     }
 
 
-    private void initArenaState() {
-        level = new Level(MAP_SIZE, MAP_SIZE);
+    private void initArenaState(){
+        level = new Level(MAP_SIZE,MAP_SIZE);
         nextStateBuilder = new ArenaState.Builder(level.getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -123,20 +121,31 @@ public class ArenaImpl implements Arena {
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
         nextStateBuilder.setBomb(position, Bomb.NORMAL);
-        timer.schedule(getBombTask(player), bombTimeout);
+        timer.schedule(getBombTask(player, position), bombTimeout);
     }
 
-    private TimerTask getBombTask(Player player) {
+    private TimerTask getBombTask(Player player, BlockPosition position) {
         return new TimerTask() {
             @Override
             public void run() {
                 player.incrementBombs();
-                explosions.addAll(level.getBlockWhereFireCanBe(convertPlayerToBlock(player.getPosition()), player.getPower()));
+                explosions.addAll(getPlacesWhereFireCanBe( position ,player.getPower()));
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
             }
         };
+    }
+
+    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition position, int power){
+        return currentState.getBlocks()
+                .entrySet()
+                .stream()
+                .filter(entry -> (entry.getKey().x == position.x && entry.getKey().y < power && entry.getKey().y > -power) ||
+                        (entry.getKey().y == position.y && entry.getKey().x < power && entry.getKey().x > -power) &&
+                                entry.getValue() != BlockType.SOLID)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
