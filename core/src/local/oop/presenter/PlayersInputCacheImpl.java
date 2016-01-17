@@ -22,7 +22,9 @@ public class PlayersInputCacheImpl implements PlayersInputCache {
 
     @Override
     public List<CommandSequence> getPlayersMoves(){
-        return playerMoves;
+        List<CommandSequence> toReturn = playerMoves;
+        playerMoves = new ArrayList<>();
+        return toReturn;
     }
 
     @Override

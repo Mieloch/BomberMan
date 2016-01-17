@@ -30,7 +30,7 @@ public class PlayerRenderer extends AbstractRenderer {
     public void renderPlayer(Player player) {
         HashMap<Direction, Animation> animationMap = playerAnimationMap.get(player.getId());
         Animation animation = animationMap.get(player.getDirection());
-        render(player.getPosition().x, player.getPosition().x, player.getDirection(), animation);
+        render(player.getPosition().x, player.getPosition().y, player.getDirection(), animation);
     }
 
 
