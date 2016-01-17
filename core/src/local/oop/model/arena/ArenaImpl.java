@@ -220,9 +220,8 @@ public class ArenaImpl implements Arena {
         return currentState.getBlocks()
                 .entrySet()
                 .stream()
-                .filter(entry -> (entry.getKey().x == position.x && entry.getKey().y < position.y + power && entry.getKey().y > position.y - power) ||
-                        (entry.getKey().y == position.y && entry.getKey().x < position.x + power && entry.getKey().x > position.x - power) &&
-                                entry.getValue() != BlockType.SOLID)
+                .filter(entry -> entry.getValue() != BlockType.SOLID && ((entry.getKey().x == position.x && entry.getKey().y < position.y + power && entry.getKey().y > position.y - power) ||
+                        (entry.getKey().y == position.y && entry.getKey().x < position.x + power && entry.getKey().x > position.x - power)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
