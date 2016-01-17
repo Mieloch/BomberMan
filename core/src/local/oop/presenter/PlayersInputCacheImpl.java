@@ -32,7 +32,9 @@ public class PlayersInputCacheImpl implements PlayersInputCache {
 
     @Override
     public void movePlayer(PlayerId id, Command command) {
-        playerMoves.stream().filter(commandSequence -> commandSequence.getPlayerId()==id).findFirst().orElse(new CommandSequence(new ArrayList<>(), id)).addCommand(command);
+        CommandSequence sequence = playerMoves.stream().filter(commandSequence -> commandSequence.getPlayerId()==id).findFirst().orElse(new CommandSequence(new ArrayList<>(), id));
+        sequence.addCommand(command);
+        playerMoves.add(sequence);
     }
 
     @Override
