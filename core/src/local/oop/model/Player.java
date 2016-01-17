@@ -7,7 +7,6 @@ import local.oop.model.player.PlayerId;
 
 public class Player {
     private PlayerPosition position;
-    private Direction direction;
     private final PlayerId id;
     private int speed;
     private int power;
@@ -32,17 +31,11 @@ public class Player {
                 position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
                 break;
         }
-        this.direction = Direction.DOWN;
     }
 
     public Player(PlayerId id, PlayerPosition position) {
-        this(id, position, Direction.DOWN);
-    }
-
-    public Player(PlayerId id, PlayerPosition position, Direction direction) {
         this.id = id;
         this.position = position;
-        this.direction = direction;
     }
 
 
@@ -64,11 +57,7 @@ public class Player {
     }
 
     public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
+        return position.getDirection();
     }
 
     @Override

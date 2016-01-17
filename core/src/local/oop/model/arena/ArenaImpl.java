@@ -77,7 +77,7 @@ public class ArenaImpl implements Arena {
             for (Command command : commandSequence.getCommands()) {
                 executeCommand(commandSequence.getPlayerId(), command);
             }
-    }
+        }
     }
 
     private boolean isMoveMakeCollision(Player player, Direction direction){
