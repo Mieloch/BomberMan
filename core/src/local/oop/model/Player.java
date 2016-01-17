@@ -88,6 +88,14 @@ public class Player {
         this.bombs = bombs;
     }
 
+    public void decrementBombs() {
+        bombs--;
+    }
+
+    public void incrementBombs() {
+        bombs++;
+    }
+
     public void setPosition(PlayerPosition position) {
         this.position = position;
     }
