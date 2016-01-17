@@ -17,6 +17,7 @@ import local.oop.presenter.Presenter;
 import local.oop.view.renderer.BlockRenderer;
 import local.oop.view.renderer.BombRenderer;
 import local.oop.view.renderer.PlayerRenderer;
+import local.oop.view.renderer.PowerUpRenderer;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +29,13 @@ public class GameScreen implements Screen {
     private PlayerRenderer playerRenderer;
     private BombRenderer bombRenderer;
     private BlockRenderer blockRenderer;
+    private PowerUpRenderer powerUpRenderer;
 
     public GameScreen(GameImpl game) {
         playerRenderer = new PlayerRenderer();
         bombRenderer = new BombRenderer();
         blockRenderer = new BlockRenderer();
+        powerUpRenderer = new PowerUpRenderer();
         this.game = game;
         this.presenter = game.getPresenter();
         presenter.startGame();
@@ -48,7 +51,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         ArenaState arenaState = presenter.getCurrentState();
-        renderLevel(arenaState.getBlocks(), arenaState.getBombs());
+        renderLevel(arenaState.getBlocks());
         renderPlayers(arenaState.getPlayers());
     }
 
@@ -83,12 +86,27 @@ public class GameScreen implements Screen {
         }
     }
     
-    private void renderLevel(Map<BlockPosition, BlockType> blocks, Map<BlockPosition, Bomb> bombs){
-        for (Map.Entry<BlockPosition, BlockType> blockPositionBlockTypeEntry : blocks.entrySet()) {
-            blockRenderer.renderBlock(blockPositionBlockTypeEntry.getKey(),blockPositionBlockTypeEntry.getValue());
-        }
-        for (Map.Entry<BlockPosition, Bomb> bomb : bombs.entrySet()) {
-            bombRenderer.render(bomb.getKey().x, bomb.getKey().y, bomb.getValue());
+    private void renderLevel(Map<BlockPosition, BlockType> blocks){
+        for (Map.Entry<BlockPosition, BlockType> entry : blocks.entrySet()) {
+            blockRenderer.renderBlock(entry.getKey(),entry.getValue());
+            switch (entry.getValue()){
+                case BOMB:
+                    bombRenderer.render(entry.getKey().x, entry.getKey().y, BlockType.BOMB);
+                    break;
+                case FIRE:
+                    bombRenderer.render(entry.getKey().x, entry.getKey().y, BlockType.FIRE);
+                    break;
+                case BOMB_POWERUP:
+                    powerUpRenderer.render(entry.getKey().x, entry.getKey().y, BlockType.BOMB_POWERUP);
+                    break;
+                case FLAME_POWERUP:
+                    powerUpRenderer.render(entry.getKey().x, entry.getKey().y, BlockType.FLAME_POWERUP);
+                    break;
+                case SPEED_POWERUP:
+                    powerUpRenderer.render(entry.getKey().x, entry.getKey().y, BlockType.SPEED_POWERUP);
+                    break;
+
+            }
         }
     }
 }

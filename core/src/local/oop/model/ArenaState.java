@@ -2,7 +2,6 @@ package local.oop.model;
 
 import local.oop.model.arena.BlockPosition;
 import local.oop.model.arena.BlockType;
-import local.oop.model.arena.Bomb;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
@@ -13,10 +12,7 @@ import java.util.stream.Collectors;
 public class ArenaState {
     List<Player> players;
     Map<BlockPosition, BlockType> blocks;
-    Map<BlockPosition, Bomb> bombs;
     Presenter presenter;
-
-
 
     private ArenaState() {
         this(Optional.empty());
@@ -27,7 +23,6 @@ public class ArenaState {
             arenaState.ifPresent(state -> {
                 players = new ArrayList<>(arenaState.get().getPlayers());
                 blocks = new HashMap<>(arenaState.get().getBlocks());
-                bombs = new HashMap<>(arenaState.get().getBombs());
             });
         }
         else{
@@ -37,20 +32,11 @@ public class ArenaState {
             if(blocks == null){
                 blocks = new HashMap<>();
             }
-            if(bombs == null){
-                bombs = new HashMap<>();
-            }
-
         }
-
     }
 
     public Map<BlockPosition, BlockType> getBlocks() {
         return blocks;
-    }
-
-    public Map<BlockPosition, Bomb> getBombs(){
-        return bombs;
     }
 
     public List<Player> getPlayers() {
@@ -104,13 +90,8 @@ public class ArenaState {
             return this;
         }
 
-        public Builder setBomb(BlockPosition position, Bomb bomb){
-            state.bombs.put(position, bomb);
-            return this;
-        }
-
-        public Builder clearBomb(BlockPosition blockPosition) {
-            state.bombs.remove(blockPosition);
+        public Builder clearBlock(BlockPosition blockPosition) {
+            state.blocks.put(blockPosition, BlockType.BACKGROUND);
             return this;
         }
 

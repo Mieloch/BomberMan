@@ -165,7 +165,7 @@ public class ArenaImpl implements Arena {
 
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
-        nextStateBuilder.setBomb(position, Bomb.NORMAL);
+        nextStateBuilder.setBlock(position, BlockType.BOMB);
         timer.schedule(getBombTask(player, position), bombTimeout);
     }
 
@@ -175,7 +175,7 @@ public class ArenaImpl implements Arena {
             public void run() {
                 List<BlockPosition> explosions = getPlacesWhereFireCanBe(position, player.getPower());
                 for (BlockPosition explosion : explosions) {
-                    nextStateBuilder.setBomb(explosion, Bomb.FIRE);
+                    nextStateBuilder.setBlock(explosion, BlockType.FIRE);
                 }
                 player.incrementBombs();
                 timer.schedule(getFireDisposalTask(explosions), fireTimeout);
@@ -187,7 +187,7 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                blocks.stream().forEach(b -> nextStateBuilder.clearBomb(b));
+                blocks.stream().forEach(b -> nextStateBuilder.clearBlock(b));
             }
         };
     }
