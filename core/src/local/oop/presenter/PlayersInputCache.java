@@ -13,4 +13,5 @@ public interface PlayersInputCache {
     void setPlayerCount(int count);
     int getNumberOfPlayers();
     void movePlayer(PlayerId id, Command command);
+    void stopMovement(PlayerId id, Command command);
 }

@@ -54,12 +54,18 @@ public class PlayersInputCacheImpl implements PlayersInputCache {
                     .orElse(new CommandSequence(new ArrayList<>(), id));
             sequence.addCommand(command);
             playerMoves.add(sequence);
-        } else if (command == Command.STOP) {
-            movingStates.put(id, Optional.empty());
-        } else {
+        }  else {
             movingStates.put(id, Optional.of(command));
         }
     }
+
+    @Override
+    public void stopMovement(PlayerId id, Command command) {
+        if (movingStates.get(id).filter(c -> c == command).isPresent()) {
+            movingStates.put(id, Optional.empty());
+        }
+    }
+
 
     @Override
     public int getNumberOfPlayers() {
