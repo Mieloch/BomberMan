@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
     public final static int MAP_SIZE = 25;
@@ -101,9 +102,48 @@ public class ArenaImpl implements Arena {
                 break;
         }
 
-       return level.areAllCornersOnFreeSpace(pX,pY);
+       return areAllCornersOnFreeSpace(pX,pY);
 
     }
+    public boolean areAllCornersOnFreeSpace(int x, int y) {
+        int playerSize = PlayerPosition.SIZE;
+        int xShift = playerSize, yShift = playerSize;
+        if(x%32==0){
+            xShift=0;
+        }
+        if(y%32==0){
+            yShift=0;
+        }
+        boolean leftBottomCorner = isFreeSpace(x, y);
+
+        boolean rightBottomCorner = isFreeSpace(x + xShift, y);
+        boolean leftTopCorner = isFreeSpace(x, y + yShift);
+        boolean rightTopCorner = isFreeSpace(x + xShift, y + yShift);
+        return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
+    }
+
+    public boolean isFreeSpace(int x, int y) {
+        int size = BlockType.SIZE;
+        int blockX = x / size, blockY = y / size;
+
+
+        if(x < 0 || x >= MAP_SIZE*32){
+            return false;
+        }
+        if(y < 0 || y >= MAP_SIZE*32){
+            return false;
+        }
+        if(blockX <0 || blockY <0){
+            return false;
+        }
+        if(blockX >= MAP_SIZE || blockY >= MAP_SIZE){
+            return false;
+        }
+
+        BlockType block = currentState.getBlocks().entrySet().stream().filter(entry -> entry.getKey().x==blockX && entry.getKey().y == blockY).collect(Collectors.toList()).get(0).getValue();
+        return block == BlockType.BACKGROUND;
+    }
+
 
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
@@ -130,7 +170,7 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.addAll(level.getBlockWhereFireCanBe(position,power));
+                explosions.addAll(getPlacesWhereFireCanBe(position,power));
                 for (BlockPosition explosion : explosions) {
                     currentState = nextStateBuilder.setBomb(explosion, Bomb.FIRE).get();
                 }

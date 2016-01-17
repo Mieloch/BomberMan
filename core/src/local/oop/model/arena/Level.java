@@ -17,64 +17,7 @@ public class Level {
         generateEnumLevel();
     }
 
-    public boolean areAllCornersOnFreeSpace(int x, int y) {
-        int playerSize = PlayerPosition.SIZE;
-        int xShift = playerSize, yShift = playerSize;
-        if(x%32==0){
-            xShift=0;
-        }
-        if(y%32==0){
-            yShift=0;
-        }
-        boolean leftBottomCorner = isFreeSpace(x, y);
 
-        boolean rightBottomCorner = isFreeSpace(x + xShift, y);
-        boolean leftTopCorner = isFreeSpace(x, y + yShift);
-        boolean rightTopCorner = isFreeSpace(x + xShift, y + yShift);
-        return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
-    }
-
-    public boolean isFreeSpace(int x, int y) {
-        int size = BlockType.SIZE;
-        int blockX = x / size, blockY = y / size;
-
-
-        if(x < 0 || x >= 17*32){
-            return false;
-        }
-        if(y < 0 || y >= 17*32){
-            return false;
-        }
-        if(blockX <0 || blockY <0){
-            return false;
-        }
-        if(blockX >= 17 || blockY >= 17){
-            return false;
-        }
-
-        BlockType block = enumLevel[blockX][blockY];
-        return block == BlockType.BACKGROUND;
-    }
-
-    public List<BlockPosition> getBlockWhereFireCanBe(BlockPosition bombPosition, int bombPower){
-        List<BlockPosition> positions = new ArrayList<>();
-        int bombX = bombPosition.x;
-        int bombY = bombPosition.y;
-        for(int i=bombX-bombPower;i<bombX+bombPower;i++){
-            if(i<0 || i>=width){
-                continue;
-            }
-            for(int j=bombY-bombPower;j<bombY+bombPower;j++) {
-                if(j<0 || j>=height){
-                  continue;
-                }
-                if(enumLevel[i][j] == BlockType.BACKGROUND || enumLevel[i][j] == BlockType.EXPLODABLE){
-                    positions.add(new BlockPosition(i,j));
-                }
-            }
-        }
-        return positions;
-    }
 
 
     public BlockType[][] getEnumLevel() {

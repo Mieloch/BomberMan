@@ -16,6 +16,8 @@ public class ArenaState {
     Map<BlockPosition, Bomb> bombs;
     Presenter presenter;
 
+
+
     private ArenaState() {
         this(Optional.empty());
     }
