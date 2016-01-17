@@ -19,20 +19,36 @@ public class Level {
 
     public boolean areAllCornersOnFreeSpace(int x, int y) {
         int playerSize = PlayerPosition.SIZE;
+        int xShift = playerSize, yShift = playerSize;
+        if(x%32==0){
+            xShift=0;
+        }
+        if(y%32==0){
+            yShift=0;
+        }
         boolean leftBottomCorner = isFreeSpace(x, y);
-        boolean rightBottomCorner = isFreeSpace(x + playerSize, y);
-        boolean leftTopCorner = isFreeSpace(x, y + playerSize);
-        boolean rightTopCorner = isFreeSpace(x + playerSize, y + playerSize);
+
+        boolean rightBottomCorner = isFreeSpace(x + xShift, y);
+        boolean leftTopCorner = isFreeSpace(x, y + yShift);
+        boolean rightTopCorner = isFreeSpace(x + xShift, y + yShift);
         return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
     }
 
     public boolean isFreeSpace(int x, int y) {
         int size = BlockType.SIZE;
         int blockX = x / size, blockY = y / size;
-        if(blockX < 0 || blockX >= 17){
+
+
+        if(x < 0 || x >= 17*32){
             return false;
         }
-        if(blockY < 0 || blockY >= 17){
+        if(y < 0 || y >= 17*32){
+            return false;
+        }
+        if(blockX <0 || blockY <0){
+            return false;
+        }
+        if(blockX >= 17 || blockY >= 17){
             return false;
         }
 
