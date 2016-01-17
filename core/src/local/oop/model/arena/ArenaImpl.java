@@ -6,10 +6,7 @@ import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
@@ -51,8 +48,8 @@ public class ArenaImpl implements Arena {
     }
 
 
-    private void initArenaState(){
-        level = new Level(MAP_SIZE,MAP_SIZE);
+    private void initArenaState() {
+        level = new Level(MAP_SIZE, MAP_SIZE);
         nextStateBuilder = new ArenaState.Builder(level.getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -69,7 +66,6 @@ public class ArenaImpl implements Arena {
     }
 
     private void loop() {
-        nextStateBuilder = new ArenaState.Builder(currentState);
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -102,48 +98,9 @@ public class ArenaImpl implements Arena {
                 break;
         }
 
-       return areAllCornersOnFreeSpace(pX,pY);
+        return level.areAllCornersOnFreeSpace(pX, pY);
 
     }
-    public boolean areAllCornersOnFreeSpace(int x, int y) {
-        int playerSize = PlayerPosition.SIZE;
-        int xShift = playerSize, yShift = playerSize;
-        if(x%32==0){
-            xShift=0;
-        }
-        if(y%32==0){
-            yShift=0;
-        }
-        boolean leftBottomCorner = isFreeSpace(x, y);
-
-        boolean rightBottomCorner = isFreeSpace(x + xShift, y);
-        boolean leftTopCorner = isFreeSpace(x, y + yShift);
-        boolean rightTopCorner = isFreeSpace(x + xShift, y + yShift);
-        return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
-    }
-
-    public boolean isFreeSpace(int x, int y) {
-        int size = BlockType.SIZE;
-        int blockX = x / size, blockY = y / size;
-
-
-        if(x < 0 || x >= MAP_SIZE*32){
-            return false;
-        }
-        if(y < 0 || y >= MAP_SIZE*32){
-            return false;
-        }
-        if(blockX <0 || blockY <0){
-            return false;
-        }
-        if(blockX >= MAP_SIZE || blockY >= MAP_SIZE){
-            return false;
-        }
-
-        BlockType block = currentState.getBlocks().entrySet().stream().filter(entry -> entry.getKey().x==blockX && entry.getKey().y == blockY).collect(Collectors.toList()).get(0).getValue();
-        return block == BlockType.BACKGROUND;
-    }
-
 
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
@@ -171,7 +128,8 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.addAll(level.getPlacesWhereFireCanBe(position,power));
+                player.incrementBombs();
+                explosions.addAll(getPlacesWhereFireCanBe( position ,player.getPower()));
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
