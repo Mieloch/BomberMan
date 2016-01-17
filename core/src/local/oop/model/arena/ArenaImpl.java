@@ -18,6 +18,7 @@ public class ArenaImpl implements Arena {
     List<BlockPosition> explosions;
     int step;
     int bombTimeout = 3000;
+    int fireTimeout = 1000;
     int blockResolution;
     private Level level;
 
@@ -170,9 +171,20 @@ public class ArenaImpl implements Arena {
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
+                timer.schedule(getFireDisposalTask(explosions), fireTimeout);
             }
         };
     }
+
+    private TimerTask getFireDisposalTask(List<BlockPosition> blocks) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                blocks.stream().forEach(b -> nextStateBuilder.clearBomb(b));
+            }
+        };
+    }
+
     private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition position, int power){
         return currentState.getBlocks()
                 .entrySet()

@@ -109,6 +109,11 @@ public class ArenaState {
             return this;
         }
 
+        public Builder clearBomb(BlockPosition blockPosition) {
+            state.bombs.remove(blockPosition);
+            return this;
+        }
+
         public Builder addPlayers(List<Player> players){
             players.forEach(this::addPlayer);
             return this;
