@@ -185,7 +185,7 @@ public class ArenaImpl implements Arena {
                 .findFirst()
                 .get()
                 .getValue();
-        return block == BlockType.BACKGROUND;
+        return block == BlockType.BACKGROUND || block == BlockType.FIRE;
     }
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
