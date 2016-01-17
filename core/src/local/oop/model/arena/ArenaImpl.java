@@ -48,6 +48,7 @@ public class ArenaImpl implements Arena {
 
 
     private void initArenaState(){
+        level = new Level(MAP_SIZE,MAP_SIZE);
         nextStateBuilder = new ArenaState.Builder(currentState);
         loadBlocksToState();
         currentState = nextStateBuilder.get();
