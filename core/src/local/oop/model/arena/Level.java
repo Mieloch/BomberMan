@@ -1,21 +1,46 @@
 package local.oop.model.arena;
 
-import local.oop.model.arena.BlockType;
+import local.oop.model.PlayerPosition;
 
 import java.util.Random;
 
 public class Level {
 
     private int[][] level;
+    BlockType[][] enumLevel;
     private int width;
     private int height;
 
+
     public Level(int width, int height) {
         this.level = generate(width, height);
+        generateEnumLevel();
     }
 
+    public boolean areAllCornersOnEmptyBlock(int x, int y) {
+        int playerSize = PlayerPosition.SIZE;
+        boolean leftBottomCorner = isEmptyBlock(x, y);
+        boolean rightBottomCorner = isEmptyBlock(x + playerSize, y);
+        boolean leftTopCorner = isEmptyBlock(x, y + playerSize);
+        boolean rightTopCorner = isEmptyBlock(x + playerSize, y + playerSize);
+        return leftBottomCorner && rightBottomCorner && leftTopCorner && rightTopCorner;
+    }
+
+    public boolean isEmptyBlock(int x, int y) {
+        int size = BlockType.SIZE;
+        int blockX = x / size, blockY = y / size;
+        BlockType block = enumLevel[blockX][blockY];
+        return block == BlockType.BACKGROUND;
+    }
+
+
     public BlockType[][] getEnumLevel() {
-        BlockType[][] enumLevel = new BlockType[width][height];
+        return enumLevel;
+    }
+
+    public void generateEnumLevel() {
+
+        enumLevel = new BlockType[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 switch (level[i][j]) {
@@ -40,7 +65,6 @@ public class Level {
                 }
             }
         }
-        return enumLevel;
     }
 
     /**

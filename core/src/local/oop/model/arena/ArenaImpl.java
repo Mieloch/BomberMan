@@ -106,10 +106,36 @@ public class ArenaImpl implements Arena {
         }
     }
 
+    private boolean isCollisionWithBlock(Player player,Direction direction){
+
+        int speed = player.getSpeed();
+        int pX = player.getPosition().x, pY = player.getPosition().y;
+        switch (direction) {
+            case UP:
+                pY +=speed;
+                break;
+            case DOWN:
+                pY -=speed;
+                break;
+            case LEFT:
+                pX -=speed;
+                break;
+            case RIGHT:
+                pY +=speed;
+                break;
+        }
+
+       return level.areAllCornersOnEmptyBlock(pX,pY);
+
+    }
+
     private void executeCommand(PlayerId playerId, Command command) {
         if (command == Command.BOMB) {
             placeBomb(convertPlayerToBlock(currentState.getPlayer(playerId).getPosition()));
         } else {
+            if(isCollisionWithBlock(currentState.getPlayer(playerId),command.getDirection())){
+                nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
+            }
             nextStateBuilder.movePlayer(playerId, command.getDirection(), step);
         }
     }

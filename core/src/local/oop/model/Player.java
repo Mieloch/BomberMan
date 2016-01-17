@@ -7,6 +7,7 @@ public class Player {
     private PlayerPosition position;
     private Direction direction;
     private final PlayerId id;
+    private int speed;
 
     public Player(PlayerId id, PlayerPosition position) {
         this(id, position, Direction.DOWN);
@@ -18,13 +19,6 @@ public class Player {
         this.direction = direction;
     }
 
-    public PlayerId getId() {
-        return id;
-    }
-
-    public PlayerPosition getPosition() {
-        return position;
-    }
 
     void move(Direction direction, int step) {
         switch (direction) {
@@ -68,5 +62,25 @@ public class Player {
         Player that = (Player) obj;
 
         return this.id == that.id;
+    }
+
+    public void setPosition(PlayerPosition position) {
+        this.position = position;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public PlayerId getId() {
+        return id;
+    }
+
+    public PlayerPosition getPosition() {
+        return position;
     }
 }
