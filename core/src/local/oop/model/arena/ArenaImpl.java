@@ -77,9 +77,6 @@ public class ArenaImpl implements Arena {
                 nextStateBuilder.setBlock(new BlockPosition(i,j), blocks[i][j]).get();
             }
         }
-
-
-
     }
 
     private TimerTask getLoopTask() {
@@ -106,10 +103,36 @@ public class ArenaImpl implements Arena {
         }
     }
 
+    private boolean isMoveMakeCollision(Player player, Direction direction){
+
+        int speed = player.getSpeed();
+        int pX = player.getPosition().x, pY = player.getPosition().y;
+        switch (direction) {
+            case UP:
+                pY +=speed;
+                break;
+            case DOWN:
+                pY -=speed;
+                break;
+            case LEFT:
+                pX -=speed;
+                break;
+            case RIGHT:
+                pY +=speed;
+                break;
+        }
+
+       return level.areAllCornersOnFreeSpace(pX,pY);
+
+    }
+
     private void executeCommand(PlayerId playerId, Command command) {
         if (command == Command.BOMB) {
             placeBomb(convertPlayerToBlock(currentState.getPlayer(playerId).getPosition()));
         } else {
+            if(isMoveMakeCollision(currentState.getPlayer(playerId),command.getDirection())){
+                nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
+            }
             nextStateBuilder.movePlayer(playerId, command.getDirection(), step);
         }
     }
