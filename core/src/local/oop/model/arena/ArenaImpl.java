@@ -6,7 +6,10 @@ import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
@@ -15,18 +18,14 @@ public class ArenaImpl implements Arena {
     Timer timer;
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
-    List<BlockPosition> explosions;
-    int step;
     int bombTimeout = 3000;
     int fireTimeout = 1000;
-    int blockResolution;
     private Level level;
 
     @Inject
     public ArenaImpl(Timer timer, ArenaState.Builder builder) {
         this.timer = timer;
         this.nextStateBuilder = builder;
-        explosions = new ArrayList<>();
         currentState = nextStateBuilder.get();
         initArenaState();
 
@@ -166,7 +165,7 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                explosions.addAll(getPlacesWhereFireCanBe( position ,player.getPower()));
+                List<BlockPosition> explosions = getPlacesWhereFireCanBe( position ,player.getPower());
                 for (BlockPosition explosion : explosions) {
                     nextStateBuilder.setBomb(explosion, Bomb.FIRE);
                 }
