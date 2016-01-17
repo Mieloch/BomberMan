@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import local.oop.model.Command;
 import local.oop.model.CommandSequence;
-import local.oop.model.Player;
 import local.oop.model.player.PlayerId;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class PlayersInputCacheImpl implements PlayersInputCache {
@@ -22,7 +22,9 @@ public class PlayersInputCacheImpl implements PlayersInputCache {
 
     @Override
     public List<CommandSequence> getPlayersMoves(){
-        return playerMoves;
+        List<CommandSequence> result = playerMoves;
+        playerMoves = new ArrayList<>();
+        return result;
     }
 
     @Override
