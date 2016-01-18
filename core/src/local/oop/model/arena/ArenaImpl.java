@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
-    public final static int MAP_SIZE = 25;
+    public final static int MAP_SIZE = 24;
     Presenter presenter;
     Timer timer;
     ArenaState currentState;
@@ -80,29 +80,6 @@ public class ArenaImpl implements Arena {
         }
     }
 
-    private boolean isMoveMakeCollision(Player player, Direction direction) {
-
-        int speed = player.getSpeed();
-        int pX = player.getPosition().x, pY = player.getPosition().y;
-        switch (direction) {
-            case UP:
-                pY += speed;
-                break;
-            case DOWN:
-                pY -= speed;
-                break;
-            case LEFT:
-                pX -= speed;
-                break;
-            case RIGHT:
-                pX += speed;
-                break;
-        }
-
-        return areCornersOnFreeSpace(pX, pY, direction);
-
-    }
-
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
         if (command == Command.BOMB) {
@@ -119,75 +96,85 @@ public class ArenaImpl implements Arena {
         }
     }
 
-    public boolean areCornersOnFreeSpace(int x, int y, Direction direction) {
-        int playerSize = PlayerPosition.SIZE;
-        int tolerance =3;
-        int xShift = playerSize, yShift = playerSize;
-        if (x % 32 == 0 || true) {
-            xShift = playerSize-tolerance;
-        }
-        if (y % 32 == 0 || true) {
-            yShift = playerSize-tolerance;
-        }
-        boolean leftBottomCorner;
-        boolean rightBottomCorner;
-        boolean leftTopCorner;
-        boolean rightTopCorner;
+    private boolean isMoveMakeCollision(Player player, Direction direction) {
+
+        Optional<Map.Entry<BlockPosition, BlockType>> entryOptional;
+        int pX = player.getPosition().x;
+        int pY = player.getPosition().y;
+        int boardSize = MAP_SIZE * BlockType.SIZE;
+        int offsetX = 0, offsetY = 0;
+        BlockType block = null;
         switch (direction) {
             case UP:
-                leftTopCorner = isFreeSpace(x+tolerance, y + yShift);
-                rightTopCorner = isFreeSpace(x + xShift , y + yShift);
-                return leftTopCorner && rightTopCorner;
-
+                if(pY > boardSize)
+                    return false;
+                pY = (pY + BlockType.SIZE)/32;
+                pX = (pX + BlockType.SIZE/2) / 32;
+                offsetY = 1;
+                break;
             case DOWN:
-                leftBottomCorner = isFreeSpace(x+tolerance, y);
-                rightBottomCorner = isFreeSpace(x + xShift, y);
-                return leftBottomCorner && rightBottomCorner;
-
+                if(pY < 0)
+                    return false;
+                pY = pY / 32;
+                pX = (pX + BlockType.SIZE/2) / 32;
+                offsetY = -1;
+                break;
             case LEFT:
-                leftBottomCorner = isFreeSpace(x, y + tolerance);
-                leftTopCorner = isFreeSpace(x, y + yShift );
-                return leftBottomCorner && leftTopCorner;
-
+                if(pX < 0)
+                    return false;
+                pY = (pY + BlockType.SIZE/2) / 32;
+                pX = pX / 32;
+                offsetX = -1;
+                break;
             case RIGHT:
-                rightTopCorner = isFreeSpace(x + xShift+tolerance, y + yShift );
-                rightBottomCorner = isFreeSpace(x + xShift+tolerance, y + tolerance);
-                return rightTopCorner && rightBottomCorner;
-
+                if(pX > boardSize)
+                    return false;
+                pY = (pY + BlockType.SIZE/2) / 32;
+                pX = (pX + BlockType.SIZE)/32;
+                offsetX = 1;
+                break;
         }
-        return false;
-    }
-
-    public boolean isFreeSpace(int x, int y) {
-        int size = BlockType.SIZE;
-
-
-        if (x < 0 || x >= MAP_SIZE * 32) {
-            return false;
-        }
-        if (y < 0 || y >= MAP_SIZE * 32) {
-            return false;
-        }
-        int blockX = (x) / size, blockY = (y) / size;
-        if (blockX < 0 || blockY < 0) {
-            return false;
-        }
-        if (blockX >= MAP_SIZE || blockY >= MAP_SIZE) {
-            return false;
-        }
-
-        if (!currentState.getBlocks().entrySet().stream().filter(entry -> entry.getKey().x == blockX && entry.getKey().y == blockY && entry.getValue() == BlockType.BOMB).collect(Collectors.toList()).isEmpty()) {
-            return false;
-        }
-        BlockType block = currentState.getBlocks()
+        final int fPX = pX;
+        final int fPY = pY;
+        entryOptional = currentState.getBlocks()
                 .entrySet()
                 .stream()
-                .filter(e -> e.getKey().x == blockX)
-                .filter(e -> e.getKey().y == blockY)
-                .findFirst()
-                .get()
-                .getValue();
-        return block == BlockType.BACKGROUND || block == BlockType.FIRE;
+                .filter(e -> e.getKey().x == fPX)
+                .filter(e -> e.getKey().y == fPY)
+                .findFirst();
+        if(entryOptional.isPresent()){
+            block = entryOptional.get().getValue();
+        }
+        if(block != null){
+            if(block == BlockType.BOMB){
+                final int fMiddlePX = (player.getPosition().x + BlockType.SIZE/2)/BlockType.SIZE;
+                final int fMiddlePY = (player.getPosition().y + BlockType.SIZE/2)/BlockType.SIZE;
+                entryOptional = currentState.getBlocks()
+                        .entrySet()
+                        .stream()
+                        .filter(e -> e.getKey().x == fMiddlePX)
+                        .filter(e -> e.getKey().y == fMiddlePY)
+                        .findFirst();
+                if(entryOptional.isPresent()){
+                    block = entryOptional.get().getValue();
+                }
+                if(block == BlockType.BOMB){
+                    final int fOffsetX = offsetX;
+                    final int fOffsetY = offsetY;
+                    entryOptional = currentState.getBlocks()
+                            .entrySet()
+                            .stream()
+                            .filter(e -> e.getKey().x == fMiddlePX + fOffsetX)
+                            .filter(e -> e.getKey().y == fMiddlePY + fOffsetY)
+                            .findFirst();
+                    if(entryOptional.isPresent()){
+                        return entryOptional.get().getValue() == BlockType.BACKGROUND;
+                    }
+                }
+            }
+            return block == BlockType.BACKGROUND;
+        }
+        return false;
     }
 
     private void placeBomb(Player player) {
