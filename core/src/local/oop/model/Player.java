@@ -10,14 +10,25 @@ public class Player {
     private final PlayerId id;
     private int speed;
     private int power;
-    private int bombs = 1;
+    private int bombs;
 
     public Player(PlayerId id){
         this.id = id;
+        this.speed = 2;
+        this.power = 2;
+        this.bombs = 1;
+        resetPosition();
+    }
+
+
+    public Player(PlayerId id, PlayerPosition position) {
+        this.id = id;
+        this.position = position;
+    }
+
+    private void resetPosition() {
         int blockSize = BlockPosition.SIZE;
         int MAP_SIZE = ArenaImpl.MAP_SIZE;
-        speed = 2;
-        power = 2;
         switch (id){
             case PLAYER_1:
                 position = new PlayerPosition(0,0, Direction.DOWN);
@@ -32,13 +43,8 @@ public class Player {
                 position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
                 break;
         }
-    }
 
-    public Player(PlayerId id, PlayerPosition position) {
-        this.id = id;
-        this.position = position;
     }
-
 
     public void move(Direction direction, int step) {
         switch (direction) {
@@ -94,6 +100,10 @@ public class Player {
 
     public void incrementBombs() {
         bombs++;
+    }
+
+    public void die() {
+        resetPosition();
     }
 
     public void setPosition(PlayerPosition position) {

@@ -227,7 +227,7 @@ public class ArenaImpl implements Arena {
                 .collect(Collectors.toList());
     }
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
-        return new BlockPosition(playerPosition.x / BlockPosition.SIZE, playerPosition.y / BlockPosition.SIZE);
+        return new BlockPosition((playerPosition.x + PlayerPosition.SIZE / 2 ) / BlockPosition.SIZE, (playerPosition.y + PlayerPosition.SIZE / 2) / BlockPosition.SIZE);
     }
 
 }
