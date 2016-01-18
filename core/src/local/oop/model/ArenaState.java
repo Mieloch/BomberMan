@@ -90,8 +90,20 @@ public class ArenaState {
             return this;
         }
 
-        public Builder clearBlock(BlockPosition blockPosition) {
-            state.blocks.put(blockPosition, BlockType.BACKGROUND);
+        public Builder clearBlock(BlockPosition blockPosition, BlockType previousBlockType) {
+            switch (previousBlockType){
+                case POWER_UP:
+                    state.blocks.put(blockPosition, BlockType.FLAME_POWERUP);
+                    break;
+                case SPEED_UP:
+                    state.blocks.put(blockPosition, BlockType.SPEED_POWERUP);
+                    break;
+                case EXTRA_BOMB:
+                    state.blocks.put(blockPosition, BlockType.BOMB_POWERUP);
+                    break;
+                default:
+                    state.blocks.put(blockPosition, BlockType.BACKGROUND);
+            }
             return this;
         }
 

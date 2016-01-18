@@ -198,31 +198,33 @@ public class ArenaImpl implements Arena {
             @Override
             public void run() {
                 List<BlockPosition> explosions = getPlacesWhereFireCanBe(position, player.getPower());
+                Map<BlockPosition, BlockType> map = new HashMap<>();
                 for (BlockPosition explosion : explosions) {
+                    map.put(explosion, currentState.getBlocks().get(explosion));
                     nextStateBuilder.setBlock(explosion, BlockType.FIRE);
                 }
                 player.incrementBombs();
-                timer.schedule(getFireDisposalTask(explosions), fireTimeout);
+                timer.schedule(getFireDisposalTask(map), fireTimeout);
             }
         };
     }
 
-    private TimerTask getFireDisposalTask(List<BlockPosition> blocks) {
+    private TimerTask getFireDisposalTask(Map<BlockPosition, BlockType> blocks) {
         return new TimerTask() {
             @Override
             public void run() {
-                blocks.stream().forEach(b -> nextStateBuilder.clearBlock(b));
+                blocks.entrySet().stream().forEach(b -> nextStateBuilder.clearBlock(b.getKey(), b.getValue()));
             }
         };
     }
 
-    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition position, int power){
+    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition pos, int pow){
         return currentState.getBlocks()
                 .entrySet()
                 .stream()
                 .filter(e -> e.getValue() != BlockType.SOLID)
-                .filter(e -> ((e.getKey().x == position.x && e.getKey().y < position.y + power && e.getKey().y > position.y - power) ||
-                        (e.getKey().y == position.y && e.getKey().x < position.x + power && e.getKey().x > position.x - power)))
+                .filter(e -> ((e.getKey().x == pos.x && e.getKey().y < pos.y + pow && e.getKey().y > pos.y - pow) ||
+                        (e.getKey().y == pos.y && e.getKey().x < pos.x + pow && e.getKey().x > pos.x - pow)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
