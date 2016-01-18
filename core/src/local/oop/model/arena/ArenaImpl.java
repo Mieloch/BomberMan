@@ -99,7 +99,7 @@ public class ArenaImpl implements Arena {
                 break;
         }
 
-        return areCornersOnFreeSpace(pX, pY,direction);
+        return areCornersOnFreeSpace(pX, pY, direction);
 
     }
 
@@ -121,12 +121,13 @@ public class ArenaImpl implements Arena {
 
     public boolean areCornersOnFreeSpace(int x, int y, Direction direction) {
         int playerSize = PlayerPosition.SIZE;
+        int tolerance =3;
         int xShift = playerSize, yShift = playerSize;
-        if (x % 32 == 0) {
-            xShift = 0;
+        if (x % 32 == 0 || true) {
+            xShift = playerSize-tolerance;
         }
-        if (y % 32 == 0) {
-            yShift = 0;
+        if (y % 32 == 0 || true) {
+            yShift = playerSize-tolerance;
         }
         boolean leftBottomCorner;
         boolean rightBottomCorner;
@@ -134,23 +135,23 @@ public class ArenaImpl implements Arena {
         boolean rightTopCorner;
         switch (direction) {
             case UP:
-                leftTopCorner = isFreeSpace(x, y + yShift);
-                rightTopCorner = isFreeSpace(x + xShift, y + yShift);
+                leftTopCorner = isFreeSpace(x+tolerance, y + yShift);
+                rightTopCorner = isFreeSpace(x + xShift , y + yShift);
                 return leftTopCorner && rightTopCorner;
 
             case DOWN:
-                leftBottomCorner = isFreeSpace(x, y);
+                leftBottomCorner = isFreeSpace(x+tolerance, y);
                 rightBottomCorner = isFreeSpace(x + xShift, y);
                 return leftBottomCorner && rightBottomCorner;
 
             case LEFT:
-                leftBottomCorner = isFreeSpace(x, y);
-                leftTopCorner = isFreeSpace(x, y + yShift);
+                leftBottomCorner = isFreeSpace(x, y + tolerance);
+                leftTopCorner = isFreeSpace(x, y + yShift );
                 return leftBottomCorner && leftTopCorner;
 
             case RIGHT:
-                rightTopCorner = isFreeSpace(x + xShift, y + yShift);
-                rightBottomCorner = isFreeSpace(x + xShift, y);
+                rightTopCorner = isFreeSpace(x + xShift+tolerance, y + yShift );
+                rightBottomCorner = isFreeSpace(x + xShift+tolerance, y + tolerance);
                 return rightTopCorner && rightBottomCorner;
 
         }
@@ -159,21 +160,22 @@ public class ArenaImpl implements Arena {
 
     public boolean isFreeSpace(int x, int y) {
         int size = BlockType.SIZE;
-        int blockX = x / size, blockY = y / size;
 
 
-        if(x < 0 || x >= MAP_SIZE*32){
+        if (x < 0 || x >= MAP_SIZE * 32) {
             return false;
         }
-        if(y < 0 || y >= MAP_SIZE*32){
+        if (y < 0 || y >= MAP_SIZE * 32) {
             return false;
         }
-        if(blockX <0 || blockY <0){
+        int blockX = (x) / size, blockY = (y) / size;
+        if (blockX < 0 || blockY < 0) {
             return false;
         }
-        if(blockX >= MAP_SIZE || blockY >= MAP_SIZE){
+        if (blockX >= MAP_SIZE || blockY >= MAP_SIZE) {
             return false;
         }
+
         if (!currentState.getBlocks().entrySet().stream().filter(entry -> entry.getKey().x == blockX && entry.getKey().y == blockY && entry.getValue() == BlockType.BOMB).collect(Collectors.toList()).isEmpty()) {
             return false;
         }
@@ -187,6 +189,7 @@ public class ArenaImpl implements Arena {
                 .getValue();
         return block == BlockType.BACKGROUND || block == BlockType.FIRE;
     }
+
     private void placeBomb(Player player) {
         BlockPosition position = convertPlayerToBlock(player.getPosition());
         nextStateBuilder.setBlock(position, BlockType.BOMB);
@@ -216,7 +219,7 @@ public class ArenaImpl implements Arena {
         };
     }
 
-    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition position, int power){
+    private List<BlockPosition> getPlacesWhereFireCanBe(BlockPosition position, int power) {
         return currentState.getBlocks()
                 .entrySet()
                 .stream()
@@ -226,6 +229,7 @@ public class ArenaImpl implements Arena {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
+
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
         return new BlockPosition(playerPosition.x / BlockPosition.SIZE, playerPosition.y / BlockPosition.SIZE);
     }
