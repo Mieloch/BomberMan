@@ -237,37 +237,28 @@ public class ArenaImpl implements Arena {
             BlockType leftType = map.get(left);
             BlockType upType = map.get(up);
             BlockType downType = map.get(down);
-            if(!blockRight && rightType != null && rightType != BlockType.SOLID){
-                if(rightType == BlockType.EXPLODABLE)
-                    blockRight = true;
-                list.add(right);
-            } else {
-                blockRight = true;
-            }
-            if(!blockLeft && leftType != null && leftType != BlockType.SOLID){
-                if(leftType == BlockType.EXPLODABLE)
-                    blockLeft = true;
-                list.add(left);
-            } else {
-                blockLeft = true;
-            }
-            if(!blockUp && upType != null && upType != BlockType.SOLID){
-                if(upType == BlockType.EXPLODABLE)
-                    blockUp = true;
-                list.add(up);
-            } else {
-                blockUp = true;
-            }
-            if(!blockDown && downType != null && downType != BlockType.SOLID){
-                if(downType == BlockType.EXPLODABLE)
-                    blockDown = true;
-                list.add(down);
-            } else {
-                blockDown = true;
-            }
+            if(!blockRight)
+                blockRight = chujMiWDupe(list, rightType, right);
+            if(!blockLeft)
+                blockLeft = chujMiWDupe(list, leftType, left);
+            if(!blockUp)
+                blockUp = chujMiWDupe(list, upType, up);
+            if(!blockDown)
+                blockDown = chujMiWDupe(list, downType, down);
         }
         return list;
 
+    }
+
+    private boolean chujMiWDupe(List<BlockPosition> list, BlockType type, BlockPosition position){
+        if(type != null && type != BlockType.SOLID){
+            list.add(position);
+            if(type == BlockType.EXPLODABLE)
+                return true;
+        } else {
+            return true;
+        }
+        return false;
     }
 
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
