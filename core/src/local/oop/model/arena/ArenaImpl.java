@@ -167,6 +167,8 @@ public class ArenaImpl implements Arena {
                     if (entryOptional.isPresent()) {
                         return entryOptional.get().getValue() == BlockType.BACKGROUND;
                     }
+                } else {
+                    return false;
                 }
             }
             return block == BlockType.BACKGROUND;
