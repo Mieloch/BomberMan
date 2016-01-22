@@ -17,7 +17,7 @@ public class Player {
         this.id = id;
         this.lives = 3;
         this.speed = 2;
-        this.power = 2;
+        this.power = 5;
         this.bombs = 1;
         resetPosition();
     }

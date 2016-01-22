@@ -167,9 +167,8 @@ public class ArenaImpl implements Arena {
                     if (entryOptional.isPresent()) {
                         return entryOptional.get().getValue() == BlockType.BACKGROUND;
                     }
-                } else {
-                    return false;
                 }
+                return false;
             }
             return block == BlockType.BACKGROUND;
         }
@@ -223,14 +222,52 @@ public class ArenaImpl implements Arena {
     }
 
     private List<BlockPosition> getPlacesWhereFireCanBe(BlockPosition pos, int pow) {
-        return currentState.getBlocks()
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue() != BlockType.SOLID)
-                .filter(e -> ((e.getKey().x == pos.x && e.getKey().y < pos.y + pow && e.getKey().y > pos.y - pow) ||
-                        (e.getKey().y == pos.y && e.getKey().x < pos.x + pow && e.getKey().x > pos.x - pow)))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        boolean blockRight = false;
+        boolean blockLeft = false;
+        boolean blockUp = false;
+        boolean blockDown = false;
+        List<BlockPosition> list = new ArrayList<>();
+        Map<BlockPosition, BlockType> map = currentState.getBlocks();
+        for(int i = 0; i<pow; i++){
+            BlockPosition right = new BlockPosition(pos.x+i, pos.y);
+            BlockPosition left = new BlockPosition(pos.x-i, pos.y);
+            BlockPosition up = new BlockPosition(pos.x, pos.y+i);
+            BlockPosition down = new BlockPosition(pos.x, pos.y-i);
+            BlockType rightType = map.get(right);
+            BlockType leftType = map.get(left);
+            BlockType upType = map.get(up);
+            BlockType downType = map.get(down);
+            if(!blockRight && rightType != null && rightType != BlockType.SOLID){
+                if(rightType == BlockType.EXPLODABLE)
+                    blockRight = true;
+                list.add(right);
+            } else {
+                blockRight = true;
+            }
+            if(!blockLeft && leftType != null && leftType != BlockType.SOLID){
+                if(leftType == BlockType.EXPLODABLE)
+                    blockLeft = true;
+                list.add(left);
+            } else {
+                blockLeft = true;
+            }
+            if(!blockUp && upType != null && upType != BlockType.SOLID){
+                if(upType == BlockType.EXPLODABLE)
+                    blockUp = true;
+                list.add(up);
+            } else {
+                blockUp = true;
+            }
+            if(!blockDown && downType != null && downType != BlockType.SOLID){
+                if(downType == BlockType.EXPLODABLE)
+                    blockDown = true;
+                list.add(down);
+            } else {
+                blockDown = true;
+            }
+        }
+        return list;
+
     }
 
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
