@@ -63,6 +63,7 @@ public class ArenaImpl implements Arena {
     }
 
     private void loop() {
+        isOnFire();
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
@@ -102,31 +103,31 @@ public class ArenaImpl implements Arena {
         BlockType block = null;
         switch (direction) {
             case UP:
-                if(pY > boardSize)
+                if (pY > boardSize)
                     return false;
-                pY = (pY + BlockType.SIZE)/32;
-                pX = (pX + BlockType.SIZE/2) / 32;
+                pY = (pY + BlockType.SIZE) / 32;
+                pX = (pX + BlockType.SIZE / 2) / 32;
                 offsetY = 1;
                 break;
             case DOWN:
-                if(pY < 0)
+                if (pY < 0)
                     return false;
                 pY = pY / 32;
-                pX = (pX + BlockType.SIZE/2) / 32;
+                pX = (pX + BlockType.SIZE / 2) / 32;
                 offsetY = -1;
                 break;
             case LEFT:
-                if(pX < 0)
+                if (pX < 0)
                     return false;
-                pY = (pY + BlockType.SIZE/2) / 32;
+                pY = (pY + BlockType.SIZE / 2) / 32;
                 pX = pX / 32;
                 offsetX = -1;
                 break;
             case RIGHT:
-                if(pX > boardSize)
+                if (pX > boardSize)
                     return false;
-                pY = (pY + BlockType.SIZE/2) / 32;
-                pX = (pX + BlockType.SIZE)/32;
+                pY = (pY + BlockType.SIZE / 2) / 32;
+                pX = (pX + BlockType.SIZE) / 32;
                 offsetX = 1;
                 break;
         }
@@ -138,23 +139,23 @@ public class ArenaImpl implements Arena {
                 .filter(e -> e.getKey().x == fPX)
                 .filter(e -> e.getKey().y == fPY)
                 .findFirst();
-        if(entryOptional.isPresent()){
+        if (entryOptional.isPresent()) {
             block = entryOptional.get().getValue();
         }
-        if(block != null){
-            if(block == BlockType.BOMB){
-                final int fMiddlePX = (player.getPosition().x + BlockType.SIZE/2)/BlockType.SIZE;
-                final int fMiddlePY = (player.getPosition().y + BlockType.SIZE/2)/BlockType.SIZE;
+        if (block != null) {
+            if (block == BlockType.BOMB) {
+                final int fMiddlePX = (player.getPosition().x + BlockType.SIZE / 2) / BlockType.SIZE;
+                final int fMiddlePY = (player.getPosition().y + BlockType.SIZE / 2) / BlockType.SIZE;
                 entryOptional = currentState.getBlocks()
                         .entrySet()
                         .stream()
                         .filter(e -> e.getKey().x == fMiddlePX)
                         .filter(e -> e.getKey().y == fMiddlePY)
                         .findFirst();
-                if(entryOptional.isPresent()){
+                if (entryOptional.isPresent()) {
                     block = entryOptional.get().getValue();
                 }
-                if(block == BlockType.BOMB){
+                if (block == BlockType.BOMB) {
                     final int fOffsetX = offsetX;
                     final int fOffsetY = offsetY;
                     entryOptional = currentState.getBlocks()
@@ -163,7 +164,7 @@ public class ArenaImpl implements Arena {
                             .filter(e -> e.getKey().x == fMiddlePX + fOffsetX)
                             .filter(e -> e.getKey().y == fMiddlePY + fOffsetY)
                             .findFirst();
-                    if(entryOptional.isPresent()){
+                    if (entryOptional.isPresent()) {
                         return entryOptional.get().getValue() == BlockType.BACKGROUND;
                     }
                 }
@@ -195,6 +196,21 @@ public class ArenaImpl implements Arena {
         };
     }
 
+    private void isOnFire() {
+        List<Player> players = currentState.getPlayers();
+        for (Player player : players) {
+            int x = player.getPosition().x, y = player.getPosition().y;
+            int playerCenterX = (x + (PlayerPosition.SIZE / 2));
+            int playerCenterY = (y + (PlayerPosition.SIZE / 2));
+            BlockPosition playerCenter = new BlockPosition(playerCenterX / BlockType.SIZE, playerCenterY / BlockType.SIZE);
+            boolean isMatch = currentState.getBlocks().entrySet().stream().anyMatch(e -> e.getValue() == BlockType.FIRE && (e.getKey().equals(playerCenter)));
+            if (isMatch) {
+                player.die();
+            }
+
+        }
+    }
+
     private TimerTask getFireDisposalTask(Map<BlockPosition, BlockType> blocks) {
         return new TimerTask() {
             @Override
@@ -204,7 +220,7 @@ public class ArenaImpl implements Arena {
         };
     }
 
-    private List<BlockPosition>getPlacesWhereFireCanBe(BlockPosition pos, int pow){
+    private List<BlockPosition> getPlacesWhereFireCanBe(BlockPosition pos, int pow) {
         return currentState.getBlocks()
                 .entrySet()
                 .stream()
@@ -216,7 +232,7 @@ public class ArenaImpl implements Arena {
     }
 
     private BlockPosition convertPlayerToBlock(PlayerPosition playerPosition) {
-        return new BlockPosition((playerPosition.x + PlayerPosition.SIZE / 2 ) / BlockPosition.SIZE, (playerPosition.y + PlayerPosition.SIZE / 2) / BlockPosition.SIZE);
+        return new BlockPosition((playerPosition.x + PlayerPosition.SIZE / 2) / BlockPosition.SIZE, (playerPosition.y + PlayerPosition.SIZE / 2) / BlockPosition.SIZE);
     }
 
 }
