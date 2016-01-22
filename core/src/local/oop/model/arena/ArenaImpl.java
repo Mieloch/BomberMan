@@ -16,11 +16,8 @@ public class ArenaImpl implements Arena {
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
-    int step;
     int bombTimeout = 3000;
     int fireTimeout = 1000;
-    int blockResolution;
-    private Level level;
 
     @Inject
     public ArenaImpl(Timer timer, ArenaState.Builder builder) {
@@ -50,8 +47,7 @@ public class ArenaImpl implements Arena {
 
 
     private void initArenaState() {
-        level = new Level(MAP_SIZE, MAP_SIZE);
-        nextStateBuilder = new ArenaState.Builder(level.getGeneratedLevel());
+        nextStateBuilder = new ArenaState.Builder(new Level(MAP_SIZE, MAP_SIZE).getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
 

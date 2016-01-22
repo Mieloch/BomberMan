@@ -11,9 +11,11 @@ public class Player {
     private int speed;
     private int power;
     private int bombs;
+    private int lives;
 
     public Player(PlayerId id){
         this.id = id;
+        this.lives = 3;
         this.speed = 2;
         this.power = 2;
         this.bombs = 1;
@@ -86,6 +88,10 @@ public class Player {
         return this.id == that.id;
     }
 
+    public int getLives() {
+        return lives;
+    }
+
     public int getBombs() {
         return bombs;
     }
@@ -103,6 +109,7 @@ public class Player {
     }
 
     public void die() {
+        lives--;
         resetPosition();
     }
 
