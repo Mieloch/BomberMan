@@ -13,6 +13,8 @@ public class ArenaState {
     List<Player> players;
     Map<BlockPosition, BlockType> blocks;
     Presenter presenter;
+    Player winner = null;
+    boolean finnish = false;
 
     private ArenaState() {
         this(Optional.empty());
@@ -33,6 +35,26 @@ public class ArenaState {
                 blocks = new HashMap<>();
             }
         }
+    }
+
+    public void reset(){
+        players = new ArrayList<>();
+        blocks = new HashMap<>();
+        finnish = false;
+        winner = null;
+    }
+
+    public void finnish(Player winner){
+        this.winner = winner;
+        this.finnish = true;
+    }
+
+    public boolean isFinnish(){
+        return finnish;
+    }
+
+    public Player getWinner(){
+        return winner;
     }
 
     public Map<BlockPosition, BlockType> getBlocks() {

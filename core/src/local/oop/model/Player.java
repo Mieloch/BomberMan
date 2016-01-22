@@ -12,6 +12,7 @@ public class Player {
     private int power;
     private int bombs;
     private int lives;
+    private String name = "Pawel Mieloch";
 
     public Player(PlayerId id){
         this.id = id;
@@ -135,6 +136,14 @@ public class Player {
 
     public int getPower() {
         return power;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPower(int power) {

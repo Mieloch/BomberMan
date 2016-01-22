@@ -7,7 +7,6 @@ import local.oop.model.player.PlayerId;
 import local.oop.presenter.Presenter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ArenaImpl implements Arena {
     public final static int MAP_SIZE = 24;
@@ -42,6 +41,8 @@ public class ArenaImpl implements Arena {
 
     @Override
     public void start() {
+        currentState.getPlayers();
+        timer = new Timer();
         timer.schedule(getLoopTask(), 0, 25);
     }
 
@@ -62,11 +63,23 @@ public class ArenaImpl implements Arena {
         };
     }
 
+    private void checkPlayersLives(){
+        currentState.getPlayers().stream().filter(player -> player.getLives() == 0).forEach(player -> {
+            nextStateBuilder.removePlayer(player);
+        });
+    }
+
     private void loop() {
+        currentState = nextStateBuilder.setPresenter(this.presenter).get();
+        checkPlayersLives();
         isOnFire();
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
+        if(currentState.getPlayers().size() == 1){
+            currentState.finnish(currentState.getPlayers().stream().findFirst().get());
+            timer.cancel();
+        }
     }
 
     private void acquireAndExecuteCommands() {
@@ -238,19 +251,19 @@ public class ArenaImpl implements Arena {
             BlockType upType = map.get(up);
             BlockType downType = map.get(down);
             if(!blockRight)
-                blockRight = chujMiWDupe(list, rightType, right);
+                blockRight = checkBlock(list, rightType, right);
             if(!blockLeft)
-                blockLeft = chujMiWDupe(list, leftType, left);
+                blockLeft = checkBlock(list, leftType, left);
             if(!blockUp)
-                blockUp = chujMiWDupe(list, upType, up);
+                blockUp = checkBlock(list, upType, up);
             if(!blockDown)
-                blockDown = chujMiWDupe(list, downType, down);
+                blockDown = checkBlock(list, downType, down);
         }
         return list;
 
     }
 
-    private boolean chujMiWDupe(List<BlockPosition> list, BlockType type, BlockPosition position){
+    private boolean checkBlock(List<BlockPosition> list, BlockType type, BlockPosition position){
         if(type != null && type != BlockType.SOLID){
             list.add(position);
             if(type == BlockType.EXPLODABLE)
