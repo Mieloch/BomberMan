@@ -123,6 +123,8 @@ public class ArenaState {
                 case EXTRA_BOMB:
                     state.blocks.put(blockPosition, BlockType.BOMB_POWERUP);
                     break;
+                case BOMB:
+                    state.blocks.put(blockPosition, BlockType.BOMB);
                 default:
                     state.blocks.put(blockPosition, BlockType.BACKGROUND);
             }

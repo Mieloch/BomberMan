@@ -51,7 +51,6 @@ public class ArenaImpl implements Arena {
         nextStateBuilder = new ArenaState.Builder(new Level(MAP_SIZE, MAP_SIZE).getGeneratedLevel());
         currentState = nextStateBuilder.get();
         nextStateBuilder.clear();
-
     }
 
     private TimerTask getLoopTask() {
@@ -217,8 +216,8 @@ public class ArenaImpl implements Arena {
             int playerCenterX = (x + (PlayerPosition.SIZE / 2));
             int playerCenterY = (y + (PlayerPosition.SIZE / 2));
             BlockPosition playerCenter = new BlockPosition(playerCenterX / BlockType.SIZE, playerCenterY / BlockType.SIZE);
-            boolean isMatch = currentState.getBlocks().entrySet().stream().anyMatch(e -> e.getValue() == BlockType.FIRE && (e.getKey().equals(playerCenter)));
-            if (isMatch) {
+            boolean playerIsOnFire = currentState.getBlocks().entrySet().stream().anyMatch(e -> e.getValue() == BlockType.FIRE && (e.getKey().equals(playerCenter)));
+            if (playerIsOnFire) {
                 player.die();
             }
 
@@ -229,7 +228,12 @@ public class ArenaImpl implements Arena {
         return new TimerTask() {
             @Override
             public void run() {
-                blocks.entrySet().stream().forEach(b -> nextStateBuilder.clearBlock(b.getKey(), b.getValue()));
+               Set<Map.Entry<BlockPosition, BlockType>> set = blocks.entrySet();
+                for (Map.Entry<BlockPosition, BlockType> blockPositionBlockTypeEntry : set) {
+                    if(currentState.getBlocks().get(blockPositionBlockTypeEntry.getKey()) != BlockType.BOMB){
+                        blocks.entrySet().stream().forEach(b -> nextStateBuilder.clearBlock(b.getKey(), b.getValue()));
+                    }
+                }
             }
         };
     }

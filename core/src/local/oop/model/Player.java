@@ -18,8 +18,8 @@ public class Player {
         this.id = id;
         this.lives = 3;
         this.speed = 2;
-        this.power = 5;
-        this.bombs = 1;
+        this.power = 3;
+        this.bombs = 4;
         resetPosition();
     }
 
@@ -46,7 +46,6 @@ public class Player {
                 position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
                 break;
         }
-
     }
 
     public void move(Direction direction, int step) {

@@ -12,4 +12,5 @@ public interface Presenter {
     PlayersInputCache getPlayersInputCache();
     List<CommandSequence> getPlayersMoves();
     void startGame();
+    void setPlayers(List<String> names);
 }

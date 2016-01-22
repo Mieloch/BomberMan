@@ -24,6 +24,10 @@ import com.badlogic.gdx.utils.Align;
 import local.oop.GameImpl;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class ChoosePlayersScreen implements Screen {
 
@@ -189,6 +193,8 @@ public class ChoosePlayersScreen implements Screen {
                     displayAlertDialog();
                 } else {
                     game.setScreen(new GameScreen(game));
+                    java.util.List selectedPlayerList = selectBoxList.stream().map(e -> e.getSelected()).collect(toList());
+                    game.getPresenter().setPlayers(selectedPlayerList);
                     game.getInputMultiplexer().removeProcessor(stage);
                 }
             }
