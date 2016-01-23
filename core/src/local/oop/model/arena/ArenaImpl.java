@@ -9,7 +9,7 @@ import local.oop.presenter.Presenter;
 import java.util.*;
 
 public class ArenaImpl implements Arena {
-    public final static int MAP_SIZE = 24;
+    public final static int MAP_SIZE = 11;
     Presenter presenter;
     Timer timer;
     ArenaState currentState;

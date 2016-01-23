@@ -192,6 +192,7 @@ public class ChoosePlayersScreen implements Screen {
                 if(showAlertDialog){
                     displayAlertDialog();
                 } else {
+
                     game.setScreen(new GameScreen(game));
                     java.util.List selectedPlayerList = selectBoxList.stream().map(e -> e.getSelected()).collect(toList());
                     game.getPresenter().setPlayers(selectedPlayerList);

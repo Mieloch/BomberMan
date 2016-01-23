@@ -22,7 +22,7 @@ public class BlockRenderer extends AbstractRenderer {
         if(blockTexture==null)
             blockTexture = blocksMap.get(BlockType.BACKGROUND);
         sprite.begin();
-        sprite.draw(blockTexture,position.x*BlockType.SIZE,position.y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
+        sprite.draw(blockTexture,xShift + position.x*BlockType.SIZE,yShift + position.y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
         sprite.end();
     }
 

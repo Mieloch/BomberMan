@@ -45,7 +45,7 @@ public class PlayerRenderer extends AbstractRenderer {
         if (frame.isFlipX() && direction == Direction.RIGHT) {
             frame.flip(true, false);
         }
-        sprite.draw(frame, x, y, frame.getRegionWidth()*SCALE, frame.getRegionHeight()*SCALE);
+        sprite.draw(frame,xShift+ x, yShift+y, frame.getRegionWidth()*SCALE, frame.getRegionHeight()*SCALE);
 
         sprite.end();
 

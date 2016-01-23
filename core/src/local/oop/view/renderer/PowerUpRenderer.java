@@ -18,7 +18,7 @@ public class PowerUpRenderer extends AbstractRenderer{
 
     public void render(float x, float y, BlockType type){
         sprite.begin();
-        sprite.draw(powerUpMap.get(type),x*BlockType.SIZE,y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
+        sprite.draw(powerUpMap.get(type),xShift+x*BlockType.SIZE,yShift+y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
         sprite.end();
     }
 

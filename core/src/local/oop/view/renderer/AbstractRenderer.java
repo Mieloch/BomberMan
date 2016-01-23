@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public abstract class AbstractRenderer {
     SpriteBatch sprite;
     float stateTime;
-
+   final float xShift = 507;
+           final float yShift = 208;
     public AbstractRenderer(){
         sprite = new SpriteBatch();
         stateTime=0;

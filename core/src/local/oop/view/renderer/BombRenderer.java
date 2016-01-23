@@ -21,7 +21,7 @@ public class BombRenderer extends AbstractRenderer{
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion frame = bomb.getKeyFrame(stateTime,true);
         sprite.begin();
-        sprite.draw(frame,x*BlockType.SIZE,y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
+        sprite.draw(frame,xShift+x*BlockType.SIZE,yShift+y*BlockType.SIZE,BlockType.SIZE,BlockType.SIZE);
         sprite.end();
     }
 

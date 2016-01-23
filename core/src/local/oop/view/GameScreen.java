@@ -64,6 +64,7 @@ public class GameScreen implements Screen {
         stage = new Stage();
         presenter.startGame();
         game.getInputMultiplexer().addProcessor(stage);
+
     }
 
     @Override

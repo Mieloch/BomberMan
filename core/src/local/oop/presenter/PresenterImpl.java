@@ -19,11 +19,11 @@ import java.util.function.Consumer;
 public class PresenterImpl implements Presenter {
     private PlayersInputCache playersInputCache;
     private Arena arena;
-    private HashMap<String,AI> playerMap;
+    private HashMap<String, AI> playerMap;
     private List<AI> aiInGame;
 
     @Inject
-    public PresenterImpl(PlayersInputCache playersInputCache, Arena arena){
+    public PresenterImpl(PlayersInputCache playersInputCache, Arena arena) {
         this.playersInputCache = playersInputCache;
         this.arena = arena;
         this.arena.setPresenter(this);
@@ -42,40 +42,33 @@ public class PresenterImpl implements Presenter {
 
     @Override
     public List<CommandSequence> getPlayersMoves() {
+        for (AI ai : aiInGame) {
+
+            Command command = ai.makeMove(arena.getCurrentState());
+            playersInputCache.movePlayer(ai.getPlayerId(), command);
+        }
         return playersInputCache.getPlayersMoves();
 
     }
 
-    private void startAI(){
-        Thread aiThread = new Thread((Runnable) () -> {
-            while(true){
-                for (AI ai : aiInGame) {
-                    Command command = ai.makeMove(arena.getCurrentState());
-                    playersInputCache.movePlayer(ai.getPlayerId(),command);
-                }
-            }
-        });
-        Executor ex = Executors.newSingleThreadExecutor();
-        ex.execute(aiThread);
-    }
 
     @Override
     public void startGame() {
         arena.start();
-        startAI();
     }
 
     @Override
     public void setPlayers(List<String> names) {
         names.stream().forEach(s -> {
-            aiInGame.add(playerMap.get(s));
+            if (playerMap.get(s) != null)
+                aiInGame.add(playerMap.get(s));
         });
     }
 
-    private void initPlayerMap(){
+    private void initPlayerMap() {
         playerMap = new HashMap<>();
         playerMap.put("Pawel", new RandomAI(PlayerId.PLAYER_1));
-        playerMap.put("Ernest", new RandomAI(PlayerId.PLAYER_3));
-        playerMap.put("Jacek", new RandomAI(PlayerId.PLAYER_2));
+        playerMap.put("Ernest", new RandomAI(PlayerId.PLAYER_2));
+        playerMap.put("Jacek", new RandomAI(PlayerId.PLAYER_3));
     }
 }
