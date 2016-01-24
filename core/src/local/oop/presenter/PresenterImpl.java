@@ -2,6 +2,7 @@ package local.oop.presenter;
 
 import com.google.inject.Inject;
 import local.oop.ai.AI;
+import local.oop.ai.PawelAi;
 import local.oop.ai.ernest.ErnestAI;
 import local.oop.ai.RandomAI;
 import local.oop.model.Command;
@@ -64,7 +65,7 @@ public class PresenterImpl implements Presenter {
             playerList.add(player);
             switch (names.get(i)){
                 case Player.PAWEL:
-                    aiInGame.add(new RandomAI(id));
+                    aiInGame.add(new PawelAi(id));
                     break;
                 case Player.ERNEST:
                     aiInGame.add(new ErnestAI(id));

@@ -1,5 +1,7 @@
 package local.oop.model;
 
+import local.oop.model.arena.BlockPosition;
+import local.oop.model.arena.BlockType;
 import local.oop.model.player.Direction;
 
 public class PlayerPosition extends Position {
@@ -29,5 +31,9 @@ public class PlayerPosition extends Position {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public BlockPosition getBlockPosition(){
+        return new BlockPosition((x+SIZE/2)/ BlockType.SIZE, (y+SIZE/2)/ BlockType.SIZE);
     }
 }

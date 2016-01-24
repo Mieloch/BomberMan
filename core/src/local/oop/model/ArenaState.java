@@ -36,7 +36,45 @@ public class ArenaState {
             }
         }
     }
+    public  List<BlockPosition> getPlacesWhereFireCanBe(BlockPosition pos, int pow) {
+        boolean blockRight = false;
+        boolean blockLeft = false;
+        boolean blockUp = false;
+        boolean blockDown = false;
+        List<BlockPosition> list = new ArrayList<>();
+        Map<BlockPosition, BlockType> map = getBlocks();
+        for(int i = 0; i<pow; i++){
+            BlockPosition right = new BlockPosition(pos.x+i, pos.y);
+            BlockPosition left = new BlockPosition(pos.x-i, pos.y);
+            BlockPosition up = new BlockPosition(pos.x, pos.y+i);
+            BlockPosition down = new BlockPosition(pos.x, pos.y-i);
+            BlockType rightType = map.get(right);
+            BlockType leftType = map.get(left);
+            BlockType upType = map.get(up);
+            BlockType downType = map.get(down);
+            if(!blockRight)
+                blockRight = checkBlock(list, rightType, right);
+            if(!blockLeft)
+                blockLeft = checkBlock(list, leftType, left);
+            if(!blockUp)
+                blockUp = checkBlock(list, upType, up);
+            if(!blockDown)
+                blockDown = checkBlock(list, downType, down);
+        }
+        return list;
 
+    }
+
+    private boolean checkBlock(List<BlockPosition> list, BlockType type, BlockPosition position){
+        if(type != null && type != BlockType.SOLID){
+            list.add(position);
+            if(type == BlockType.EXPLODABLE)
+                return true;
+        } else {
+            return true;
+        }
+        return false;
+    }
     public void reset(){
         players = new ArrayList<>();
         blocks = new HashMap<>();
