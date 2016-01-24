@@ -15,14 +15,12 @@ public class ErnestAI extends AbstractAI {
 
     private Player me;
     private ArenaState currentState;
+    private List<Node> nodes;
+    private BlockPosition lastPlace;
 
     public ErnestAI(PlayerId id) {
         super(id);
     }
-
-    private List<Node> nodes;
-    private Map<Node, Boolean> vis;
-    private Map<Node, Node> prev;
 
     @Override
     public Command makeMove(ArenaState state) {
@@ -35,10 +33,14 @@ public class ErnestAI extends AbstractAI {
                 return getSafeMove(bomb);
             }
         }
+        if(me.getBombs()==0){
+            lastPlace = null;
+        }
         BlockPosition block = getSafePlaceForBomb();
-        if(block != null) {
-            if (block.equals(me.getBlockPosition()))
+        if (block != null) {
+            if (block.equals(me.getBlockPosition())) {
                 return Command.BOMB;
+            }
             else
                 return goToBlock(block);
         }
@@ -46,6 +48,8 @@ public class ErnestAI extends AbstractAI {
     }
 
     private List<Node> getDirections(Node start, Node finish){
+        Map<Node, Boolean> vis;
+        Map<Node, Node> prev;
         List<Node> directions = new LinkedList<>();
         Queue<Node> q = new LinkedList<>();
         Node current = start;
@@ -90,18 +94,16 @@ public class ErnestAI extends AbstractAI {
             nodes.add(new Node(block.x, block.y, entry.getValue()));
         }
         for (Node node : nodes) {
-            for (Node node1 : nodes) {
-                if(node1.getType() == BlockType.BACKGROUND) {
-                    if (node.x == node1.x) {
-                        if (node.y == node1.y + 1 || node.y == node1.y - 1)
-                            node.addOutNode(node1);
-                    }
-                    if (node.y == node1.y) {
-                        if (node.x == node1.x + 1 || node.x == node1.x - 1)
-                            node.addOutNode(node1);
-                    }
+            nodes.stream().filter(node1 -> node1.getType() == BlockType.BACKGROUND).forEach(node1 -> {
+                if (node.x == node1.x) {
+                    if (node.y == node1.y + 1 || node.y == node1.y - 1)
+                        node.addOutNode(node1);
                 }
-            }
+                if (node.y == node1.y) {
+                    if (node.x == node1.x + 1 || node.x == node1.x - 1)
+                        node.addOutNode(node1);
+                }
+            });
         }
     }
 
@@ -135,6 +137,8 @@ public class ErnestAI extends AbstractAI {
     }
 
     private BlockPosition getSafePlaceForBomb(){
+        if(lastPlace!=null)
+            return lastPlace;
         BlockPosition myPosition = me.getBlockPosition();
         List<BlockPosition> blocks = currentState
                 .getBlocks()
@@ -145,9 +149,11 @@ public class ErnestAI extends AbstractAI {
                 .filter(e -> e.getValue() == BlockType.BACKGROUND)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+        Collections.shuffle(blocks);
         for (BlockPosition block : blocks) {
             for (BlockPosition blockPosition : blocks) {
                 if(isPath(block, blockPosition) && block.x != blockPosition.x && block.y != blockPosition.y && isSurrounded(blockPosition)){
+                    lastPlace = blockPosition;
                     return blockPosition;
                 }
             }
@@ -162,11 +168,13 @@ public class ErnestAI extends AbstractAI {
             BlockType type = entry.getValue();
             if (block.x == blockPosition.x) {
                 if (block.y == blockPosition.y + 1 || block.y == blockPosition.y - 1)
-                    return type == BlockType.EXPLODABLE;
+                    if(type == BlockType.EXPLODABLE)
+                        return true;
             }
             if (block.y == blockPosition.y) {
                 if (block.x == blockPosition.x + 1 || block.x == blockPosition.x - 1)
-                    return type == BlockType.EXPLODABLE;
+                    if(type == BlockType.EXPLODABLE)
+                        return true;
             }
         }
         return false;
@@ -197,46 +205,22 @@ public class ErnestAI extends AbstractAI {
     }
 
     private Command getSafeMove(BlockPosition bomb){
-        BlockPosition myPosition = me.getBlockPosition();
-        if(bomb.equals(myPosition)) {
-            List<BlockPosition> positionList = currentState
-                    .getBlocks()
-                    .entrySet()
-                    .stream()
-                    .filter(e -> Math.abs(e.getKey().x - myPosition.x) < 3)
-                    .filter(e -> Math.abs(e.getKey().y - myPosition.y) < 3)
-                    .filter(e -> e.getValue() == BlockType.BACKGROUND)
-                    .map(Map.Entry::getKey)
-                    .collect(Collectors.toList());
-            for (BlockPosition blockPosition : positionList) {
-                Command toReturn = goToBlock(blockPosition);
-                if (toReturn != null)
-                    return toReturn;
-            }
-        }
-        if(me.getBlockPosition().y == bomb.y){
-            if( currentState
-                    .getBlocks()
-                    .get(new BlockPosition(me.getBlockPosition().x, me.getBlockPosition().y+1)) == BlockType.BACKGROUND)
-                return Command.UP;
-            if( currentState
-                    .getBlocks()
-                    .get(new BlockPosition(me.getBlockPosition().x, me.getBlockPosition().y-1)) == BlockType.BACKGROUND)
-                return Command.DOWN;
+        List<BlockPosition> positionList = currentState
+                .getBlocks()
+                .entrySet()
+                .stream()
+                .filter(e -> e.getKey().x != bomb.x)
+                .filter(e -> e.getKey().y != bomb.y)
+                .filter(e -> e.getValue() == BlockType.BACKGROUND)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        for (BlockPosition blockPosition : positionList) {
+            Command toReturn = goToBlock(blockPosition);
+            if (toReturn != null)
+                return toReturn;
         }
 
-        if(me.getBlockPosition().x == bomb.x){
-            if( currentState
-                    .getBlocks()
-                    .get(new BlockPosition(me.getBlockPosition().x-1, me.getBlockPosition().y)) == BlockType.BACKGROUND)
-                return Command.LEFT;
-            if( currentState
-                    .getBlocks()
-                    .get(new BlockPosition(me.getBlockPosition().x+1, me.getBlockPosition().y)) == BlockType.BACKGROUND)
-                return Command.RIGHT;
-        }
-
-        return Command.getRandomMove();
+        return null;
     }
 
 

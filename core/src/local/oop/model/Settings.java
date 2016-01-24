@@ -55,46 +55,6 @@ public class Settings {
         return map;
     }
 
-    public int getPlayerOneDownKeycode() {
-        return playerOneDownKeycode;
-    }
-
-    public int getPlayerOneLeftKeycode() {
-        return playerOneLeftKeycode;
-    }
-
-    public int getPlayerOneRightKeycode() {
-        return playerOneRightKeycode;
-    }
-
-    public int getPlayerOneUpKeycode() {
-        return playerOneUpKeycode;
-    }
-
-    public int getPlayerOneBombKeycode() {
-        return playerOneBombKeycode;
-    }
-
-    public int getPlayerTwoBombKeycode() {
-        return playerTwoBombKeycode;
-    }
-
-    public int getPlayerTwoDownKeycode() {
-        return playerTwoDownKeycode;
-    }
-
-    public int getPlayerTwoLeftKeycode() {
-        return playerTwoLeftKeycode;
-    }
-
-    public int getPlayerTwoRightKeycode() {
-        return playerTwoRightKeycode;
-    }
-
-    public int getPlayerTwoUpKeycode() {
-        return playerTwoUpKeycode;
-    }
-
     public String oneUp(){
         return Input.Keys.toString(playerOneUpKeycode);
     }

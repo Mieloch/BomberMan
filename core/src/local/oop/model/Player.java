@@ -16,8 +16,6 @@ public class Player {
     public final static String ERNEST = "Ernest";
     public final static String JACEK = "Jacek";
     public final static String SEBASTIAN = "Sebastian";
-    public final static String PLAYER_1 = "Player 1";
-    public final static String PLAYER_2 = "Player 2";
     private String name = "Pawel Mieloch";
 
     public Player(PlayerId id){
@@ -27,12 +25,6 @@ public class Player {
         this.power = 3;
         this.bombs = 1;
         resetPosition();
-    }
-
-
-    public Player(PlayerId id, PlayerPosition position) {
-        this.id = id;
-        this.position = position;
     }
 
     public BlockPosition getBlockPosition(){
@@ -121,10 +113,6 @@ public class Player {
     public void die() {
         lives--;
         resetPosition();
-    }
-
-    public void setPosition(PlayerPosition position) {
-        this.position = position;
     }
 
     public int getSpeed() {

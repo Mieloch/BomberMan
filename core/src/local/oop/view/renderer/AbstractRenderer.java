@@ -17,9 +17,7 @@ public abstract class AbstractRenderer {
     }
 
     Texture createTexture(String texturePath){
-        Texture texture = new Texture(texturePath);
-
-        return texture;
+        return new Texture(texturePath);
     }
 
     Animation createAnimation(String sheetPath, int frameRows, int frameCols, float duration){

@@ -30,12 +30,12 @@ public class BlockRenderer extends AbstractRenderer {
         blocksMap = new HashMap<>();
         blocksMap.put(BlockType.BACKGROUND, createTexture(BACKGROUNG_TILE_PATH));
         blocksMap.put(BlockType.SOLID, createTexture(SOLID_BLOCK_PATH));
-        Texture exlodableTexture =  createTexture(EXPLODABLE_BLOCK_PATH);
+        Texture explodableTexture =  createTexture(EXPLODABLE_BLOCK_PATH);
 
-        blocksMap.put(BlockType.EXPLODABLE,exlodableTexture);
-        blocksMap.put(BlockType.POWER_UP,exlodableTexture);
-        blocksMap.put(BlockType.SPEED_UP,exlodableTexture);
-        blocksMap.put(BlockType.EXTRA_BOMB,exlodableTexture);
+        blocksMap.put(BlockType.EXPLODABLE,explodableTexture);
+        blocksMap.put(BlockType.POWER_UP,explodableTexture);
+        blocksMap.put(BlockType.SPEED_UP,explodableTexture);
+        blocksMap.put(BlockType.EXTRA_BOMB,explodableTexture);
     }
 
 

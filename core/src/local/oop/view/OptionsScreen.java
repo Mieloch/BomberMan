@@ -1,123 +1,30 @@
 package local.oop.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import local.oop.GameImpl;
-import local.oop.model.Settings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OptionsScreen implements Screen {
+public class OptionsScreen extends AbstractScreen {
 
-    private GameImpl game;
-    private Stage stage;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private Skin skin;
-    private InputListener listener;
-    private Settings settings;
-    private TextureAtlas atlas;
-    private static float labelSpacing = 30f;
-    private static float textBoxWidth = 300f;
-    private static float textBoxHeight = 30f;
     private Map<TextButton, String> map;
 
     public OptionsScreen(GameImpl game){
         this.game = game;
     }
 
-    private void displayAlertDialog(){
-        Window.WindowStyle windowStyle = new Window.WindowStyle(font, new Color(0,0,0,1), skin.getDrawable("window_01"));
-        Dialog dialog = new Dialog("Settings must not be empty", windowStyle){
-            @Override
-            public float getPrefWidth() {
-                return Gdx.graphics.getWidth() / 2;
-            }
-
-            @Override
-            public float getPrefHeight() {
-                return Gdx.graphics.getHeight() / 3;
-            }
-        };
-        dialog.pad(40f);
-        dialog.setModal(true);
-        dialog.setMovable(false);
-        dialog.setResizable(false);
-
-        Label label = new Label("Please correct your settings", new Label.LabelStyle(font, new Color(0, 0, 0, 1)));
-        label.setAlignment(Align.center);
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.getDrawable("button_01");
-        textButtonStyle.over = skin.getDrawable("button_02");
-        textButtonStyle.down = skin.getDrawable("button_03");
-        textButtonStyle.font = font;
-        textButtonStyle.fontColor = new Color(0,0,0,1);
-        TextButton button = new TextButton("Ok", textButtonStyle);
-        button.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                dialog.hide();
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
-            }
-        });
-        dialog.getContentTable().add(label).center();
-        dialog.getButtonTable().add(button).center().size(200f, 80f);
-        dialog.show(stage);
-        stage.addActor(dialog);
-    }
-
     @Override
     public void show() {
-        batch = new SpriteBatch();
-        settings = new Settings();
-
-        atlas = new TextureAtlas(Gdx.files.internal("ui_green.atlas"));
-        skin = new Skin();
-        skin.addRegions(atlas);
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.up = skin.getDrawable("button_01");
-        buttonStyle.over = skin.getDrawable("button_02");
-        buttonStyle.down = skin.getDrawable("button_03");
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("eightbitwonder.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        buttonStyle.fontColor = new Color(0, 0, 0, 1);
-        font = generator.generateFont(parameter);
-        buttonStyle.font = font;
-
-        stage = new Stage();
-        Table table = new Table();
+        super.show();
         table.setFillParent(true);
         Table scrollTable = new Table();
-
-        game.getInputMultiplexer().addProcessor(stage);
-
-        Image imageLogo = new Image();
-        imageLogo.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("bomberman_logo.png")))));
 
         final TextButton.TextButtonStyle buttonStyle1 = new TextButton.TextButtonStyle();
         buttonStyle1.up = skin.getDrawable("textbox_01");
@@ -168,7 +75,7 @@ public class OptionsScreen implements Screen {
         textButtonButtonGroup.setMaxCheckCount(1);
         textButtonButtonGroup.setMinCheckCount(0);
 
-        listener = new InputListener(){
+        InputListener listener = new InputListener(){
 
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
@@ -198,15 +105,15 @@ public class OptionsScreen implements Screen {
             public void touchUp(InputEvent event, float x, float y,
                                 int pointer, int button) {
                 Map<String, Integer> settingsMap = new HashMap<>();
-                boolean displayalert = false;
+                boolean displayAlert = false;
                 for(TextButton button1 : textButtonButtonGroup.getButtons()){
                     if(button1.getText().toString().isEmpty()){
-                        displayalert = true;
+                        displayAlert = true;
                     }
                     settingsMap.put(map.get(button1), Input.Keys.valueOf(button1.getText().toString()));
                 }
-                if(displayalert){
-                    displayAlertDialog();
+                if(displayAlert){
+                    displayAlertDialog("Settings must not be empty", "Please correct your settings", new ArrayList<>());
                 } else {
                     settings.save(settingsMap);
                     game.setScreen(new StartScreen(game));
@@ -236,41 +143,40 @@ public class OptionsScreen implements Screen {
 
         scrollTable.add(playerOne).colspan(2);
         scrollTable.row();
-        scrollTable.add(lOneUp).space(labelSpacing).left().expandX();
-        scrollTable.add(bOneUp).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lOneUp).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bOneUp).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lOneDown).space(labelSpacing).left().expandX();
-        scrollTable.add(bOneDown).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lOneDown).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bOneDown).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lOneLeft).space(labelSpacing).left().expandX();
-        scrollTable.add(bOneLeft).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lOneLeft).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bOneLeft).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lOneRight).space(labelSpacing).left().expandX();
-        scrollTable.add(bOneRight).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lOneRight).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bOneRight).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lOneBomb).space(labelSpacing).left().expandX();
-        scrollTable.add(bOneBomb).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lOneBomb).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bOneBomb).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
 
         scrollTable.row();
 
         scrollTable.add(playerTwo).colspan(2);
         scrollTable.row();
-        scrollTable.add(lTwoUp).space(labelSpacing).left().expandX();
-        scrollTable.add(bTwoUp).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lTwoUp).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bTwoUp).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lTwoDown).space(labelSpacing).left().expandX();
-        scrollTable.add(bTwoDown).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lTwoDown).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bTwoDown).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lTwoLeft).space(labelSpacing).left().expandX();
-        scrollTable.add(bTwoLeft).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lTwoLeft).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bTwoLeft).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lTwoRight).space(labelSpacing).left().expandX();
-        scrollTable.add(bTwoRight).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lTwoRight).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bTwoRight).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
-        scrollTable.add(lTwoBomb).space(labelSpacing).left().expandX();
-        scrollTable.add(bTwoBomb).space(labelSpacing).right().size(textBoxWidth, textBoxHeight);
+        scrollTable.add(lTwoBomb).space(LABEL_SPACING).left().expandX();
+        scrollTable.add(bTwoBomb).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.pad(50f);
-//        scrollTable.padRight(50f);
 
         ScrollPane scrollPane = new ScrollPane(scrollTable, scrollPaneStyle);
         scrollPane.setVariableSizeKnobs(false);
@@ -286,46 +192,6 @@ public class OptionsScreen implements Screen {
 
         stage.addActor(table);
         stage.setScrollFocus(scrollPane);
-        generator.dispose();
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.act(delta);
-        stage.draw();
-
-        batch.begin();
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
-        stage.dispose();
-        skin.dispose();
-        atlas.dispose();
-    }
 }

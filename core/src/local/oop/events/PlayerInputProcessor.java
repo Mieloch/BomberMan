@@ -1,9 +1,7 @@
 package local.oop.events;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.google.inject.Inject;
-import local.oop.model.Command;
 import local.oop.model.Setting;
 import local.oop.model.Settings;
 import local.oop.model.player.PlayerId;

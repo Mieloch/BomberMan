@@ -8,4 +8,9 @@ public class BlockPosition extends Position {
     public BlockPosition(int x, int y) {
         super(x, y);
     }
+
+    @Override
+    public String toString(){
+        return "(" + x + "," + y + ")";
+    }
 }

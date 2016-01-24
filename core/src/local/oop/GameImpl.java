@@ -10,25 +10,23 @@ import local.oop.view.StartScreen;
 public class GameImpl extends Game {
     private Presenter presenter;
     private InputProcessor playerInputProcessor;
-    private InputProcessor windowInputProcessor;
     private InputMultiplexer inputMultiplexer;
 
     @Inject
-    public GameImpl(Presenter presenter, @Named("PlayerInputProcessor") InputProcessor playerInputProcessor,
-                    @Named("WindowInputProcessor") InputProcessor windowInputProcessor) {
+    public GameImpl(Presenter presenter, @Named("PlayerInputProcessor") InputProcessor playerInputProcessor) {
         this.presenter = presenter;
         this.playerInputProcessor = playerInputProcessor;
-        this.windowInputProcessor = windowInputProcessor;
     }
 
     @Override
     public void create() {
-        Timer timer = new Timer();
         inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(windowInputProcessor);
-        inputMultiplexer.addProcessor(playerInputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
         this.setScreen(new StartScreen(this));
+    }
+
+    public void setPlayerInputProcessor(){
+        inputMultiplexer.addProcessor(playerInputProcessor);
     }
 
     public Presenter getPresenter(){

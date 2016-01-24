@@ -79,14 +79,6 @@ public class ArenaState {
     public static class Builder {
         private ArenaState state;
 
-        public Builder() {
-            this((ArenaState) null);
-        }
-
-        public Builder(ArenaState arenaState) {
-            state = new ArenaState(Optional.ofNullable(arenaState));
-        }
-
         public Builder(Map<BlockPosition, BlockType> blocks) {
             state = new ArenaState();
             state.blocks = blocks;
@@ -130,20 +122,6 @@ public class ArenaState {
             return this;
         }
 
-        public Builder addPlayers(List<Player> players){
-            players.forEach(this::addPlayer);
-            return this;
-        }
-
-        public Builder addPlayer(Player player) {
-            if (state.players.stream().noneMatch(p -> p.equals(player))) {
-                state.players.add(player);
-            } else {
-                throw new RuntimeException("Player already exists");
-            }
-            return this;
-        }
-
         public Builder removePlayer(Player player) {
             state.players = state.getPlayers().stream()
                     .filter(p -> !p.equals(player))
@@ -153,10 +131,6 @@ public class ArenaState {
 
         public ArenaState get() {
             return state;
-        }
-
-        public void clear() {
-            state = new ArenaState(Optional.ofNullable(state));
         }
     }
 }

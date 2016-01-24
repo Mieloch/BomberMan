@@ -1,7 +1,5 @@
 package local.oop.model.arena;
 
-import local.oop.model.PlayerPosition;
-
 import java.util.*;
 
 public class Level {
@@ -15,13 +13,6 @@ public class Level {
     public Level(int width, int height) {
         this.level = generate(width, height);
         generateEnumLevel();
-    }
-
-
-
-
-    public BlockType[][] getEnumLevel() {
-        return enumLevel;
     }
 
     public void generateEnumLevel() {
@@ -122,33 +113,6 @@ public class Level {
             if (i == 6)
                 generated = true;
         }
-
         return level;
-    }
-
-    public int[][] getRawLevel() {
-        return level;
-    }
-
-
-    public void printLevel() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                System.out.print(level[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int at(int width, int height) {
-        return level[width][height];
     }
 }

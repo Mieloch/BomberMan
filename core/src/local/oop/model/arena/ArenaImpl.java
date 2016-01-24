@@ -1,7 +1,6 @@
 package local.oop.model.arena;
 
 import com.google.inject.Inject;
-import jdk.nashorn.internal.ir.Block;
 import local.oop.model.*;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
@@ -58,9 +57,7 @@ public class ArenaImpl implements Arena {
     }
 
     private void checkPlayersLives(){
-        currentState.getPlayers().stream().filter(player -> player.getLives() == 0).forEach(player -> {
-            nextStateBuilder.removePlayer(player);
-        });
+        currentState.getPlayers().stream().filter(player -> player.getLives() == 0).forEach(player -> nextStateBuilder.removePlayer(player));
     }
 
     private void loop() {

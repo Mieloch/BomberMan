@@ -12,13 +12,11 @@ import local.oop.model.CommandSequence;
 import local.oop.model.player.PlayerId;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class PresenterImpl implements Presenter {
     private PlayersInputCache playersInputCache;
     private Arena arena;
-    private HashMap<String, AI> playerMap;
     private List<AI> aiInGame;
 
     @Inject
@@ -27,7 +25,6 @@ public class PresenterImpl implements Presenter {
         this.arena = arena;
         this.arena.setPresenter(this);
         aiInGame = new ArrayList<>();
-        initPlayerMap();
     }
 
     @Override
@@ -62,7 +59,9 @@ public class PresenterImpl implements Presenter {
         List<Player> playerList = new ArrayList<>();
         for(int i = 0; i < names.size(); i++){
             PlayerId id = PlayerId.getId(i+1);
-            playerList.add(new Player(id));
+            Player player = new Player(id);
+            player.setName(names.get(i));
+            playerList.add(player);
             switch (names.get(i)){
                 case Player.PAWEL:
                     aiInGame.add(new RandomAI(id));
@@ -79,13 +78,5 @@ public class PresenterImpl implements Presenter {
             }
         }
         arena.getCurrentState().setPlayers(playerList);
-    }
-
-    private void initPlayerMap() {
-        playerMap = new HashMap<>();
-        playerMap.put("Pawel", new RandomAI(PlayerId.PLAYER_1));
-        playerMap.put("Ernest", new ErnestAI(PlayerId.PLAYER_2));
-        playerMap.put("Jacek", new RandomAI(PlayerId.PLAYER_3));
-        playerMap.put("Sebastian", new RandomAI(PlayerId.PLAYER_4));
     }
 }

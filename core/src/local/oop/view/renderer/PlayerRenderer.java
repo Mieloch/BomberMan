@@ -13,11 +13,11 @@ public class PlayerRenderer extends AbstractRenderer {
 
     private static final int FRAME_COLS = 4;
     private static final int FRAME_ROWS = 2;
-    private final String FRONT_SHEET_PATH = "player_sprites/front";
-    private final String BACK_SHEET_PATH = "player_sprites/back";
-    private final String SIDE_SHEET_PATH = "player_sprites/side";
-    private final String FILE_EXTENSION = ".png";
-    private final float SCALE = 0.492f;
+    private final static String FRONT_SHEET_PATH = "player_sprites/front";
+    private final static String BACK_SHEET_PATH = "player_sprites/back";
+    private final static String SIDE_SHEET_PATH = "player_sprites/side";
+    private final static String FILE_EXTENSION = ".png";
+    private final static float SCALE = 0.492f;
 
 
     private HashMap<PlayerId, HashMap<Direction, Animation>> playerAnimationMap;

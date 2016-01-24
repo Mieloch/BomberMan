@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import local.oop.events.PlayerInputProcessor;
-import local.oop.events.WindowInputProcessor;
 import local.oop.model.arena.Arena;
 import local.oop.model.arena.ArenaImpl;
 import local.oop.presenter.PlayersInputCache;
@@ -20,7 +19,6 @@ public class ApplicationModule extends AbstractModule {
         bind(Presenter.class).to(PresenterImpl.class);
         bind(Arena.class).to(ArenaImpl.class);
         bind(InputProcessor.class).annotatedWith(Names.named("PlayerInputProcessor")).to(PlayerInputProcessor.class);
-        bind(InputProcessor.class).annotatedWith(Names.named("WindowInputProcessor")).to(WindowInputProcessor.class);
         bind(Game.class).to(GameImpl.class);
     }
 }
