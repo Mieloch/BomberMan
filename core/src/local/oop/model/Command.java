@@ -21,7 +21,7 @@ public enum Command {
     private Direction direction = null;
 
     public static Command getRandomMove(){
-        int i = new Random().nextInt(5);
+        int i = new Random().nextInt(4);
         switch(i){
             case 0:
                 return Command.RIGHT;
@@ -31,8 +31,6 @@ public enum Command {
                 return Command.UP;
             case 3:
                 return Command.DOWN;
-            case 4:
-                return Command.BOMB;
         }
         return null;
     }

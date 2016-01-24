@@ -8,7 +8,7 @@ import com.google.inject.Injector;
 import local.oop.ApplicationModule;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main (String[] args) {
         Injector injector = Guice.createInjector(new ApplicationModule());
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.height = 768;

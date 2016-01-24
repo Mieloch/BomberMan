@@ -36,7 +36,7 @@ public class Player {
     }
 
     public BlockPosition getBlockPosition(){
-        return new BlockPosition(position.x/BlockPosition.SIZE, position.y/BlockPosition.SIZE);
+        return new BlockPosition((position.x+(BlockPosition.SIZE/2))/BlockPosition.SIZE, (position.y+(BlockPosition.SIZE/2))/BlockPosition.SIZE);
     }
 
     private void resetPosition() {

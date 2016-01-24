@@ -2,7 +2,7 @@ package local.oop.presenter;
 
 import com.google.inject.Inject;
 import local.oop.ai.AI;
-import local.oop.ai.ErnestAI;
+import local.oop.ai.ernest.ErnestAI;
 import local.oop.ai.RandomAI;
 import local.oop.model.Command;
 import local.oop.model.Player;
@@ -14,10 +14,6 @@ import local.oop.model.player.PlayerId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 public class PresenterImpl implements Presenter {
     private PlayersInputCache playersInputCache;
