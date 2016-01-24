@@ -194,7 +194,7 @@ public class ChoosePlayersScreen implements Screen {
                 } else {
 
                     game.setScreen(new GameScreen(game));
-                    java.util.List selectedPlayerList = selectBoxList.stream().map(e -> e.getSelected()).collect(toList());
+                    java.util.List<String> selectedPlayerList = selectBoxList.stream().map(SelectBox::getSelected).collect(toList());
                     game.getPresenter().setPlayers(selectedPlayerList);
                     game.getInputMultiplexer().removeProcessor(stage);
                 }

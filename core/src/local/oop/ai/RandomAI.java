@@ -18,18 +18,7 @@ public class RandomAI extends AbstractAI implements  AI{
 
     @Override
     public Command makeMove(ArenaState state){
-        int i = new Random().nextInt(4);
-        switch(i){
-            case 0:
-                return Command.RIGHT;
-            case 1:
-                return Command.LEFT;
-            case 2:
-                return Command.UP;
-            case 3:
-                return Command.DOWN;
-        }
-    return null;
+        return Command.getRandomMove();
     }
 
 }

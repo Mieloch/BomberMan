@@ -62,19 +62,18 @@ public class ArenaState {
     }
 
     public List<Player> getPlayers() {
-        if(players.isEmpty() && presenter != null){
-            for (int i = 1; i <= presenter.getPlayersInputCache().getNumberOfPlayers(); i++) {
-                players.add(new Player(PlayerId.getId(i)));
-            }
-        }
         return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     public Player getPlayer(PlayerId playerId) {
         return players.stream()
                 .filter(player -> player.getId() == playerId)
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     public static class Builder {
@@ -147,7 +146,7 @@ public class ArenaState {
 
         public Builder removePlayer(Player player) {
             state.players = state.getPlayers().stream()
-                    .filter(p -> p.equals(player))
+                    .filter(p -> !p.equals(player))
                     .collect(Collectors.toList());
             return this;
         }

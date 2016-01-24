@@ -1,6 +1,7 @@
 package local.oop.model.arena;
 
 import com.google.inject.Inject;
+import jdk.nashorn.internal.ir.Block;
 import local.oop.model.*;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
@@ -19,13 +20,10 @@ public class ArenaImpl implements Arena {
     int fireTimeout = 1000;
 
     @Inject
-    public ArenaImpl(Timer timer, ArenaState.Builder builder) {
-        this.timer = timer;
-        this.nextStateBuilder = builder;
+    public ArenaImpl() {
+        this.timer = new Timer();
         explosions = new ArrayList<>();
-        currentState = nextStateBuilder.get();
         initArenaState();
-
     }
 
     @Override
@@ -41,8 +39,6 @@ public class ArenaImpl implements Arena {
 
     @Override
     public void start() {
-        currentState.getPlayers();
-        timer = new Timer();
         timer.schedule(getLoopTask(), 0, 25);
     }
 
@@ -50,7 +46,6 @@ public class ArenaImpl implements Arena {
     private void initArenaState() {
         nextStateBuilder = new ArenaState.Builder(new Level(MAP_SIZE, MAP_SIZE).getGeneratedLevel());
         currentState = nextStateBuilder.get();
-        nextStateBuilder.clear();
     }
 
     private TimerTask getLoopTask() {
@@ -69,12 +64,10 @@ public class ArenaImpl implements Arena {
     }
 
     private void loop() {
-        currentState = nextStateBuilder.setPresenter(this.presenter).get();
         checkPlayersLives();
         isOnFire();
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
-        nextStateBuilder.clear();
         if(currentState.getPlayers().size() == 1){
             currentState.finnish(currentState.getPlayers().stream().findFirst().get());
             timer.cancel();
@@ -91,23 +84,26 @@ public class ArenaImpl implements Arena {
 
     private void executeCommand(PlayerId playerId, Command command) {
         Player player = currentState.getPlayer(playerId);
-        if (command == Command.BOMB) {
-            if (player.getBombs() > 0) {
-                placeBomb(player);
-                player.decrementBombs();
-            }
+        if(player != null) {
+            if (command == Command.BOMB) {
+                if (player.getBombs() > 0) {
+                    placeBomb(player);
+                    player.decrementBombs();
+                }
 
-        } else {
-            if (isMoveMakeCollision(player, command.getDirection())) {
-                nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
+            } else {
+                if (isMoveMakeCollision(player, command.getDirection())) {
+                    nextStateBuilder.movePlayer(playerId, command.getDirection(), player.getSpeed());
+                }
+                nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
             }
-            nextStateBuilder.movePlayer(playerId, command.getDirection(), 0);
         }
     }
 
     private boolean isMoveMakeCollision(Player player, Direction direction) {
 
         Optional<Map.Entry<BlockPosition, BlockType>> entryOptional;
+        BlockPosition blockPosition = null;
         int pX = player.getPosition().x;
         int pY = player.getPosition().y;
         int boardSize = MAP_SIZE * BlockType.SIZE;
@@ -153,6 +149,7 @@ public class ArenaImpl implements Arena {
                 .findFirst();
         if (entryOptional.isPresent()) {
             block = entryOptional.get().getValue();
+            blockPosition = entryOptional.get().getKey();
         }
         if (block != null) {
             if (block == BlockType.BOMB) {
@@ -181,6 +178,15 @@ public class ArenaImpl implements Arena {
                     }
                 }
                 return false;
+            } else if(block == BlockType.BOMB_POWERUP){
+                player.setBombs(3);
+                nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
+            } else if(block == BlockType.FLAME_POWERUP){
+                player.setPower(6);
+                nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
+            } else if(block == BlockType.SPEED_POWERUP){
+                player.setSpeed(4);
+                nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
             }
             return block == BlockType.BACKGROUND;
         }

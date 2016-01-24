@@ -2,6 +2,8 @@ package local.oop.model;
 
 import local.oop.model.player.Direction;
 
+import java.util.Random;
+
 public enum Command {
     LEFT,
     RIGHT,
@@ -17,6 +19,23 @@ public enum Command {
     }
 
     private Direction direction = null;
+
+    public static Command getRandomMove(){
+        int i = new Random().nextInt(5);
+        switch(i){
+            case 0:
+                return Command.RIGHT;
+            case 1:
+                return Command.LEFT;
+            case 2:
+                return Command.UP;
+            case 3:
+                return Command.DOWN;
+            case 4:
+                return Command.BOMB;
+        }
+        return null;
+    }
 
     public Direction getDirection() {
         return direction;
