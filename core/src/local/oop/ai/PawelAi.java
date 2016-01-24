@@ -8,6 +8,7 @@ import local.oop.model.arena.BlockType;
 import local.oop.model.player.PlayerId;
 
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -248,7 +249,12 @@ public class PawelAi extends AbstractAI {
     }
 
     private boolean isTypeOnPosition(int x, int y, BlockType type) {
-        return state.getBlocks().entrySet().stream().anyMatch(e -> e.getKey().equals(new BlockPosition(x, y)) && e.getValue().equals(type));
+        List<BlockPosition> positions = state.getBlocks().entrySet().stream().filter(e -> e.getKey().equals(new BlockPosition(x, y)) && e.getValue().equals(type) || e.getValue().equals(BlockType.FIRE)).map(e->e.getKey()).collect(Collectors.toList());
+        if(positions.size()==1){
+            return true;
+        }else{
+            return  false;
+        }
     }
 
 
