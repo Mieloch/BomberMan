@@ -16,9 +16,9 @@ public class ArenaImpl implements Arena {
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
-    int loopTime = 15;
-    int bombTimeout = 1500;
-    int fireTimeout = 1000;
+    int loopTime = 1;
+    int bombTimeout = 200;
+    int fireTimeout = 100;
     int invincibilityTime = fireTimeout+1;
 
     @Inject
@@ -41,6 +41,10 @@ public class ArenaImpl implements Arena {
 
     @Override
     public void start() {
+        loopTime = Settings.getInstance().getSpeed();
+        bombTimeout = 100* loopTime;
+        fireTimeout = bombTimeout/2;
+        invincibilityTime = fireTimeout+1;
         timer.schedule(getLoopTask(), 0, loopTime);
     }
 

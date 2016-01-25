@@ -22,6 +22,7 @@ public class Settings {
     private int playerTwoRightKeycode;
     private int playerTwoBombKeycode;
     private boolean allowRepeatedPlayers = false;
+    private int gameSpeed = 15;
     private Preferences prefs;
     private static Settings instance;
 
@@ -74,6 +75,7 @@ public class Settings {
         playerTwoRightKeycode = prefs.getInteger(Setting.TWO_RIGHT.toString(), Input.Keys.RIGHT);
         playerTwoBombKeycode = prefs.getInteger(Setting.TWO_BOMB.toString(), Input.Keys.ENTER);
         allowRepeatedPlayers = prefs.getBoolean("allowRepeatedPlayers", false);
+        gameSpeed = prefs.getInteger("speed", 15);
     }
 
     public String oneUp(){
@@ -121,5 +123,15 @@ public class Settings {
 
     public boolean isAllowRepeatedPlayers() {
         return allowRepeatedPlayers;
+    }
+
+    public void setSpeed(int gameSpeed) {
+        this.gameSpeed = gameSpeed;
+        prefs.putInteger("speed", gameSpeed);
+        prefs.flush();
+    }
+
+    public int getSpeed() {
+        return gameSpeed;
     }
 }

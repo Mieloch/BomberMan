@@ -2,10 +2,12 @@ package local.oop.view;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import local.oop.GameImpl;
 import local.oop.model.Setting;
 
@@ -104,6 +106,22 @@ public class OptionsScreen extends AbstractScreen {
         CheckBox checkBox = new CheckBox("Allow repeated players", checkBoxStyle);
         checkBox.setChecked(settings.isAllowRepeatedPlayers());
 
+
+        Label speedLabel = new Label("Game speed", labelStyle);
+        Label sliderLabel = new Label("1", labelStyle);
+        Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
+        sliderStyle.background = skin.getDrawable("slider_back_hor");
+        sliderStyle.knob = skin.getDrawable("knob_01");
+        Slider slider = new Slider(1, 25, 1, false, sliderStyle);
+        slider.setValue(slider.getMaxValue() - settings.getSpeed() + 1);
+        sliderLabel.setText(Integer.toString((int)slider.getValue()));
+        slider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                sliderLabel.setText(Integer.toString((int)slider.getValue()));
+            }
+        });
+
         TextButton save = new TextButton("Save settings", buttonStyle);
         save.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y,
@@ -126,6 +144,7 @@ public class OptionsScreen extends AbstractScreen {
                 } else {
                     settings.save(settingsMap);
                     settings.setAllowRepeatedPlayers(checkBox.isChecked());
+                    settings.setSpeed((int)(slider.getMaxValue() - slider.getValue() + 1));
                     game.setScreen(new StartScreen(game));
                     game.getInputMultiplexer().removeProcessor(stage);
                 }
@@ -188,10 +207,17 @@ public class OptionsScreen extends AbstractScreen {
         scrollTable.add(bTwoBomb).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
         scrollTable.row();
         scrollTable.add(checkBox).space(LABEL_SPACING).right().expandX();
+        scrollTable.row();
+        scrollTable.add(speedLabel).space(LABEL_SPACING).expandX().right();
+        scrollTable.row();
+        scrollTable.add(slider).space(LABEL_SPACING).expandX().left();
+        scrollTable.add(sliderLabel).space(LABEL_SPACING).right().expandX();
         scrollTable.pad(50f);
-
         ScrollPane scrollPane = new ScrollPane(scrollTable, scrollPaneStyle);
         scrollPane.setVariableSizeKnobs(false);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setCancelTouchFocus(true);
+        scrollPane.setFlickScroll(false);
 
         table.add(imageLogo).center().colspan(2).minHeight(imageLogo.getPrefHeight());
         table.row();
