@@ -10,10 +10,7 @@ import local.oop.model.ArenaState;
 import local.oop.model.arena.*;
 import local.oop.model.Player;
 import local.oop.presenter.Presenter;
-import local.oop.view.renderer.BlockRenderer;
-import local.oop.view.renderer.BombRenderer;
-import local.oop.view.renderer.PlayerRenderer;
-import local.oop.view.renderer.PowerUpRenderer;
+import local.oop.view.renderer.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,7 @@ public class GameScreen extends AbstractScreen {
     private BombRenderer bombRenderer;
     private BlockRenderer blockRenderer;
     private PowerUpRenderer powerUpRenderer;
+    private InfoRenderer infoRenderer;
 
     public GameScreen(GameImpl game) {
         this.game = game;
@@ -33,6 +31,7 @@ public class GameScreen extends AbstractScreen {
         bombRenderer = new BombRenderer();
         blockRenderer = new BlockRenderer();
         powerUpRenderer = new PowerUpRenderer();
+        infoRenderer= new InfoRenderer();
         this.presenter = game.getPresenter();
         presenter.startGame();
     }
@@ -48,7 +47,7 @@ public class GameScreen extends AbstractScreen {
             renderLevel(arenaState.getBlocks());
             renderPlayers(arenaState.getPlayers());
         }
-
+        infoRenderer.render(arenaState.getPlayers());
         stage.act(delta);
         stage.draw();
 
