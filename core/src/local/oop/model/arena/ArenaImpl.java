@@ -16,9 +16,9 @@ public class ArenaImpl implements Arena {
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
-    int loopTime = 5;
-    int bombTimeout = 800;
-    int fireTimeout = 300;
+    int loopTime = 15;
+    int bombTimeout = 1500;
+    int fireTimeout = 1000;
     int invincibilityTime = fireTimeout+1;
 
     @Inject

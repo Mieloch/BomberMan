@@ -48,7 +48,7 @@ public class AbstractScreen implements Screen{
     public void show() {
         stage = new Stage();
         batch = new SpriteBatch();
-        settings = new Settings();
+        settings = Settings.getInstance();
         table = new Table();
         atlas = new TextureAtlas(Gdx.files.internal("ui_green.atlas"));
         skin = new Skin();

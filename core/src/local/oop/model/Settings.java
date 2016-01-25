@@ -3,9 +3,12 @@ package local.oop.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Settings {
     private int playerOneUpKeycode;
@@ -20,26 +23,28 @@ public class Settings {
     private int playerTwoBombKeycode;
     private boolean allowRepeatedPlayers = false;
     private Preferences prefs;
+    private static Settings instance;
 
-    public Settings(){
-        prefs = Gdx.app.getPreferences("config");
-        playerOneUpKeycode = prefs.getInteger(Setting.ONE_UP.toString(), Input.Keys.W);
-        playerOneDownKeycode = prefs.getInteger(Setting.ONE_DOWN.toString(), Input.Keys.S);
-        playerOneLeftKeycode = prefs.getInteger(Setting.ONE_LEFT.toString(), Input.Keys.A);
-        playerOneRightKeycode = prefs.getInteger(Setting.ONE_RIGHT.toString(), Input.Keys.D);
-        playerOneBombKeycode = prefs.getInteger(Setting.ONE_BOMB.toString(), Input.Keys.SPACE);
-        playerTwoUpKeycode = prefs.getInteger(Setting.TWO_UP.toString(), Input.Keys.UP);
-        playerTwoDownKeycode = prefs.getInteger(Setting.TWO_DOWN.toString(), Input.Keys.DOWN);
-        playerTwoLeftKeycode = prefs.getInteger(Setting.TWO_LEFT.toString(), Input.Keys.LEFT);
-        playerTwoRightKeycode = prefs.getInteger(Setting.TWO_RIGHT.toString(), Input.Keys.RIGHT);
-        playerTwoBombKeycode = prefs.getInteger(Setting.TWO_BOMB.toString(), Input.Keys.ENTER);
-        allowRepeatedPlayers = prefs.getBoolean("allowRepeatedPlayers", false);
+    public static Settings getInstance() {
+        if(instance == null){
+            instance = new Settings();
+        }
+        return instance;
+    }
+
+    private Settings(){
+        if(prefs==null){
+            prefs = Gdx.app.getPreferences("config");
+        }
+        loadValues();
 
     }
 
     public void save(Map<String, Integer> map){
+        prefs.clear();
         prefs.put(map);
         prefs.flush();
+        loadValues();
     }
 
     public Map<String, Integer> getKeycodesMap(){
@@ -55,6 +60,20 @@ public class Settings {
         map.put(Setting.TWO_RIGHT.toString(), playerTwoRightKeycode);
         map.put(Setting.TWO_BOMB.toString(), playerTwoBombKeycode);
         return map;
+    }
+
+    private void loadValues(){
+        playerOneUpKeycode = prefs.getInteger(Setting.ONE_UP.toString(), Input.Keys.W);
+        playerOneDownKeycode = prefs.getInteger(Setting.ONE_DOWN.toString(), Input.Keys.S);
+        playerOneLeftKeycode = prefs.getInteger(Setting.ONE_LEFT.toString(), Input.Keys.A);
+        playerOneRightKeycode = prefs.getInteger(Setting.ONE_RIGHT.toString(), Input.Keys.D);
+        playerOneBombKeycode = prefs.getInteger(Setting.ONE_BOMB.toString(), Input.Keys.SPACE);
+        playerTwoUpKeycode = prefs.getInteger(Setting.TWO_UP.toString(), Input.Keys.UP);
+        playerTwoDownKeycode = prefs.getInteger(Setting.TWO_DOWN.toString(), Input.Keys.DOWN);
+        playerTwoLeftKeycode = prefs.getInteger(Setting.TWO_LEFT.toString(), Input.Keys.LEFT);
+        playerTwoRightKeycode = prefs.getInteger(Setting.TWO_RIGHT.toString(), Input.Keys.RIGHT);
+        playerTwoBombKeycode = prefs.getInteger(Setting.TWO_BOMB.toString(), Input.Keys.ENTER);
+        allowRepeatedPlayers = prefs.getBoolean("allowRepeatedPlayers", false);
     }
 
     public String oneUp(){

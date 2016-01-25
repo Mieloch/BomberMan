@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import local.oop.GameImpl;
+import local.oop.model.Setting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,16 +59,16 @@ public class OptionsScreen extends AbstractScreen {
         final TextButton bTwoBomb = new TextButton(settings.twoBomb(), buttonStyle1);
 
         map = new HashMap<>();
-        map.put(bOneUp, "oneup");
-        map.put(bOneDown, "onedown");
-        map.put(bOneLeft, "oneleft");
-        map.put(bOneRight, "oneright");
-        map.put(bOneBomb, "onebomb");
-        map.put(bTwoUp, "twoup");
-        map.put(bTwoDown, "twodown");
-        map.put(bTwoLeft, "twoleft");
-        map.put(bTwoRight, "tworight");
-        map.put(bTwoBomb, "twobomb");
+        map.put(bOneUp, Setting.ONE_UP.toString());
+        map.put(bOneDown, Setting.ONE_DOWN.toString());
+        map.put(bOneLeft, Setting.ONE_LEFT.toString());
+        map.put(bOneRight, Setting.ONE_RIGHT.toString());
+        map.put(bOneBomb, Setting.ONE_BOMB.toString());
+        map.put(bTwoUp, Setting.TWO_UP.toString());
+        map.put(bTwoDown, Setting.TWO_DOWN.toString());
+        map.put(bTwoLeft, Setting.TWO_LEFT.toString());
+        map.put(bTwoRight, Setting.TWO_RIGHT.toString());
+        map.put(bTwoBomb, Setting.TWO_BOMB.toString());
 
 
 

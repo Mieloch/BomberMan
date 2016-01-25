@@ -59,6 +59,7 @@ public class PresenterImpl implements Presenter {
     public void resetAll() {
         arena.stop();
         aiInGame = new ArrayList<>();
+        PlayerId.reset();
         arena.getCurrentState().setPlayers(new ArrayList<>());
     }
 
@@ -87,6 +88,14 @@ public class PresenterImpl implements Presenter {
                     break;
                 case Player.SEBASTIAN:
                     aiInGame.add(new RandomAI(id));
+                    break;
+                case Player.PLAYER_1:
+                    player.setRealPlayer(1);
+                    PlayerId.setFirst(player.getId());
+                    break;
+                case Player.PLAYER_2:
+                    player.setRealPlayer(2);
+                    PlayerId.setSecond(player.getId());
                     break;
             }
         }

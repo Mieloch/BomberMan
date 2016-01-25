@@ -6,6 +6,7 @@ import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
 
 public class Player {
+    private Integer realPlayer;
     private PlayerPosition position;
     private final PlayerId id;
     private int speed;
@@ -18,6 +19,8 @@ public class Player {
     public final static String ERNEST = "Ernest";
     public final static String JACEK = "Jacek";
     public final static String SEBASTIAN = "Sebastian";
+    public final static String PLAYER_1 = "Player 1";
+    public final static String PLAYER_2 = "Player 2";
     private String name = "Pawel Mieloch";
 
     public Player(PlayerId id){
@@ -161,5 +164,13 @@ public class Player {
 
     public void setPower(int power) {
         this.power = power;
+    }
+
+    public void setRealPlayer(Integer realPlayer) {
+        this.realPlayer = realPlayer;
+    }
+
+    public Integer getRealPlayer() {
+        return realPlayer;
     }
 }
