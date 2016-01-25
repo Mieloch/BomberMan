@@ -14,6 +14,7 @@ import local.oop.model.player.PlayerId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PresenterImpl implements Presenter {
     private PlayersInputCache playersInputCache;
@@ -49,6 +50,16 @@ public class PresenterImpl implements Presenter {
 
     }
 
+    public void removeAI(PlayerId id){
+        aiInGame = aiInGame.stream().filter(ai -> ai.getPlayerId() != id).collect(Collectors.toList());
+    }
+
+    @Override
+    public void resetAll() {
+        arena.stop();
+        aiInGame = new ArrayList<>();
+        arena.getCurrentState().setPlayers(new ArrayList<>());
+    }
 
     @Override
     public void startGame() {

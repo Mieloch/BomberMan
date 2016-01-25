@@ -90,9 +90,11 @@ public class Level {
         int number;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if ((i == 0 || i == 1 || i == width - 1 || i == width - 2) && (j == 0 || j == 1 || j == height - 1 || j == height - 2) && !((i == 1 || i == width - 2) && (j == 1 || j == height - 2))) {
+                if(i==0 || j==0 || i==width-1 || j==width-1){
+                    number = 2;
+                } else if ((i == 1 || i == 2 || i == width - 2 || i == width - 3) && (j == 1 || j == 2 || j == height - 2 || j == height - 3) && !((i == 2 || i == width - 3) && (j == 2 || j == height - 3))) {
                     number = 0;
-                } else if (i % 2 == 1 && j % 2 == 1) {
+                } else if (i % 2 == 0 && j % 2 == 0) {
                     number = 2;
                 } else {
                     number = 1;

@@ -5,14 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import local.oop.model.arena.ArenaImpl;
+import local.oop.model.arena.BlockType;
 
 public abstract class AbstractRenderer {
     SpriteBatch sprite;
     float stateTime;
-    final float xShift = 507;
-    final float yShift = 208;
+    float xShift;
+    float yShift;
 
     public AbstractRenderer() {
+        xShift = (Gdx.graphics.getWidth() - ArenaImpl.MAP_SIZE* BlockType.SIZE)/2;
+        yShift = (Gdx.graphics.getHeight() - ArenaImpl.MAP_SIZE*BlockType.SIZE)/2;
         sprite = new SpriteBatch();
         stateTime = 0;
     }

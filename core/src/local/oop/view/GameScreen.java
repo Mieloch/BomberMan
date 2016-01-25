@@ -4,7 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import local.oop.GameImpl;
 import local.oop.model.ArenaState;
 import local.oop.model.arena.*;
@@ -24,16 +28,43 @@ public class GameScreen extends AbstractScreen {
     private BlockRenderer blockRenderer;
     private PowerUpRenderer powerUpRenderer;
     private InfoRenderer infoRenderer;
+    private InputListener listener;
 
     public GameScreen(GameImpl game) {
         this.game = game;
+        this.presenter = game.getPresenter();
+        presenter.startGame();
         playerRenderer = new PlayerRenderer();
         bombRenderer = new BombRenderer();
         blockRenderer = new BlockRenderer();
         powerUpRenderer = new PowerUpRenderer();
         infoRenderer= new InfoRenderer();
-        this.presenter = game.getPresenter();
-        presenter.startGame();
+    }
+
+    @Override
+    public void show(){
+        super.show();
+        listener = new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                presenter.resetAll();
+                game.setScreen(new StartScreen(game));
+                game.getInputMultiplexer().removeProcessor(stage);
+            }
+        };
+        TextButton button = new TextButton("Quit", buttonStyle);
+        button.addListener(listener);
+        table.setFillParent(true);
+        table.add(imageLogo).expandY().top();
+        table.row();
+        table.add(button).align(Align.bottomLeft).pad(30);
+        stage.addActor(table);
     }
 
     @Override
@@ -87,18 +118,7 @@ public class GameScreen extends AbstractScreen {
 
     private void displayAlertDialog(Player player){
         TextButton button = new TextButton("Play again", buttonStyle);
-        button.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                throw new IllegalStateException(); // tak jest dobrze
-            }
-        });
+        button.addListener(listener);
 
         TextButton button1 = new TextButton("Exit", buttonStyle);
         button1.addListener(new InputListener(){

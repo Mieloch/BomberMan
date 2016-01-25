@@ -1,6 +1,8 @@
 package local.oop.view.renderer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import local.oop.model.arena.ArenaImpl;
 import local.oop.model.arena.BlockPosition;
 import local.oop.model.arena.BlockType;
 

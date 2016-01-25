@@ -18,6 +18,7 @@ public class Settings {
     private int playerTwoLeftKeycode;
     private int playerTwoRightKeycode;
     private int playerTwoBombKeycode;
+    private boolean allowRepeatedPlayers = false;
     private Preferences prefs;
 
     public Settings(){
@@ -32,6 +33,7 @@ public class Settings {
         playerTwoLeftKeycode = prefs.getInteger(Setting.TWO_LEFT.toString(), Input.Keys.LEFT);
         playerTwoRightKeycode = prefs.getInteger(Setting.TWO_RIGHT.toString(), Input.Keys.RIGHT);
         playerTwoBombKeycode = prefs.getInteger(Setting.TWO_BOMB.toString(), Input.Keys.ENTER);
+        allowRepeatedPlayers = prefs.getBoolean("allowRepeatedPlayers", false);
 
     }
 
@@ -90,5 +92,15 @@ public class Settings {
     }
     public String twoBomb(){
         return Input.Keys.toString(playerTwoBombKeycode);
+    }
+
+    public void setAllowRepeatedPlayers(boolean allowRepeatedPlayers) {
+        this.allowRepeatedPlayers = allowRepeatedPlayers;
+        prefs.putBoolean("allowRepeatedPlayers", allowRepeatedPlayers);
+        prefs.flush();
+    }
+
+    public boolean isAllowRepeatedPlayers() {
+        return allowRepeatedPlayers;
     }
 }

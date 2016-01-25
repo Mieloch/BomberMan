@@ -29,33 +29,35 @@ public class ChoosePlayersScreen extends AbstractScreen {
             SelectBox<String> selectBox = new SelectBox<>(selectBoxStyle);
             selectBox.setItems(list);
             selectBox.setSelectedIndex(i+1);
-            selectBox.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    for(SelectBox<String> box : selectBoxList){
+            if(!settings.isAllowRepeatedPlayers()) {
+                selectBox.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        for (SelectBox<String> box : selectBoxList) {
 
-                        String boxSelected = box.getSelected();
-                        /**
-                         * It is HIGHLY advised not to do unchecked cast
-                         * but in that case we can be sure that actor invoking event is of type SelectBox
-                         * We cannot check it though, because SelectBox is of generic type
-                         */
-                        try {
-                            @SuppressWarnings("unchecked")
+                            String boxSelected = box.getSelected();
+                            /**
+                             * It is HIGHLY advised not to do unchecked cast
+                             * but in that case we can be sure that actor invoking event is of type SelectBox
+                             * We cannot check it though, because SelectBox is of generic type
+                             */
+                            try {
+                                @SuppressWarnings("unchecked")
                                 SelectBox<String> actorBox = ((SelectBox<String>) actor);
 
-                            String actorSelected = actorBox.getSelected();
-                            if(!box.equals(actorBox)) {
-                                if (boxSelected.equals(actorSelected)) {
-                                    box.setSelected("");
+                                String actorSelected = actorBox.getSelected();
+                                if (!box.equals(actorBox)) {
+                                    if (boxSelected.equals(actorSelected)) {
+                                        box.setSelected("");
+                                    }
                                 }
+                            } catch (ClassCastException e) {
+                                e.printStackTrace();
                             }
-                        } catch (ClassCastException e){
-                            e.printStackTrace();
                         }
                     }
-                }
-            });
+                });
+            }
             selectBoxList.add(selectBox);
             Label player = new Label("Player " + (i+1), labelStyle);
             labelList.add(player);

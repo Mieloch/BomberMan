@@ -9,14 +9,14 @@ import local.oop.presenter.Presenter;
 import java.util.*;
 
 public class ArenaImpl implements Arena {
-    public final static int MAP_SIZE = 11;
+    public final static int MAP_SIZE = 13;
     Presenter presenter;
     Timer timer;
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
-    int bombTimeout = 3000;
-    int fireTimeout = 1000;
+    int bombTimeout = 1000;
+    int fireTimeout = 200;
 
     @Inject
     public ArenaImpl() {
@@ -38,9 +38,16 @@ public class ArenaImpl implements Arena {
 
     @Override
     public void start() {
-        timer.schedule(getLoopTask(), 0, 25);
+        timer.schedule(getLoopTask(), 0, 5);
     }
 
+    @Override
+    public void stop() {
+        this.timer.cancel();
+        this.timer = new Timer();
+        explosions = new ArrayList<>();
+        initArenaState();
+    }
 
     private void initArenaState() {
         nextStateBuilder = new ArenaState.Builder(new Level(MAP_SIZE, MAP_SIZE).getGeneratedLevel());
@@ -57,7 +64,10 @@ public class ArenaImpl implements Arena {
     }
 
     private void checkPlayersLives(){
-        currentState.getPlayers().stream().filter(player -> player.getLives() == 0).forEach(player -> nextStateBuilder.removePlayer(player));
+        currentState.getPlayers().stream().filter(player -> player.getLives() == 0).forEach(player -> {
+            nextStateBuilder.removePlayer(player);
+            presenter.removeAI(player.getId());
+        });
     }
 
     private void loop() {
@@ -220,11 +230,22 @@ public class ArenaImpl implements Arena {
             int playerCenterY = (y + (PlayerPosition.SIZE / 2));
             BlockPosition playerCenter = new BlockPosition(playerCenterX / BlockType.SIZE, playerCenterY / BlockType.SIZE);
             boolean playerIsOnFire = currentState.getBlocks().entrySet().stream().anyMatch(e -> e.getValue() == BlockType.FIRE && (e.getKey().equals(playerCenter)));
-            if (playerIsOnFire) {
+            if (playerIsOnFire && !player.isInvincible()) {
                 player.die();
+                player.setInvincible(true);
+                scheduleInvincibility(player);
             }
 
         }
+    }
+
+    private void scheduleInvincibility(Player player){
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                player.setInvincible(false);
+            }
+        }, 1000);
     }
 
     private TimerTask getFireDisposalTask(Map<BlockPosition, BlockType> blocks) {

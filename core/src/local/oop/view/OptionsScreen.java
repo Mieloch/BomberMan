@@ -95,6 +95,14 @@ public class OptionsScreen extends AbstractScreen {
 
         stage.addCaptureListener(listener);
 
+        CheckBox.CheckBoxStyle checkBoxStyle = new CheckBox.CheckBoxStyle();
+        checkBoxStyle.checkboxOff = skin.getDrawable("checkbox_off");
+        checkBoxStyle.checkboxOn = skin.getDrawable("checkbox_on");
+        checkBoxStyle.font = font;
+        checkBoxStyle.fontColor = new Color(1, 1, 1, 1);
+        CheckBox checkBox = new CheckBox("Allow repeated players", checkBoxStyle);
+        checkBox.setChecked(settings.isAllowRepeatedPlayers());
+
         TextButton save = new TextButton("Save settings", buttonStyle);
         save.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y,
@@ -116,6 +124,7 @@ public class OptionsScreen extends AbstractScreen {
                     displayAlertDialog("Settings must not be empty", "Please correct your settings", new ArrayList<>());
                 } else {
                     settings.save(settingsMap);
+                    settings.setAllowRepeatedPlayers(checkBox.isChecked());
                     game.setScreen(new StartScreen(game));
                     game.getInputMultiplexer().removeProcessor(stage);
                 }
@@ -176,6 +185,8 @@ public class OptionsScreen extends AbstractScreen {
         scrollTable.row();
         scrollTable.add(lTwoBomb).space(LABEL_SPACING).left().expandX();
         scrollTable.add(bTwoBomb).space(LABEL_SPACING).right().size(TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
+        scrollTable.row();
+        scrollTable.add(checkBox).space(LABEL_SPACING).right().expandX();
         scrollTable.pad(50f);
 
         ScrollPane scrollPane = new ScrollPane(scrollTable, scrollPaneStyle);

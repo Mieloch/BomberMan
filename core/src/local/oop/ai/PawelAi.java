@@ -56,6 +56,7 @@ public class PawelAi extends AbstractAI {
 
             } else {
                 List<BlockPosition> nastepniki = graph.get(current);
+                if(nastepniki != null)
                 for (BlockPosition blockPosition : nastepniki) {
                     if (!visited.containsKey(blockPosition)) {
                         prev.put(blockPosition, current);
@@ -127,6 +128,7 @@ public class PawelAi extends AbstractAI {
                 break;
             } else {
                 List<BlockPosition> nastepniki = graph.get(current);
+                if(nastepniki!=null)
                 for (BlockPosition blockPosition : nastepniki) {
                     if (!visited.containsKey(blockPosition)) {
                         prev.put(blockPosition, current);

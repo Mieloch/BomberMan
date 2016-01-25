@@ -11,7 +11,9 @@ public class Player {
     private int speed;
     private int power;
     private int bombs;
+    private int bombsLimit;
     private int lives;
+    private boolean invincible;
     public final static String PAWEL = "Pawel";
     public final static String ERNEST = "Ernest";
     public final static String JACEK = "Jacek";
@@ -24,6 +26,7 @@ public class Player {
         this.speed = 2;
         this.power = 3;
         this.bombs = 1;
+        this.bombsLimit = 1;
         resetPosition();
     }
 
@@ -36,16 +39,16 @@ public class Player {
         int MAP_SIZE = ArenaImpl.MAP_SIZE;
         switch (id){
             case PLAYER_1:
-                position = new PlayerPosition(0,0, Direction.DOWN);
+                position = new PlayerPosition(blockSize,blockSize, Direction.DOWN);
                 break;
             case PLAYER_2:
-                position = new PlayerPosition((MAP_SIZE-1) *blockSize,0,Direction.DOWN);
+                position = new PlayerPosition((MAP_SIZE-2) *blockSize,blockSize,Direction.DOWN);
                 break;
             case PLAYER_3:
-                position = new PlayerPosition(0,(MAP_SIZE-1)*blockSize,Direction.DOWN);
+                position = new PlayerPosition(blockSize,(MAP_SIZE-2)*blockSize,Direction.DOWN);
                 break;
             case PLAYER_4:
-                position = new PlayerPosition((MAP_SIZE-1)*blockSize,(MAP_SIZE-1)*blockSize,Direction.DOWN);
+                position = new PlayerPosition((MAP_SIZE-2)*blockSize,(MAP_SIZE-2)*blockSize,Direction.DOWN);
                 break;
         }
     }
@@ -100,6 +103,11 @@ public class Player {
 
     public void setBombs(int bombs) {
         this.bombs = bombs;
+        this.bombsLimit = bombs;
+    }
+
+    public int getBombsLimit() {
+        return bombsLimit;
     }
 
     public void decrementBombs() {
@@ -137,6 +145,14 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public void setInvincible(boolean invincible) {
+        this.invincible = invincible;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
     }
 
     public void setName(String name) {

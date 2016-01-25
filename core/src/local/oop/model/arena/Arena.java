@@ -7,4 +7,5 @@ public interface Arena {
     ArenaState getCurrentState();
     void setPresenter(Presenter presenter);
     void start();
+    void stop();
 }

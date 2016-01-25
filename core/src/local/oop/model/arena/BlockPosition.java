@@ -13,4 +13,8 @@ public class BlockPosition extends Position {
     public String toString(){
         return "(" + x + "," + y + ")";
     }
+
+    public double distanceFrom(BlockPosition position){
+        return Math.sqrt(Math.pow(Math.abs(x- position.x),2) + Math.pow(Math.abs(y- position.y), 2));
+    }
 }

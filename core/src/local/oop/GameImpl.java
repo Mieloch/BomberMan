@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import local.oop.presenter.Presenter;
+import local.oop.view.AbstractScreen;
 import local.oop.view.StartScreen;
 
 public class GameImpl extends Game {
