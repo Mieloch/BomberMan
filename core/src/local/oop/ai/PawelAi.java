@@ -20,6 +20,7 @@ public class PawelAi extends AbstractAI {
     private Player player;
     private BlockPosition playerBlock;
     private List<BlockPosition> trace;
+    private int life = 3;
     Map<BlockPosition, Boolean> visited;
     Map<BlockPosition, BlockPosition> prev;
     Map<BlockPosition, List<BlockPosition>> graph;
@@ -224,17 +225,22 @@ public class PawelAi extends AbstractAI {
         playerBlock = player.getPosition().getBlockPosition();
         graph = createGraph();
         List<BlockPosition> enemyPositions = state.getPlayers().stream().filter(e -> e.getId() != this.id).map(e -> e.getPosition().getBlockPosition()).collect(Collectors.toList());
-        if (enemyPositions.isEmpty()) {
+        if(player.getLives() +1 == life){
+            life--;
             trace = findFirstSafeSpot(playerBlock, createNotSafeList());
         } else {
-            BlockPosition enemyBlock = enemyPositions.get(new Random().nextInt(enemyPositions.size()));
-            if (trace == null || trace.isEmpty()) {
-                if (back) {
-                    trace = findFirstSafeSpot(playerBlock, createNotSafeList());
-                } else {
-                    trace = findPathToEnemy(playerBlock, enemyBlock);
-                    if (trace == null || trace.isEmpty()) {
-                        trace = findFirstBlockToDestroy(playerBlock);
+            if (enemyPositions.isEmpty()) {
+                trace = findFirstSafeSpot(playerBlock, createNotSafeList());
+            } else {
+                BlockPosition enemyBlock = enemyPositions.get(new Random().nextInt(enemyPositions.size()));
+                if (trace == null || trace.isEmpty()) {
+                    if (back) {
+                        trace = findFirstSafeSpot(playerBlock, createNotSafeList());
+                    } else {
+                        trace = findPathToEnemy(playerBlock, enemyBlock);
+                        if (trace == null || trace.isEmpty()) {
+                            trace = findFirstBlockToDestroy(playerBlock);
+                        }
                     }
                 }
             }

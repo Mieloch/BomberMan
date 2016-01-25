@@ -100,11 +100,11 @@ public class ChoosePlayersScreen extends AbstractScreen {
                     displayAlertDialog("Player must have selection", "Please correct your settings", null);
                 } else {
 
-                    game.setScreen(new GameScreen(game));
                     java.util.List<String> selectedPlayerList = selectBoxList.stream().map(SelectBox::getSelected).collect(toList());
                     game.getPresenter().setPlayers(selectedPlayerList);
                     game.getInputMultiplexer().removeProcessor(stage);
                     game.setPlayerInputProcessor();
+                    game.setScreen(new GameScreen(game));
                 }
             }
         });

@@ -1,6 +1,7 @@
 package local.oop.model.arena;
 
 import com.google.inject.Inject;
+import local.oop.GameImpl;
 import local.oop.model.*;
 import local.oop.model.player.Direction;
 import local.oop.model.player.PlayerId;
@@ -15,8 +16,10 @@ public class ArenaImpl implements Arena {
     ArenaState currentState;
     ArenaState.Builder nextStateBuilder;
     List<BlockPosition> explosions;
-    int bombTimeout = 1000;
-    int fireTimeout = 200;
+    int loopTime = 5;
+    int bombTimeout = 800;
+    int fireTimeout = 300;
+    int invincibilityTime = fireTimeout+1;
 
     @Inject
     public ArenaImpl() {
@@ -38,7 +41,7 @@ public class ArenaImpl implements Arena {
 
     @Override
     public void start() {
-        timer.schedule(getLoopTask(), 0, 5);
+        timer.schedule(getLoopTask(), 0, loopTime);
     }
 
     @Override
@@ -75,8 +78,8 @@ public class ArenaImpl implements Arena {
         isOnFire();
         acquireAndExecuteCommands();
         currentState = nextStateBuilder.get();
-        if(currentState.getPlayers().size() == 1){
-            currentState.finnish(currentState.getPlayers().stream().findFirst().get());
+        if(currentState.getPlayers().size() <= 1){
+            currentState.finnish(currentState.getPlayers().stream().findFirst().orElse(null));
             timer.cancel();
         }
     }
@@ -187,17 +190,28 @@ public class ArenaImpl implements Arena {
                 return false;
             } else if(block == BlockType.BOMB_POWERUP){
                 player.setBombs(3);
+                playPowerUpSound();
                 nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
             } else if(block == BlockType.FLAME_POWERUP){
                 player.setPower(6);
+                playPowerUpSound();
                 nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
             } else if(block == BlockType.SPEED_POWERUP){
                 player.setSpeed(4);
+                playPowerUpSound();
                 nextStateBuilder.setBlock(blockPosition, BlockType.BACKGROUND);
             }
             return block == BlockType.BACKGROUND;
         }
         return false;
+    }
+
+    private void playPowerUpSound(){
+        GameImpl.playPowerUp();
+    }
+
+    private void playExplosionSound(){
+        GameImpl.playExplosion();
     }
 
     private void placeBomb(Player player) {
@@ -217,6 +231,7 @@ public class ArenaImpl implements Arena {
                     nextStateBuilder.setBlock(explosion, BlockType.FIRE);
                 }
                 player.incrementBombs();
+                playExplosionSound();
                 timer.schedule(getFireDisposalTask(map), fireTimeout);
             }
         };
@@ -245,7 +260,7 @@ public class ArenaImpl implements Arena {
             public void run() {
                 player.setInvincible(false);
             }
-        }, 1000);
+        }, invincibilityTime);
     }
 
     private TimerTask getFireDisposalTask(Map<BlockPosition, BlockType> blocks) {

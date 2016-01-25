@@ -55,6 +55,7 @@ public class GameScreen extends AbstractScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 presenter.resetAll();
                 game.setScreen(new StartScreen(game));
+                game.disablePlayerInput();
                 game.getInputMultiplexer().removeProcessor(stage);
             }
         };
@@ -117,6 +118,13 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void displayAlertDialog(Player player){
+        String title = "Game over";
+        String desc;
+        if(player != null){
+            desc = player.getName() + " wins";
+        } else {
+            desc = "Draw";
+        }
         TextButton button = new TextButton("Play again", buttonStyle);
         button.addListener(listener);
 
@@ -136,7 +144,7 @@ public class GameScreen extends AbstractScreen {
         List<Button> buttons = new ArrayList<>();
         buttons.add(button);
         buttons.add(button1);
-        displayAlertDialog("Game over", player.getName() + " wins", buttons);
+        displayAlertDialog(title, desc, buttons);
         presenter.getCurrentState().reset();
     }
 }

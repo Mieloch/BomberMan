@@ -37,6 +37,14 @@ public class ErnestAI extends AbstractAI {
         if(me.getBombsLimit() > me.getBombs())
             lastPlace = null;
 
+        BlockPosition powerUp = getPowerUp();
+        if (powerUp != null) {
+            Command toReturn = goToBlock(powerUp);
+            if(toReturn!=null) {
+                return toReturn;
+            }
+        }
+
         if(me.getBombs()>0) {
             BlockPosition block = getSafePlaceForBomb();
             if (block != null) {
@@ -52,25 +60,22 @@ public class ErnestAI extends AbstractAI {
                 return goToBlock(playerBlock);
             }
         }
-
-        List<BlockPosition> powerUp = getPowerUp();
-        if (powerUp != null && powerUp.size()>0) {
-            for (BlockPosition blockPosition : powerUp) {
-                Command toReturn = goToBlock(blockPosition);
-                if(toReturn!=null) {
-                    return toReturn;
-                }
-            }
-        }
         return null;
     }
 
-    private List<BlockPosition> getPowerUp(){
-        return currentState
+    private BlockPosition getPowerUp(){
+        List<BlockPosition> list = currentState
                 .getBlocks()
                 .entrySet()
                 .stream()
-                .filter(e -> e.getValue() == BlockType.BOMB_POWERUP || e.getValue() == BlockType.SPEED_POWERUP || e.getValue() == BlockType.FLAME_POWERUP).map(Map.Entry::getKey).collect(Collectors.toList());
+                .filter(e -> e.getValue() == BlockType.BOMB_POWERUP || e.getValue() == BlockType.SPEED_POWERUP || e.getValue() == BlockType.FLAME_POWERUP)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        for (BlockPosition blockPosition : list) {
+            if(goToBlock(blockPosition)!=null)
+                return blockPosition;
+        }
+        return null;
     }
 
     private BlockPosition getPlaceForBombingPlayer(){
@@ -100,7 +105,7 @@ public class ErnestAI extends AbstractAI {
                     break;
                 } else {
                     for (Node node : current.getOutNodes()) {
-                        if (!vis.containsKey(node)) {
+                        if (!vis.containsKey(node) && node.getType() != BlockType.BOMB) {
                             q.add(node);
                             vis.put(node, true);
                             prev.put(node, current);
@@ -149,13 +154,22 @@ public class ErnestAI extends AbstractAI {
         }
     }
 
+    private List<Node> getNodeDirections(BlockPosition first, BlockPosition second){
+        Node start = nodes.stream().filter(node -> node.x == first.x)
+                .filter(node -> node.y == first.y).findFirst().orElse(null);
+        Node end = nodes.stream().filter(node -> node.x == second.x)
+                .filter(node -> node.y == second.y).findFirst().orElse(null);
+        return getDirections(start, end);
+    }
+
+    private boolean isPath(BlockPosition first, BlockPosition second){
+        List<Node> list = getNodeDirections(first, second);
+        return list != null && list.size()>1;
+    }
+
     private Command goToBlock(BlockPosition block){
         BlockPosition myPosition = me.getBlockPosition();
-        Node start = nodes.stream().filter(node -> node.x == myPosition.x)
-                .filter(node -> node.y == myPosition.y).findFirst().orElse(null);
-        Node end = nodes.stream().filter(node -> node.x == block.x)
-                .filter(node -> node.y == block.y).findFirst().orElse(null);
-        List<Node> list = getDirections(start, end);
+        List<Node> list = getNodeDirections(myPosition, block);
         if(list != null && list.size()>1) {
             Command command = getDirection(list.get(0), list.get(1));
             if (command != null)
@@ -188,6 +202,7 @@ public class ErnestAI extends AbstractAI {
                 .filter(e -> e.getValue() == BlockType.BOMB)
                 .filter(e -> e.getKey().x == block.x ||
                         e.getKey().y == block.y)
+                .filter(e -> !distanceFromBombIsSafe(e.getKey()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         return list.isEmpty();
@@ -217,15 +232,17 @@ public class ErnestAI extends AbstractAI {
                 .getBlocks()
                 .entrySet()
                 .stream()
-                .filter(e -> Math.abs(e.getKey().x - myPosition.x)<6)
-                .filter(e -> Math.abs(e.getKey().y - myPosition.y)<6)
-                .filter(e -> e.getValue() == BlockType.BACKGROUND)
+                .filter(e -> e.getValue() != BlockType.SOLID)
+                .filter(e -> e.getValue() != BlockType.EXPLODABLE)
+                .filter(e -> e.getValue() != BlockType.POWER_UP)
+                .filter(e -> e.getValue() != BlockType.EXTRA_BOMB)
+                .filter(e -> e.getValue() != BlockType.SPEED_UP)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         Collections.shuffle(blocks);
         for (BlockPosition block : blocks) {
             for (BlockPosition blockPosition : blocks) {
-                if(goToBlock(blockPosition)!=null && block.x != blockPosition.x && block.y != blockPosition.y && isSurrounded(blockPosition)){
+                if(isPath(block, blockPosition) && isPath(myPosition, blockPosition) && block.x != blockPosition.x && block.y != blockPosition.y && isSurrounded(blockPosition)){
                     lastPlace = blockPosition;
                     return blockPosition;
                 }
@@ -253,15 +270,6 @@ public class ErnestAI extends AbstractAI {
         return false;
     }
 
-    private boolean isPath(BlockPosition first, BlockPosition second){
-        Node start = nodes.stream().filter(node -> node.x == first.x)
-                .filter(node -> node.y == first.y).findFirst().orElse(null);
-        Node end = nodes.stream().filter(node -> node.x == second.x)
-                .filter(node -> node.y == second.y).findFirst().orElse(null);
-        List<Node> list = getDirections(start, end);
-        return list != null && list.size()>0;
-    }
-
     private List<BlockPosition> getBombsOnMyAxis(){
         return currentState.getBlocks()
                 .entrySet()
@@ -284,7 +292,11 @@ public class ErnestAI extends AbstractAI {
                 .stream()
                 .filter(e -> e.getKey().x != bomb.x)
                 .filter(e -> e.getKey().y != bomb.y)
-                .filter(e -> e.getValue() == BlockType.BACKGROUND)
+                .filter(e -> e.getValue() != BlockType.SOLID)
+                .filter(e -> e.getValue() != BlockType.EXPLODABLE)
+                .filter(e -> e.getValue() != BlockType.POWER_UP)
+                .filter(e -> e.getValue() != BlockType.EXTRA_BOMB)
+                .filter(e -> e.getValue() != BlockType.SPEED_UP)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         for (BlockPosition blockPosition : positionList) {

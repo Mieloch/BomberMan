@@ -71,6 +71,27 @@ public class AbstractScreen implements Screen{
         selectBoxStyle = new SelectBox.SelectBoxStyle(buttonStyle.font, new Color(0,0,0,1),skin.getDrawable("selectbox_01"), scrollPaneStyle, listStyle);
         labelStyle = new Label.LabelStyle(buttonStyle.font, new Color(1, 1, 1, 1));
         game.getInputMultiplexer().addProcessor(stage);
+        CheckBox.CheckBoxStyle style = new CheckBox.CheckBoxStyle();
+        style.checkboxOff = skin.getDrawable("icon_sound_off");
+        style.checkboxOn = skin.getDrawable("icon_sound_on");
+        style.font = font;
+        style.fontColor = new Color( 1, 1, 1 ,1);
+        CheckBox checkBox = new CheckBox(null, style);
+        checkBox.setX(0);
+        checkBox.setY(Gdx.graphics.getHeight() - checkBox.getHeight());
+        checkBox.setChecked(!game.isMuted());
+        checkBox.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.mute(!checkBox.isChecked());
+            }
+        });
+        stage.addActor(checkBox);
     }
 
     @Override
